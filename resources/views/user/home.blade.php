@@ -49,7 +49,7 @@
     @else
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto px-4">
             @foreach($destinasi as $item)
-            <a href="{{ route('user.destinasi.show', $item->id) }}" class="group relative rounded-2xl overflow-hidden shadow-lg cursor-pointer transform transition duration-500 hover:scale-[1.05] hover:shadow-2xl">
+            <a href="{{ route('destinasi.show', $item->id) }}" class="group relative rounded-2xl overflow-hidden shadow-lg cursor-pointer transform transition duration-500 hover:scale-[1.05] hover:shadow-2xl">
 
                 @if($item->foto)
                 <img src="{{ asset('storage/'.$item->foto) }}" 
@@ -170,7 +170,7 @@
 <section class="py-20 bg-blue-600 text-white text-center rounded-t-3xl shadow-lg mt-20">
     <h2 class="text-3xl md:text-4xl font-bold mb-4">Siap untuk Liburan?</h2>
     <p class="mb-8 text-lg opacity-90">Jelajahi destinasi terbaik di Indonesia sekarang juga.</p>
-    <a href="{{ route('user.destinasi.index') }}" 
+    <a href="{{ route('destinasi.index') }}" 
       class="bg-white text-blue-600 font-semibold px-8 py-3 rounded-full shadow hover:bg-gray-100 transition">
         Lihat Semua Destinasi
     </a>

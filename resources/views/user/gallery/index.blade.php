@@ -4,7 +4,7 @@
 
 @section('banner')
 <div class="relative w-screen left-1/2 -translate-x-1/2 h-[570px] -mt-[15px]">
-    <img src="{{ asset('images/banner-gallery.jpeg') }}" 
+    <img src="{{ asset('images/banner3.jpeg') }}" 
          alt="Gallery Wisata" 
          class="w-full h-full object-cover">
     <div class="absolute inset-0 bg-black/40"></div>
@@ -54,7 +54,7 @@
                         <h3 class="text-white text-2xl font-bold mb-2">{{ $gallery->title }}</h3>
                         <p class="text-gray-200 text-sm mb-3">{{ Str::limit($gallery->description, 60) }}</p>
 
-                        <a href="{{ route('user.gallery.show', $gallery->id) }}"
+                        <a href="{{ route('gallery.show', $gallery->id) }}"
                            class="inline-block bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold px-5 py-2 rounded-xl shadow-lg hover:scale-105 hover:shadow-2xl transition-transform duration-300">
                            Lihat Galeri
                         </a>

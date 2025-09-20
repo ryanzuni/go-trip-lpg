@@ -17,7 +17,7 @@
             <!-- Dashboard -->
             <li class="nav-item">
                 <a class="nav-link d-flex align-items-center {{ request()->routeIs('dashboard') ? 'active text-white bg-primary rounded-3' : 'text-dark' }}" 
-                   href="{{ route('dashboard') }}">
+                   href="{{ route('admin.dashboard') }}">
                     <i class="bi bi-speedometer2 me-2"></i>
                     <span class="sidebar-text">Dashboard</span>
                 </a>
@@ -26,7 +26,7 @@
             <!-- Destinasi -->
             <li class="nav-item">
                 <a class="nav-link d-flex align-items-center {{ request()->routeIs('destinasi.*') ? 'active text-white bg-primary rounded-3' : 'text-dark' }}" 
-                   href="{{ route('destinasi.index') }}">
+                   href="{{ route('admin.destinasi.index') }}">
                     <i class="bi bi-geo-alt me-2"></i>
                     <span class="sidebar-text">Destinasi Wisata</span>
                 </a>
@@ -34,8 +34,8 @@
 
             <!-- Paket Wisata -->
             <li class="nav-item">
-                <a class="nav-link d-flex align-items-center {{ request()->routeIs('paket-wisata.*') ? 'active text-white bg-primary rounded-3' : 'text-dark' }}" 
-                   href="{{ route('paket-wisata.index') }}">
+                <a class="nav-link d-flex align-items-center {{ request()->routeIs('paket_wisata.*') ? 'active text-white bg-primary rounded-3' : 'text-dark' }}" 
+                   href="{{ route('admin.paket_wisata.index') }}">
                     <i class="bi bi-box-seam me-2"></i>
                     <span class="sidebar-text">Paket Wisata</span>
                 </a>
@@ -64,13 +64,13 @@
                 <ul class="nav flex-column ms-3" id="transaksiMenu" style="display: none;">
                     <li class="nav-item">
                         <a class="nav-link {{ request()->is('transaksi') ? 'active text-white bg-primary rounded-3' : 'text-dark' }}" 
-                        href="{{ route('transaksi.index') }}">
+                        href="{{ route('admin.transaksi.index') }}">
                             <i class="far fa-circle me-2 fs-6"></i><span class="sidebar-text">Data Transaksi</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ request()->is('data-masters') ? 'active text-white bg-primary rounded-3' : 'text-dark' }}" 
-                        href="{{ route('data-masters.index') }}">
+                        href="{{ route('admin.data-masters.index') }}">
                             <i class="far fa-circle me-2 fs-6"></i><span class="sidebar-text">Data Master</span>
                         </a>
                     </li>
@@ -90,28 +90,28 @@
                 <ul class="nav flex-column ms-3" id="laporanMenu" style="display:none;">
                     <li class="nav-item">
                         <a class="nav-link {{ request()->is('laporan/transaksi') ? 'active text-white bg-primary rounded-3' : 'text-dark' }}" 
-                        href="{{ route('laporan.transaksi') }}">
+                        href="{{ route('admin.laporan.transaksi') }}">
                             <i class="far fa-circle me-2 fs-6"></i>
                             <span class="sidebar-text">Transaksi</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ request()->is('laporan/booking') ? 'active text-white bg-primary rounded-3' : 'text-dark' }}" 
-                        href="{{ route('laporan.booking') }}">
+                        href="{{ route('admin.laporan.booking') }}">
                             <i class="far fa-circle me-2 fs-6"></i>
                             <span class="sidebar-text">Booking</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ request()->is('laporan/pendapatan') ? 'active text-white bg-primary rounded-3' : 'text-dark' }}" 
-                        href="{{ route('laporan.pendapatan') }}">
+                        href="{{ route('admin.laporan.pendapatan') }}">
                             <i class="far fa-circle me-2 fs-6"></i>
                             <span class="sidebar-text">Pendapatan</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->is('laporan/paket-wisata') ? 'active text-white bg-primary rounded-3' : 'text-dark' }}" 
-                        href="{{ route('laporan.paket_wisata') }}">
+                        <a class="nav-link {{ request()->is('laporan/paket_wisata') ? 'active text-white bg-primary rounded-3' : 'text-dark' }}" 
+                        href="{{ route('admin.laporan.paket_wisata') }}">
                             <i class="far fa-circle me-2 fs-6"></i>
                             <span class="sidebar-text">Paket Wisata</span>
                         </a>
@@ -132,13 +132,13 @@
                 <ul class="nav flex-column ms-3" id="settingsMenu" style="display:none;">
                     <li class="nav-item">
                         <a class="nav-link {{ request()->is('settings/profile') ? 'active text-white bg-primary rounded-3' : 'text-dark' }}" 
-                        href="{{ route('settings.profile') }}">
+                        href="{{ route('admin.settings.profile') }}">
                         <i class="far fa-user me-2 fs-6"></i> Profil
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ request()->is('settings/password') ? 'active text-white bg-primary rounded-3' : 'text-dark' }}" 
-                        href="{{ route('settings.password') }}">
+                        href="{{ route('admin.settings.password') }}">
                         <i class="fas fa-lock me-2 fs-6"></i> Ubah Password
                         </a>
                     </li>

@@ -48,10 +48,10 @@
 
             {{-- Export --}}
             <div class="mt-3 d-flex gap-2">
-                <a href="{{ route('laporan.pendapatan', array_merge(request()->all(), ['export'=>'pdf'])) }}" class="btn btn-danger">
+                <a href="{{ route('admin.laporan.pendapatan', array_merge(request()->all(), ['export'=>'pdf'])) }}" class="btn btn-danger">
                     <i class="bi bi-file-earmark-pdf"></i> Export PDF
                 </a>
-                <a href="{{ route('laporan.pendapatan', array_merge(request()->all(), ['export'=>'excel'])) }}" class="btn btn-success">
+                <a href="{{ route('admin.laporan.pendapatan', array_merge(request()->all(), ['export'=>'excel'])) }}" class="btn btn-success">
                     <i class="bi bi-file-earmark-excel"></i> Export Excel
                 </a>
             </div>

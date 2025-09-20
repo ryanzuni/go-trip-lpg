@@ -15,104 +15,86 @@ use App\Http\Controllers\GalleryController;
 
 
 
+/*
+|--------------------------------------------------------------------------
+| AUTH
+|--------------------------------------------------------------------------
+*/
+
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::get('/dashboard', function () {
-    return view('dashboard'); 
-})->name('dashboard');
-
-// // Halaman login
-// Route::get('/', function () {
-//     return view('auth.login');
-// })->name('dsahboard');
-
-// // Halaman dashboard
-// Route::get('/dashboard', function () {
-//     return view('dashboard.index');
-// })->name('dashboard');
-
-// Route::resource('destinasi', DestinasiController::class);
-
-Route::resource('paket-wisata', PaketWisataController::class);
-
-Route::resource('transaksi', TransaksiController::class);
-
-Route::resource('data-masters', DataMasterController::class)->only(['index']);
-
-Route::prefix('admin')->name('admin.')->group(function () {
-    Route::resource('galleries', GalleryController::class);
-});
-
-// route untuk wisatawan
-Route::prefix('gallery')->name('user.gallery.')->group(function () {
-    Route::get('/', [App\Http\Controllers\GalleryController::class, 'userIndex'])->name('index');
-    Route::get('/{id}', [App\Http\Controllers\GalleryController::class, 'userShow'])->name('show');
-});
-
-Route::prefix('laporan')->group(function(){
-    Route::get('transaksi', [LaporanController::class, 'transaksi'])->name('laporan.transaksi');
-});
-
-Route::prefix('laporan')->group(function(){
-    Route::get('transaksi', [LaporanController::class,'transaksi'])->name('laporan.transaksi');
-    Route::get('pendapatan', [LaporanController::class,'pendapatan'])->name('laporan.pendapatan');
-    Route::get('paket-wisata', [LaporanController::class,'paketWisata'])->name('laporan.paket_wisata');
-});
-
-Route::prefix('settings')->middleware('auth')->group(function(){
-    Route::get('profile', [SettingController::class,'profile'])->name('settings.profile');
-    Route::post('profile', [SettingController::class,'updateProfile']);
-    Route::get('password', [SettingController::class,'password'])->name('settings.password');
-    Route::post('password', [SettingController::class,'updatePassword']);
-});
+/*
+|--------------------------------------------------------------------------
+| USER ROUTES
+|--------------------------------------------------------------------------
+*/
 
 // Home
-Route::get('/', [HomeController::class, 'index'])->name('user.home');
-// Destinasi
-// Route::get('/user/destinasi', [DestinasiController::class, 'userIndex'])->name('user.destinasi');
-// Destinasi
-// Route untuk ADMIN (CRUD)
-Route::resource('destinasi', DestinasiController::class);
+Route::get('/', [HomeController::class, 'index'])->name('home');
+// Destinasi (User)
+Route::get('/destinasi', [DestinasiController::class, 'userIndex'])->name('destinasi.index');
+Route::get('/destinasi/{id}', [DestinasiController::class, 'show'])->name('destinasi.show');
 
-// Route untuk USER
-// Route untuk USER
-Route::prefix('user')->name('user.')->group(function () {
-    Route::get('/destinasi', [DestinasiController::class, 'userIndex'])->name('destinasi.index');
-    Route::get('/destinasi/{id}', [DestinasiController::class, 'show'])->name('destinasi.show');
-});
+// Paket Wisata (User)
+Route::get('/paket_wisata', [PaketWisataController::class, 'userIndex'])->name('paket.index');
+Route::get('/paket_wisata/{id}', [PaketWisataController::class, 'userShow'])->name('paket.show');
 
+// Gallery (User)
+Route::get('/gallery', [GalleryController::class, 'userIndex'])->name('gallery.index');
+Route::get('/gallery/{id}', [GalleryController::class, 'userShow'])->name('gallery.show');
 
+// Booking
+Route::post('/booking/{paket}', [BookingController::class, 'store'])->name('booking.store');
 
-// Paket Wisata
-
-// Route untuk USER (tanpa sidebar admin)
-// Group route user
-Route::prefix('user')->name('user.')->group(function () {
-    // Daftar paket
-    Route::get('/paket-wisata', [PaketWisataController::class, 'userIndex'])->name('paket.index');
-
-    // Detail paket
-    Route::get('/paket-wisata/{id}', [PaketWisataController::class, 'userShow'])->name('paket.show');
-});
-Route::post('/booking/{paket}', [BookingController::class, 'store'])->name('user.booking.store');
-Route::get('/laporan/booking', [BookingController::class, 'laporan'])->name('laporan.booking');
-
-// Route::prefix('user')->group(function () {
-//     Route::get('/paket-wisata', [PaketWisataController::class, 'userIndex'])->name('user.paket.index');
-//     Route::get('/paket-wisata/{id}', [PaketWisataController::class, 'userIndex'])->name('user.paket.show');
-// });
-// Route::get('/paket-wisata', [PaketWisataController::class, 'index'])->name('paket-wisata.index');
-// Route::get('/paket-wisata/{id}', [PaketWisataController::class, 'show'])->name('paket-wisata.show');
 // Contact
-Route::get('/contact', function () {
-    return view('user.contact');
-})->name('user.contact');
+Route::get('/contact', fn() => view('user.contact'))->name('contact');
 
-// Route untuk admin
-Route::resource('/admin/paket-wisata', PaketWisataController::class);
-Route::get('/paket-wisata/{id?}', [PaketWisataController::class, 'index'])->name('paket-wisata.show');
+/*
+|--------------------------------------------------------------------------
+| ADMIN ROUTES (prefix: admin)
+|--------------------------------------------------------------------------
+*/
+Route::prefix('admin')->middleware('auth')->name('admin.')->group(function () {
+    // Dashboard
+    Route::get('/dashboard', fn() => view('dashboard'))->name('dashboard');
+
+    // Destinasi CRUD
+    Route::resource('destinasi', DestinasiController::class);
+
+    // Paket Wisata CRUD
+    Route::resource('paket_wisata', PaketWisataController::class);
+
+    // Gallery CRUD
+    Route::resource('galleries', GalleryController::class);
+
+    // Transaksi
+    Route::resource('transaksi', TransaksiController::class);
+
+    // Data Master
+    Route::resource('data-masters', DataMasterController::class)->only(['index']);
+
+    // Laporan
+    Route::prefix('laporan')->name('laporan.')->group(function () {
+        Route::get('transaksi', [LaporanController::class, 'transaksi'])->name('transaksi');
+        Route::get('pendapatan', [LaporanController::class, 'pendapatan'])->name('pendapatan');
+        Route::get('paket_wisata', [LaporanController::class, 'paketWisata'])->name('paket_wisata');
+        Route::get('booking', [BookingController::class, 'laporan'])->name('booking');
+    });
+
+    // Settings
+    Route::prefix('settings')->name('settings.')->group(function () {
+        Route::get('profile', [SettingController::class, 'profile'])->name('profile');
+        Route::post('profile', [SettingController::class, 'updateProfile']);
+        Route::get('password', [SettingController::class, 'password'])->name('password');
+        Route::post('password', [SettingController::class, 'updatePassword']);
+    });
+
+    // Profile
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
+});
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/admin/profile', [ProfileController::class, 'edit'])->name('profile.edit');

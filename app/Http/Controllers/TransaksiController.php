@@ -44,7 +44,7 @@ class TransaksiController extends Controller
 
         Transaksi::create($request->all());
 
-        return redirect()->route('transaksi.index')->with('success','Transaksi berhasil ditambahkan');
+        return redirect()->route('admin.transaksi.index')->with('success','Transaksi berhasil ditambahkan');
     }
 
     /**
@@ -81,7 +81,7 @@ class TransaksiController extends Controller
 
         $transaksi->update($request->all());
 
-        return redirect()->route('transaksi.index')->with('success','Transaksi berhasil diperbarui');
+        return redirect()->route('admin.transaksi.index')->with('success','Transaksi berhasil diperbarui');
     }
 
     /**
@@ -91,6 +91,6 @@ class TransaksiController extends Controller
     {
         //
         $transaksi->delete();
-        return redirect()->route('transaksi.index')->with('success','Transaksi berhasil dihapus');
+        return redirect()->route('admin.transaksi.index')->with('success','Transaksi berhasil dihapus');
     }
 }

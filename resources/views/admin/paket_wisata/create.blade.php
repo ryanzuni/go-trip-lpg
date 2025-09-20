@@ -6,7 +6,7 @@
         <div class="card-body">
             <h5 class="fw-bold text-primary mb-3">➕ Tambah Paket Wisata</h5>
 
-            <form action="{{ route('paket-wisata.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('admin.paket_wisata.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
                 <div class="mb-3">
@@ -52,7 +52,7 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Simpan</button>
-                <a href="{{ route('paket-wisata.index') }}" class="btn btn-secondary">Batal</a>
+                <a href="{{ route('admin.paket_wisata.index') }}" class="btn btn-secondary">Batal</a>
             </form>
         </div>
     </div>

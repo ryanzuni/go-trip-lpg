@@ -6,7 +6,7 @@
         <div class="card-body">
             <div class="d-flex justify-content-between mb-3">
                 <h5 class="fw-bold text-primary">Daftar Paket Wisata</h5>
-                <a href="{{ route('paket-wisata.create') }}" class="btn btn-primary btn-sm">
+                <a href="{{ route('admin.paket_wisata.create') }}" class="btn btn-primary btn-sm">
                     <i class="bi bi-plus-circle"></i> Tambah
                 </a>
             </div>
@@ -41,11 +41,11 @@
                             @endif
                         </td>
                         <td>
-                            <a href="{{ route('paket-wisata.edit',$item->id) }}" 
+                            <a href="{{ route('admin.paket_wisata.edit',$item->id) }}" 
                                class="btn btn-warning btn-sm">
                                 <i class="bi bi-pencil"></i>
                             </a>
-                            <form action="{{ route('paket-wisata.destroy',$item->id) }}" 
+                            <form action="{{ route('admin.paket_wisata.destroy',$item->id) }}" 
                                   method="POST" class="d-inline">
                                 @csrf @method('DELETE')
                                 <button class="btn btn-danger btn-sm" onclick="return confirm('Yakin hapus paket ini?')">

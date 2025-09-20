@@ -5,7 +5,7 @@
     <div class="card shadow-sm rounded-4">
         <div class="card-body">
             <h5 class="fw-bold text-primary mb-3">➕ Tambah Transaksi</h5>
-            <form action="{{ route('transaksi.store') }}" method="POST">
+            <form action="{{ route('admin.transaksi.store') }}" method="POST">
                 @csrf
                 <div class="mb-3">
                     <label class="form-label">Nama Pelanggan</label>
@@ -54,7 +54,7 @@
                     </select>
                 </div>
                 <button class="btn btn-primary">Simpan</button>
-                <a href="{{ route('transaksi.index') }}" class="btn btn-secondary">Batal</a>
+                <a href="{{ route('admin.transaksi.index') }}" class="btn btn-secondary">Batal</a>
             </form>
         </div>
     </div>

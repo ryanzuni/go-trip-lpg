@@ -58,7 +58,7 @@
             </ul>
         </div>
 
-        <a href="{{ route('user.destinasi.index') }}" 
+        <a href="{{ route('destinasi.index') }}" 
            class="block text-center bg-blue-600 text-white py-3 rounded-xl font-semibold shadow hover:bg-blue-700 transition">
             ← Kembali ke Daftar Destinasi
         </a>
@@ -71,7 +71,7 @@
     <h2 class="text-2xl font-bold text-blue-600 text-center mb-10">Rekomendasi Destinasi Lain</h2>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto px-6">
         @foreach($related as $item)
-        <a href="{{ route('user.destinasi.show', $item->id) }}" 
+        <a href="{{ route('destinasi.show', $item->id) }}" 
             class="group relative rounded-2xl overflow-hidden shadow-lg cursor-pointer transform transition duration-500 hover:scale-[1.05] hover:shadow-2xl">
                 
                 <!-- Gambar -->

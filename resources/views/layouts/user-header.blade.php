@@ -2,51 +2,51 @@
   <div class="container mx-auto px-6 py-4 flex justify-between items-center">
 
     <!-- Logo -->
-    <a href="{{ route('user.home') }}" class="flex items-center group">
+    <a href="{{ route('home') }}" class="flex items-center group">
       <img src="{{ asset('images/logo.jpg') }}" alt="Pariwisata Kita" 
            class="w-12 h-12 object-contain transform transition duration-300 group-hover:scale-110">
     </a>
 
     <!-- Desktop Nav -->
     <nav class="hidden md:flex items-center space-x-8">
-      <a href="{{ route('user.home') }}"
+      <a href="{{ route('home') }}"
          class="relative font-medium transition duration-300 
-         {{ Request::routeIs('user.home') ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600' }}">
+         {{ Request::routeIs('home') ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600' }}">
          Home
          <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-blue-600 transition-all duration-300
-          {{ Request::routeIs('user.home') ? 'w-full' : 'group-hover:w-full' }}"></span>
+          {{ Request::routeIs('home') ? 'w-full' : 'group-hover:w-full' }}"></span>
       </a>
 
-      <a href="{{ route('user.gallery.index') }}"
+      <a href="{{ route('gallery.index') }}"
         class="relative font-medium transition duration-300 
-        {{ Request::routeIs('user.gallery.*') ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600' }}">
+        {{ Request::routeIs('gallery.*') ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600' }}">
         Gallery
         <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-blue-600 transition-all duration-300
-          {{ Request::routeIs('user.gallery.*') ? 'w-full' : 'group-hover:w-full' }}"></span>
+          {{ Request::routeIs('gallery.*') ? 'w-full' : 'group-hover:w-full' }}"></span>
       </a>
 
-      <a href="{{ route('user.destinasi.index') }}"
+      <a href="{{ route('destinasi.index') }}"
         class="relative font-medium transition duration-300
-        {{ Request::routeIs('user.destinasi.index') ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600' }}">
+        {{ Request::routeIs('destinasi.index') ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600' }}">
         Destinasi
         <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-blue-600 transition-all duration-300
-        {{ Request::routeIs('user.destinasi.index') ? 'w-full' : 'group-hover:w-full' }}"></span>
+        {{ Request::routeIs('destinasi.index') ? 'w-full' : 'group-hover:w-full' }}"></span>
       </a>
 
-      <a href="{{ route('user.paket.index') }}"
+      <a href="{{ route('paket.index') }}"
         class="relative font-medium transition duration-300 
-        {{ Request::routeIs('user.paket.*') ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600' }}">
+        {{ Request::routeIs('paket.*') ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600' }}">
         Paket Wisata
         <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-blue-600 transition-all duration-300
-          {{ Request::routeIs('user.paket.*') ? 'w-full' : 'group-hover:w-full' }}"></span>
+          {{ Request::routeIs('paket.*') ? 'w-full' : 'group-hover:w-full' }}"></span>
       </a>
 
-      <a href="{{ route('user.contact') }}"
+      <a href="{{ route('contact') }}"
          class="relative font-medium transition duration-300 
-         {{ Request::routeIs('user.contact') ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600' }}">
+         {{ Request::routeIs('contact') ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600' }}">
          Contact
          <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-blue-600 transition-all duration-300
-          {{ Request::routeIs('user.contact') ? 'w-full' : 'group-hover:w-full' }}"></span>
+          {{ Request::routeIs('contact') ? 'w-full' : 'group-hover:w-full' }}"></span>
       </a>
 
       <!-- CTA Button -->
@@ -65,15 +65,15 @@
   <!-- Mobile Menu -->
   <div id="mobile-menu" class="hidden md:hidden bg-white/95 backdrop-blur-md shadow-md border-t animate-slideDown">
     <nav class="flex flex-col px-6 py-4 space-y-3">
-      <a href="{{ route('user.home') }}" class="font-medium {{ Request::routeIs('user.home') ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600' }}">
+      <a href="{{ route('home') }}" class="font-medium {{ Request::routeIs('home') ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600' }}">
         Home
       </a>
-      <a href="{{ route('user.gallery.index') }}" 
-        class="font-medium {{ Request::routeIs('user.gallery.*') ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600' }}">
+      <a href="{{ route('gallery.index') }}" 
+        class="font-medium {{ Request::routeIs('gallery.*') ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600' }}">
         Gallery
       </a>
-      <a href="{{ route('user.destinasi.index') }}" 
-        class="font-medium {{ Request::routeIs('user.destinasi.index') ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600' }}">
+      <a href="{{ route('destinasi.index') }}" 
+        class="font-medium {{ Request::routeIs('destinasi.index') ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600' }}">
           Destinasi
       </a>
       <a href="#contact" class="font-medium text-gray-700 hover:text-blue-600">Contact</a>

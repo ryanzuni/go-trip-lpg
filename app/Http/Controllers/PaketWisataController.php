@@ -17,7 +17,7 @@ class PaketWisataController extends Controller
    public function userIndex()
 {
     $paket = PaketWisata::with('destinasi')->paginate(9);
-    return view('user.paket.index', compact('paket')); // ⬅️ ini cocok dengan index.blade.php
+    return view('user.paket_wisata.index', compact('paket')); // ⬅️ ini cocok dengan index.blade.php
 }
 
 // untuk admin
@@ -26,7 +26,7 @@ public function index()
     $paket = PaketWisata::with('destinasi')->paginate(10);
 
     // view untuk ADMIN (sidebar)
-    return view('admin.paket.index', compact('paket'));
+    return view('admin.paket_wisata.index', compact('paket'));
 }
 
 
@@ -39,11 +39,11 @@ public function index()
     //     // Ambil detail paket jika ada ID
     //     $detailPaket = $id ? PaketWisata::with('destinasi')->find($id) : null;
 
-    //     return view('user.paket-wisata', compact('paket', 'detailPaket'));
+    //     return view('user.paket_wisata', compact('paket', 'detailPaket'));
     //     }
         //
         // $paket = PaketWisata::with('destinasi')->paginate(10);
-        // return view('admin.paket.index', compact('paket'));
+        // return view('admin.paket_wisata.index', compact('paket'));
     // }
 
     /**
@@ -53,7 +53,7 @@ public function index()
     {
         //
         $destinasi = Destinasi::all();
-        return view('admin.paket.create', compact('destinasi'));
+        return view('admin.paket_wisata.create', compact('destinasi'));
     }
 
     /**
@@ -77,7 +77,7 @@ public function index()
 
         PaketWisata::create($data);
 
-        return redirect()->route('paket-wisata.index')->with('success','Paket wisata berhasil ditambahkan');
+        return redirect()->route('admin.paket_wisata.index')->with('success','Paket wisata berhasil ditambahkan');
     }
 
     /**
@@ -96,7 +96,7 @@ public function index()
                         ->take(6)
                         ->get();
 
-        return view('user.paket.show', compact('paket', 'paketLain'));
+        return view('user.paket_wisata.show', compact('paket', 'paketLain'));
         // $paket = PaketWisata::with('destinasi')->findOrFail($id);
         // return view('user.paket.show', compact('paket')); // ⬅️ pastikan file show.blade.php ada
     }
@@ -111,9 +111,8 @@ public function index()
      */
     public function edit(PaketWisata $paketWisata)
     {
-        //
         $destinasi = Destinasi::all();
-        return view('admin.paket.edit', compact('paket_wisata','destinasi'));
+         return view('admin.paket_wisata.edit', compact('paketWisata', 'destinasi'));
     }
 
     /**
@@ -121,14 +120,13 @@ public function index()
      */
     public function update(Request $request, PaketWisata $paketWisata)
     {
-        //
         $data = $request->all();
         if ($request->hasFile('foto')) {
             $data['foto'] = $request->file('foto')->store('paket', 'public');
         }
-        $paket_wisata->update($data);
+        $paketWisata->update($data);
 
-        return redirect()->route('paket-wisata.index')->with('success','Paket wisata berhasil diperbarui');
+        return redirect()->route('admin.paket_wisata.index')->with('success','Paket wisata berhasil diperbarui');
     }
 
     /**
@@ -136,8 +134,7 @@ public function index()
      */
     public function destroy(PaketWisata $paketWisata)
     {
-        //
-        $paket_wisata->delete();
-        return redirect()->route('paket-wisata.index')->with('success','Paket wisata berhasil dihapus');
+        $paketWisata->delete();
+        return redirect()->route('admin.paket_wisata.index')->with('success','Paket wisata berhasil dihapus');
     }
 }

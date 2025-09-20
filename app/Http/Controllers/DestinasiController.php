@@ -36,12 +36,12 @@ class DestinasiController extends Controller
 
         Destinasi::create($validated);
 
-        return redirect()->route('destinasi.index')->with('success', 'Destinasi berhasil ditambahkan!');
+        return redirect()->route('admin.destinasi.index')->with('success', 'Destinasi berhasil ditambahkan!');
     }
 
     public function edit(Destinasi $destinasi)
     {
-        return view('destinasi.edit', compact('destinasi'));
+        return view('admin.destinasi.edit', compact('destinasi'));
     }
 
     public function update(Request $request, Destinasi $destinasi)
@@ -49,7 +49,6 @@ class DestinasiController extends Controller
         $validated = $request->validate([
             'nama' => 'required|string|max:255',
             'lokasi' => 'required|string|max:255',
-            'harga_tiket' => 'nullable|numeric',
             'deskripsi' => 'nullable|string',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
@@ -63,7 +62,7 @@ class DestinasiController extends Controller
 
         $destinasi->update($validated);
 
-        return redirect()->route('destinasi.index')->with('success', 'Destinasi berhasil diperbarui!');
+        return redirect()->route('admin.destinasi.index')->with('success', 'Destinasi berhasil diperbarui!');
     }
 
     public function destroy(Destinasi $destinasi)
@@ -74,7 +73,7 @@ class DestinasiController extends Controller
 
         $destinasi->delete();
 
-        return redirect()->route('destinasi.index')->with('success', 'Destinasi berhasil dihapus!');
+        return redirect()->route('admin.destinasi.index')->with('success', 'Destinasi berhasil dihapus!');
     }
 
     // ================= USER VIEW =================

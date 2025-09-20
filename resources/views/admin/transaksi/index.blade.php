@@ -6,7 +6,7 @@
         <div class="card-body">
             <div class="d-flex justify-content-between mb-3">
                 <h5 class="fw-bold text-primary">Daftar Transaksi</h5>
-                <a href="{{ route('transaksi.create') }}" class="btn btn-primary btn-sm">
+                <a href="{{ route('admin.transaksi.create') }}" class="btn btn-primary btn-sm">
                     <i class="bi bi-plus-circle"></i> Tambah
                 </a>
             </div>
@@ -37,7 +37,7 @@
             <td>Rp {{ number_format($transaksi->total_harga, 0, ',', '.') }}</td>
             <td>{{ ucfirst($transaksi->status) }}</td>
             <td>
-                <a href="{{ route('transaksi.edit', $transaksi->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                <a href="{{ route('admin.transaksi.edit', $transaksi->id) }}" class="btn btn-sm btn-warning">Edit</a>
                 <form action="{{ route('transaksi.destroy', $transaksi->id) }}" method="POST" class="d-inline">
                     @csrf
                     @method('DELETE')

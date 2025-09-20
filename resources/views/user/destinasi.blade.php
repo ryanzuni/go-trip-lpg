@@ -4,7 +4,7 @@
 
 @section('banner')
 <div class="relative w-screen left-1/2 -translate-x-1/2 h-[570px] -mt-[15px]">
-    <img src="{{ asset('images/banner1.jpeg') }}" 
+    <img src="{{ asset('images/banner2.jpeg') }}" 
          alt="Destinasi Wisata" 
          class="w-full h-full object-cover">
     <div class="absolute inset-0 bg-black/40"></div>

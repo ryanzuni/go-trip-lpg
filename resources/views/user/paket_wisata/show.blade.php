@@ -91,7 +91,7 @@
     <div x-data="{ openForm: false }">
         <!-- Tombol -->
         <div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row gap-4 mb-12">
-            <a href="{{ route('user.paket.index') }}" 
+            <a href="{{ route('paket.index') }}" 
             class="px-6 py-3 w-full sm:w-auto rounded-xl bg-gray-200 text-gray-700 font-medium hover:bg-gray-300 transition">
             ← Kembali
             </a>
@@ -109,7 +109,7 @@
             class="bg-gray-50 p-8 rounded-3xl shadow-lg">
             <h2 class="text-2xl font-bold text-gray-800 mb-6">Formulir Pemesanan</h2>
 
-            <form action="{{ route('user.booking.store', $paket->id) }}" method="POST" class="space-y-6">
+            <form action="{{ route('booking.store', $paket->id) }}" method="POST" class="space-y-6">
                 @csrf
 
                 <!-- Nama -->
@@ -182,7 +182,7 @@
                                 Rp {{ number_format($item->harga,0,',','.') }}
                             </span>
 
-                            <a href="{{ route('user.paket.show', $item->id) }}"
+                            <a href="{{ route('paket.show', $item->id) }}"
                                class="inline-block bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold px-4 py-2 rounded-xl shadow-lg hover:scale-105 hover:shadow-2xl transition-transform duration-300">
                                Lihat Detail
                             </a>

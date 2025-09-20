@@ -56,18 +56,6 @@
             </div>
         </div>
 
-        <!-- Foto Utama -->
-        <div class="mb-14">
-            <div class="group relative overflow-hidden rounded-3xl shadow-xl hover:shadow-2xl transition">
-                <img src="{{ asset('storage/'.$gallery->image) }}" 
-                     alt="{{ $gallery->title }}" 
-                     class="w-full h-[500px] object-cover rounded-3xl transform group-hover:scale-105 transition duration-500">
-                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                    <span class="text-white text-lg font-medium">Klik untuk memperbesar</span>
-                </div>
-            </div>
-        </div>
-
         <!-- Deskripsi -->
         <div class="mb-14">
             <h2 class="text-3xl font-bold text-gray-800 mb-4 flex items-center gap-2">
@@ -80,7 +68,7 @@
 
         <!-- Tombol Back -->
         <div class="flex justify-center">
-            <a href="{{ route('user.gallery.index') }}" 
+            <a href="{{ route('gallery.index') }}" 
                class="px-8 py-3 rounded-full bg-gradient-to-r from-blue-600 to-cyan-400 text-white font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition">
                ← Kembali ke Galeri
             </a>

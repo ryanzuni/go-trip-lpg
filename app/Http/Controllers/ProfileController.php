@@ -34,6 +34,6 @@ class ProfileController extends Controller
         $user->save();
 
         // redirect ke dashboard dengan pesan sukses
-        return redirect()->route('dashboard')->with('success', 'Profil berhasil diperbarui!');
+        return redirect()->route('admin.dashboard')->with('success', 'Profil berhasil diperbarui!');
     }
 }
