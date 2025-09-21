@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Carbon\Carbon;
 
 class PaketWisata extends Model
 {
@@ -14,10 +15,12 @@ class PaketWisata extends Model
         'destinasi_id',
         'deskripsi',
         'harga',
+        'harga_weekday',
+        'harga_weekend',
         'durasi_hari',
         'fasilitas',
         'foto',
-        'itinerary', // tambahkan ini kalau ada kolom itinerary
+        'itinerary',
     ];
 
     // Relasi ke tabel destinasi
@@ -36,5 +39,19 @@ class PaketWisata extends Model
     public function transaksis()
     {
         return $this->hasMany(Transaksi::class, 'paket_id');
+    }
+
+    /**
+     * Accessor: Harga otomatis berdasarkan hari ini
+     * Senin-Jumat => harga_weekday
+     * Sabtu-Minggu => harga_weekend
+     */
+    public function getHargaHariIniAttribute()
+    {
+        $day = Carbon::now()->dayOfWeek; // 0 = Minggu, 6 = Sabtu
+
+        return in_array($day, [0, 6]) 
+            ? $this->harga_weekend 
+            : $this->harga_weekday;
     }
 }

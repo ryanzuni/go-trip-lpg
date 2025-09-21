@@ -63,10 +63,11 @@ public function index()
     {
         //
         $request->validate([
-            'nama_paket' => 'required',
-            'destinasi_id' => 'required',
-            'harga' => 'required|numeric',
-            'durasi_hari' => 'required|numeric',
+            'nama_paket'    => 'required',
+            'destinasi_id'  => 'required',
+            'harga_weekday' => 'required|numeric',
+            'harga_weekend' => 'required|numeric',
+            'durasi_hari'   => 'required|numeric',
         ]);
 
         $data = $request->all();
@@ -120,6 +121,14 @@ public function index()
      */
     public function update(Request $request, PaketWisata $paketWisata)
     {
+        $request->validate([
+            'nama_paket'    => 'required',
+            'destinasi_id'  => 'required',
+            'harga_weekday' => 'required|numeric',
+            'harga_weekend' => 'required|numeric',
+            'durasi_hari'   => 'required|numeric',
+        ]);
+
         $data = $request->all();
         if ($request->hasFile('foto')) {
             $data['foto'] = $request->file('foto')->store('paket', 'public');

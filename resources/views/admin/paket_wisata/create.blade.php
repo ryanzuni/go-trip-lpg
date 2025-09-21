@@ -32,8 +32,13 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">Harga (Rp)</label>
-                    <input type="number" name="harga" class="form-control" value="{{ old('harga') }}" required>
+                    <label for="harga_weekday" class="form-label">Harga Weekday</label>
+                    <input type="number" name="harga_weekday" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="harga_weekend" class="form-label">Harga Weekend / Long Weekend</label>
+                    <input type="number" name="harga_weekend" class="form-control" required>
                 </div>
 
                 <div class="mb-3">

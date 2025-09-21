@@ -74,9 +74,13 @@
                     <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center text-center p-3">
                         <h3 class="text-white text-lg sm:text-xl font-bold mb-1">{{ $item->nama_paket }}</h3>
                         <p class="text-gray-200 text-xs sm:text-sm mb-1">{{ $item->destinasi->nama }} - {{ $item->durasi_hari }} Hari</p>
-                        <span class="text-white font-semibold bg-blue-600/80 px-3 py-1 rounded-full shadow-lg mb-2 animate-pulse text-sm sm:text-base">
-                            Rp {{ number_format($item->harga,0,',','.') }}
+                        <span class="block text-sm text-gray-600">
+                            Weekday: Rp {{ number_format($item->harga_weekday,0,',','.') }}
                         </span>
+                        <span class="block text-sm text-gray-600">
+                            Weekend: Rp {{ number_format($item->harga_weekend,0,',','.') }}
+                        </span>
+
                         <span class="text-xs sm:text-sm text-gray-200 bg-black/50 px-2 py-1 rounded-full mb-2">
                             {{ $item->bookings_count }} booking
                         </span>

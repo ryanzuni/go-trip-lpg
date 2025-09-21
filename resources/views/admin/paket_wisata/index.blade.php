@@ -22,7 +22,8 @@
                         <th>Nama Paket</th>
                         <th>Destinasi</th>
                         <th>Durasi</th>
-                        <th>Harga</th>
+                        <th>Harga Weekday</th>
+                        <th>Harga Weekend</th>
                         <th>Foto</th>
                         <th>Aksi</th>
                     </tr>
@@ -34,7 +35,8 @@
                         <td>{{ $item->nama_paket }}</td>
                         <td>{{ $item->destinasi->nama }}</td>
                         <td>{{ $item->durasi_hari }} Hari</td>
-                        <td>Rp {{ number_format($item->harga,0,',','.') }}</td>
+                        <td>Rp {{ number_format($item->harga_weekday,0,',','.') }}</td>
+                        <td>Rp {{ number_format($item->harga_weekend,0,',','.') }}</td>
                         <td>
                             @if($item->foto)
                                 <img src="{{ asset('storage/'.$item->foto) }}" width="80" class="rounded-3">
