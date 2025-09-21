@@ -15,11 +15,19 @@ class Booking extends Model
         'email',
         'telepon',
         'jumlah_orang',
+        'tanggal_booking',
+        'harga_satuan',
+        'total_harga',
         'catatan',
+        'status',
     ];
 
-    public function paket()
+    public function paketWisata()
     {
         return $this->belongsTo(PaketWisata::class, 'paket_id');
     }
+    // public function paket()
+    // {
+    //     return $this->belongsTo(PaketWisata::class, 'paket_id');
+    // }
 }
