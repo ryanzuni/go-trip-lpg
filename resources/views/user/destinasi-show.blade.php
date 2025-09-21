@@ -2,16 +2,15 @@
 
 @section('title', $destinasi->nama . ' - Pariwisata Kita')
 
-@section('content')
-<!-- Banner Full Width (benar-benar nempel kiri kanan layar) -->
-<section class="relative h-[80vh] flex items-center justify-center bg-cover bg-center">
+@section('banner')
+<div class="relative w-screen left-1/2 -translate-x-1/2 h-[510px] -mt-[15px]">
     <img src="{{ asset('storage/'.$destinasi->foto) }}" 
          alt="{{ $destinasi->nama }}" 
          class="absolute inset-0 w-full h-full object-cover">
-    
+
     <!-- Overlay -->
     <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent"></div>
-    
+
     <!-- Text -->
     <div class="relative z-10 flex flex-col items-center justify-center h-full text-center text-white px-6">
         <h1 class="text-5xl md:text-6xl font-bold drop-shadow-lg">{{ $destinasi->nama }}</h1>
@@ -19,11 +18,13 @@
             <i class="fas fa-map-marker-alt text-red-400"></i> {{ $destinasi->lokasi }}
         </p>
     </div>
-</section>
+</div>
+@endsection
 
 
+@section('content')
 <!-- Detail Konten -->
-<section class="max-w-6xl mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-3 gap-10">
+<section class="max-w-6xl mx-auto px-6 py-1 grid grid-cols-1 md:grid-cols-3 gap-10">
     <!-- Informasi -->
     <div class="md:col-span-2 space-y-6">
         <h2 class="text-2xl font-bold text-gray-800">Tentang Destinasi</h2>

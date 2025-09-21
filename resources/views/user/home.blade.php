@@ -6,7 +6,7 @@
 
 @section('banner')
 <!-- Hero 3D Slider Modern Full Width -->
-<section class="w-screen h-[80vh] overflow-hidden relative" id="hero-3d-modern-slider">
+<section class="w-screen h-[85vh] overflow-hidden relative" id="hero-3d-modern-slider">
     <!-- Background full width -->
     <div class="absolute inset-0 z-0">
         <img src="{{ asset('images/banner1.jpeg') }}" alt="Banner" class="w-full h-full object-cover">
