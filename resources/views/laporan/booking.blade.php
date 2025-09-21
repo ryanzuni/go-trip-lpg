@@ -5,7 +5,7 @@
 <div class="container mt-4">
     <div class="card shadow-sm rounded-4">
         <div class="card-body">
-            <h5 class="fw-bold text-primary mb-3">📝 Laporan Booking</h5>
+            <h5 class="fw-bold text-primary mb-3">Laporan Booking</h5>
 
             {{-- Filter --}}
             <form method="GET" class="row g-2 mb-3">
@@ -48,6 +48,8 @@
                             <th>Telepon</th>
                             <th>Paket Wisata</th>
                             <th>Jumlah Orang</th>
+                            <th>Harga Satuan</th>
+                            <th>Total Pembayaran</th>
                             <th>Catatan</th>
                             <th>Status</th>
                             <th>Tanggal Booking</th>
@@ -55,17 +57,34 @@
                     </thead>
                     <tbody>
                         @foreach($bookings as $b)
-                        <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $b->nama }}</td>
-                            <td>{{ $b->email }}</td>
-                            <td>{{ $b->telepon }}</td>
-                            <td>{{ $b->paketWisata->nama ?? '-' }}</td>
-                            <td>{{ $b->jumlah_orang }}</td>
-                            <td>{{ $b->catatan ?? '-' }}</td>
-                            <td>{{ ucfirst($b->status) }}</td>
-                            <td>{{ \Carbon\Carbon::parse($b->created_at)->format('d M Y') }}</td>
-                        </tr>
+                            @php
+                                $tanggal = \Carbon\Carbon::parse($b->created_at);
+                                $dayOfWeek = $tanggal->dayOfWeek;
+
+                                if ($b->paketWisata) {
+                                    $hargaSatuan = ($dayOfWeek == 0 || $dayOfWeek == 6) 
+                                        ? $b->paketWisata->harga_weekend 
+                                        : $b->paketWisata->harga_weekday;
+
+                                    $total = $hargaSatuan * $b->jumlah_orang;
+                                } else {
+                                    $hargaSatuan = 0;
+                                    $total = 0;
+                                }
+                            @endphp
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $b->nama }}</td>
+                                <td>{{ $b->email }}</td>
+                                <td>{{ $b->telepon }}</td>
+                                <td>{{ $b->paketWisata->nama_paket ?? '-' }}</td>
+                                <td>{{ $b->jumlah_orang }}</td>
+                                <td>Rp {{ number_format($b->harga_satuan, 0, ',', '.') }}</td>
+                                <td class="fw-bold text-success">Rp {{ number_format($b->total_harga, 0, ',', '.') }}</td>
+                                <td>{{ $b->catatan ?? '-' }}</td>
+                                <td>{{ ucfirst($b->status) }}</td>
+                                <td>{{ \Carbon\Carbon::parse($b->tanggal_booking)->translatedFormat('l, d F Y') }}</td>
+                            </tr>
                         @endforeach
                     </tbody>
                 </table>
@@ -79,6 +98,11 @@
                 <button id="printTable" class="btn btn-danger">
                     <i class="bi bi-printer"></i> Print
                 </button>
+            </div>
+            
+            {{-- Pagination --}}
+            <div class="d-flex justify-content-left mt-2">
+                {{ $bookings->links('pagination::bootstrap-5') }}
             </div>
         </div>
     </div>
