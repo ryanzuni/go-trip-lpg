@@ -125,6 +125,22 @@
                     <span>{{ session('success') }}</span>
                     <button @click="show = false" class="font-bold text-green-600 hover:text-green-800">&times;</button>
                 </div>
+
+                @if(session('wa_link'))
+                    <div class="mb-6 p-4 rounded-xl bg-green-100 text-green-800 flex items-center gap-4 shadow">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h11M9 21V3m0 0L3 10m6-7l6 7" />
+                        </svg>
+                        <div>
+                            <p>Untuk konfirmasi lebih lanjut, silakan klik tombol WhatsApp berikut:</p>
+                            @if(session('wa_link'))
+                                <a href="{{ session('wa_link') }}" target="_blank" class="btn btn-success">
+                                    Hubungi via WhatsApp
+                                </a>
+                            @endif
+                        </div>
+                    </div>
+                @endif
             @endif
 
             <form action="{{ route('booking.store', $paket->id) }}" method="POST" class="space-y-6">
@@ -164,13 +180,12 @@
 
                 <!-- Tanggal Booking -->
                 <div>
-    <label for="tanggal_booking" class="block text-gray-700 font-medium mb-2">Tanggal Booking</label>
-    <input type="date" name="tanggal_booking" id="tanggal_booking" 
-        value="{{ old('tanggal_booking') }}"
-        class="w-full rounded-xl border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 px-4 py-3"
-        required>
-</div>
-
+                    <label for="tanggal_booking" class="block text-gray-700 font-medium mb-2">Tanggal Booking</label>
+                    <input type="date" name="tanggal_booking" id="tanggal_booking" 
+                        value="{{ old('tanggal_booking') }}"
+                        class="w-full rounded-xl border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 px-4 py-3"
+                        required>
+                </div>
 
                 <!-- Catatan -->
                 <div>

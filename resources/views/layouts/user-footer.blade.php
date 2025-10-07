@@ -57,6 +57,6 @@
 
   <!-- Bottom -->
   <div class="border-t border-gray-200 mt-8 py-4 text-center text-sm text-gray-500">
-    &copy; {{ date('Y') }} Pariwisata Kita. All rights reserved.
+    &copy; {{ date('Y') }} GoTrip Lampung. All rights reserved.
   </div>
 </footer>

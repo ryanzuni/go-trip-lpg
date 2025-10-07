@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\PaketWisata;
 use App\Models\Booking;
 use Carbon\Carbon;
+use App\Notifications\BookingConfirmed;
 
 class BookingController extends Controller
 {
@@ -13,6 +14,16 @@ class BookingController extends Controller
     {
         $paket = PaketWisata::withCount('bookings')->paginate(9);
         return view('user.paket.index', compact('paket'));
+    }
+
+    public function show($id)
+    {
+        $booking = Booking::with('paketWisata.destinasi')->findOrFail($id);
+
+        $paket = $booking->paketWisata; // ambil paket dari relasi booking
+        $paketLain = PaketWisata::where('id', '!=', $paket->id)->get();
+
+        return view('booking.show', compact('paket', 'paketLain', 'booking'));
     }
 
     public function laporan(Request $request)
@@ -110,9 +121,34 @@ class BookingController extends Controller
             'status'          => 'pending',
         ]);
 
-        return redirect()->back()
+        $booking->notify(new BookingConfirmed($booking));
+
+        // Buat link WhatsApp ke customer
+        $waNumber = preg_replace('/[^0-9]/', '', $booking->telepon); // bersihkan input, hanya angka
+        if (str_starts_with($waNumber, '0')) {
+            $waNumber = '628981798046' . substr($waNumber, 1); // ganti 0 diawal jadi 62 (kode negara Indonesia)
+        }
+
+        $message = "Halo {$booking->nama}, terima kasih telah melakukan booking paket wisata di *" . config('app.name') . "*.\n\n"
+            . "📌 *Detail Booking:*\n"
+            . "- Paket: {$booking->paketWisata->nama}\n"
+            . "- Tanggal: {$booking->tanggal_booking}\n"
+            . "- Jumlah Orang: {$booking->jumlah_orang}\n"
+            . "- Total: Rp " . number_format($booking->total_harga, 0, ',', '.') . "\n\n"
+            . "Kami akan segera menghubungi Anda untuk konfirmasi lebih lanjut.\n\n"
+            . "Terima kasih 🙏";
+
+        $waLink = "https://wa.me/{$waNumber}?text=" . urlencode($message);
+
+        return redirect()
+            ->route('paket.show', $paket->id) // balik ke detail paket
             ->with('success', 'Pemesanan berhasil dikirim!')
-            ->with('booking_id', $booking->id);
+            ->with('booking_id', $booking->id)
+            ->with('wa_link', $waLink);
+
+        // return redirect()->back()
+        //     ->with('success', 'Pemesanan berhasil dikirim!')
+        //     ->with('booking_id', $booking->id);
     }
 
 }
