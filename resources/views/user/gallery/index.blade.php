@@ -44,9 +44,8 @@
                 <!-- Gambar Sampul -->
                 <div class="relative h-72">
                     @if($gallery->image)
-                    <img src="{{ asset('storage/'.$gallery->image) }}" 
-                         alt="{{ $gallery->title }}"
-                         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    <img src="{{ asset('storage/' . $gallery->image) }}" 
+                    alt="{{ $gallery->title }}" class="img-fluid">
                     @endif
 
                     <!-- Overlay saat hover -->

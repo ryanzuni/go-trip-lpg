@@ -24,13 +24,13 @@
             </li>
 
             <!-- Destinasi -->
-            <li class="nav-item">
+            <!-- <li class="nav-item">
                 <a class="nav-link d-flex align-items-center {{ request()->routeIs('destinasi.*') ? 'active text-white bg-primary rounded-3' : 'text-dark' }}" 
                    href="{{ route('admin.destinasi.index') }}">
                     <i class="bi bi-geo-alt me-2"></i>
                     <span class="sidebar-text">Destinasi Wisata</span>
                 </a>
-            </li>
+            </li> -->
 
             <!-- Paket Wisata -->
             <li class="nav-item">
@@ -52,7 +52,7 @@
             </li>
 
             <!-- Dropdown Transaksi -->
-            <li class="nav-item">
+            <!-- <li class="nav-item">
                 <a href="#!" class="nav-link d-flex align-items-center justify-content-between text-dark" 
                 onclick="toggleDropdown('transaksiMenu')">
                     <span>
@@ -75,7 +75,7 @@
                         </a>
                     </li>
                 </ul>
-            </li>
+            </li> -->
 
             <!-- Dropdown Laporan -->
             <li class="nav-item">
@@ -88,13 +88,13 @@
                     <i class="fas fa-chevron-down small-chevron" id="chevron-laporan"></i>
                 </a>
                 <ul class="nav flex-column ms-3" id="laporanMenu" style="display:none;">
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a class="nav-link {{ request()->is('laporan/transaksi') ? 'active text-white bg-primary rounded-3' : 'text-dark' }}" 
                         href="{{ route('admin.laporan.transaksi') }}">
                             <i class="far fa-circle me-2 fs-6"></i>
                             <span class="sidebar-text">Transaksi</span>
                         </a>
-                    </li>
+                    </li> -->
                     <li class="nav-item">
                         <a class="nav-link {{ request()->is('laporan/booking') ? 'active text-white bg-primary rounded-3' : 'text-dark' }}" 
                         href="{{ route('admin.laporan.booking') }}">
@@ -102,7 +102,7 @@
                             <span class="sidebar-text">Booking</span>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a class="nav-link {{ request()->is('laporan/pendapatan') ? 'active text-white bg-primary rounded-3' : 'text-dark' }}" 
                         href="{{ route('admin.laporan.pendapatan') }}">
                             <i class="far fa-circle me-2 fs-6"></i>
@@ -115,12 +115,12 @@
                             <i class="far fa-circle me-2 fs-6"></i>
                             <span class="sidebar-text">Paket Wisata</span>
                         </a>
-                    </li>
+                    </li> -->
                 </ul>
             </li>
 
             <!-- Settings Admin -->
-            <li class="nav-item">
+            <!-- <li class="nav-item">
                 <a class="nav-link d-flex align-items-center justify-content-between text-dark" 
                 href="#!" onclick="toggleDropdown('settingsMenu')">
                     <span>
@@ -143,42 +143,41 @@
                         </a>
                     </li>
                 </ul>
-            </li>
-
+            </li> -->
         </ul>
     </div>
 </div>
 
 <!-- Script -->
 <script>
-function toggleDropdown(id) {
-    const menu = document.getElementById(id);
-    const chevron = document.getElementById('chevron-' + id.split('Menu')[0]);
+    function toggleDropdown(id) {
+        const menu = document.getElementById(id);
+        const chevron = document.getElementById('chevron-' + id.split('Menu')[0]);
 
-    // Tutup semua dropdown lain dulu
-    document.querySelectorAll('ul[id$="Menu"]').forEach(m => {
-        if (m.id !== id) {
-            m.style.display = 'none';
-            const ch = document.getElementById('chevron-' + m.id.split('Menu')[0]);
-            if (ch) ch.classList.remove('rotate-180');
+        // Tutup semua dropdown lain dulu
+        document.querySelectorAll('ul[id$="Menu"]').forEach(m => {
+            if (m.id !== id) {
+                m.style.display = 'none';
+                const ch = document.getElementById('chevron-' + m.id.split('Menu')[0]);
+                if (ch) ch.classList.remove('rotate-180');
+            }
+        });
+
+        // Toggle menu yang dipilih
+        if (menu.style.display === 'none' || menu.style.display === '') {
+            menu.style.display = 'block';
+            chevron.classList.add('rotate-180');
+        } else {
+            menu.style.display = 'none';
+            chevron.classList.remove('rotate-180');
         }
-    });
-
-    // Toggle menu yang dipilih
-    if (menu.style.display === 'none' || menu.style.display === '') {
-        menu.style.display = 'block';
-        chevron.classList.add('rotate-180');
-    } else {
-        menu.style.display = 'none';
-        chevron.classList.remove('rotate-180');
     }
-}
 
-// Toggle collapse sidebar
-document.getElementById("sidebarToggle").addEventListener("click", function () {
-    const sidebar = document.getElementById("sidebar");
-    sidebar.classList.toggle("collapsed");
-});
+    // Toggle collapse sidebar
+    document.getElementById("sidebarToggle").addEventListener("click", function () {
+        const sidebar = document.getElementById("sidebar");
+        sidebar.classList.toggle("collapsed");
+    });
 </script>
 
 <!-- Style -->
