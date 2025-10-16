@@ -25,13 +25,13 @@
           {{ Request::routeIs('gallery.*') ? 'w-full' : 'group-hover:w-full' }}"></span>
       </a>
 
-      <a href="{{ route('destinasi.index') }}"
+      <!-- <a href="{{ route('destinasi.index') }}"
         class="relative font-medium transition duration-300
         {{ Request::routeIs('destinasi.index') ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600' }}">
         Destinasi
         <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-blue-600 transition-all duration-300
         {{ Request::routeIs('destinasi.index') ? 'w-full' : 'group-hover:w-full' }}"></span>
-      </a>
+      </a> -->
 
       <a href="{{ route('paket.index') }}"
         class="relative font-medium transition duration-300 
@@ -50,10 +50,10 @@
       </a>
 
       <!-- CTA Button -->
-      <a href="#explore"
+      <!-- <a href="#explore"
          class="ml-4 bg-gradient-to-r from-blue-500 to-cyan-400 text-white px-5 py-2 rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition transform duration-300">
          Explore
-      </a>
+      </a> -->
     </nav>
 
     <!-- Mobile Menu Button -->
@@ -72,10 +72,10 @@
         class="font-medium {{ Request::routeIs('gallery.*') ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600' }}">
         Gallery
       </a>
-      <a href="{{ route('destinasi.index') }}" 
+      <!-- <a href="{{ route('destinasi.index') }}" 
         class="font-medium {{ Request::routeIs('destinasi.index') ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600' }}">
           Destinasi
-      </a>
+      </a> -->
       <a href="#contact" class="font-medium text-gray-700 hover:text-blue-600">Contact</a>
       <a href="#explore" class="bg-gradient-to-r from-blue-500 to-cyan-400 text-white px-4 py-2 rounded-full shadow-md text-center">
         Explore
