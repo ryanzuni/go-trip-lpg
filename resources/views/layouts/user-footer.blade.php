@@ -7,10 +7,10 @@
         <img src="{{ asset('images/logo.jpg') }}" alt="Pariwisata Kita" class="w-12 h-12 object-contain">
         <span class="text-2xl font-bold text-gray-800">GoTrip Lampung</span>
       </div>
-      <p class="text-gray-600 text-sm leading-relaxed">
+      <!-- <p class="text-gray-600 text-sm leading-relaxed">
         Platform untuk menemukan destinasi terbaik di Indonesia. 
         Temukan keindahan alam & budaya nusantara bersama kami.
-      </p>
+      </p> -->
     </div>
 
     <!-- Quick Links -->
@@ -20,7 +20,7 @@
         <li><a href="/" class="hover:text-blue-600 transition">Home</a></li>
         <li><a href="/gallery" class="hover:text-blue-600 transition">Gallery</a></li>
         <li><a href="/paket-wisata" class="hover:text-blue-600 transition">Paket Wisata</a></li>
-        <li><a href="/contact" class="hover:text-blue-600 transition">Contact</a></li>
+        <!-- <li><a href="/contact" class="hover:text-blue-600 transition">Contact</a></li> -->
       </ul>
     </div>
 

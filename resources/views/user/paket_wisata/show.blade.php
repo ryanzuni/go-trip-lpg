@@ -100,13 +100,13 @@
         <div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row gap-4 mb-12">
             <a href="{{ route('paket.index') }}" 
             class="px-6 py-3 w-full sm:w-auto rounded-xl bg-gray-200 text-gray-700 font-medium hover:bg-gray-300 transition">
-            ← Kembali
+            Kembali
             </a>
 
-            <button @click="openForm = !openForm" 
+            <!-- <button @click="openForm = !openForm" 
                     class="px-6 py-3 w-full sm:w-auto rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold shadow-lg hover:scale-[1.02] hover:shadow-xl transition transform">
                 Pesan Sekarang
-            </button>
+            </button> -->
         </div>
 
         <!-- Form Booking (tersembunyi default) -->
@@ -196,14 +196,14 @@
                 </div>
 
                 <!-- Tombol Submit -->
-                <div class="flex justify-end">
+                <!-- <div class="flex justify-end">
                     <button type="submit"
                             class="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold rounded-xl shadow-lg hover:scale-[1.02] hover:shadow-xl transition">
                         Lanjutkan Pemesanan
                     </button>
                 </div>
             </form>
-        </div>
+        </div> -->
 
 
         <!-- Konten Lain / Paket Lainnya -->
