@@ -19,6 +19,7 @@
       <ul class="space-y-2 text-sm">
         <li><a href="/" class="hover:text-blue-600 transition">Home</a></li>
         <li><a href="/gallery" class="hover:text-blue-600 transition">Gallery</a></li>
+        <li><a href="/destinasi" class="hover:text-blue-600 transition">Destinasi</a></li>
         <li><a href="/paket-wisata" class="hover:text-blue-600 transition">Paket Wisata</a></li>
         <!-- <li><a href="/contact" class="hover:text-blue-600 transition">Contact</a></li> -->
       </ul>

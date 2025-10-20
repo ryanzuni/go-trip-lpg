@@ -14,7 +14,7 @@
                     <input type="text" name="nama_paket" class="form-control" value="{{ old('nama_paket') }}" required>
                 </div>
 
-                <!-- <div class="mb-3">
+                <div class="mb-3">
                     <label class="form-label">Destinasi</label>
                     <select name="destinasi_id" class="form-select" required>
                         <option value="">-- Pilih Destinasi --</option>
@@ -24,7 +24,7 @@
                             </option>
                         @endforeach
                     </select>
-                </div> -->
+                </div>
 
                 <div class="mb-3">
                     <label class="form-label">Deskripsi</label>

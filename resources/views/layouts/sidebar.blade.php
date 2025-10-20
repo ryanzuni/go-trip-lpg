@@ -24,13 +24,13 @@
             </li>
 
             <!-- Destinasi -->
-            <!-- <li class="nav-item">
+            <li class="nav-item">
                 <a class="nav-link d-flex align-items-center {{ request()->routeIs('destinasi.*') ? 'active text-white bg-primary rounded-3' : 'text-dark' }}" 
                    href="{{ route('admin.destinasi.index') }}">
                     <i class="bi bi-geo-alt me-2"></i>
                     <span class="sidebar-text">Destinasi Wisata</span>
                 </a>
-            </li> -->
+            </li>
 
             <!-- Paket Wisata -->
             <li class="nav-item">

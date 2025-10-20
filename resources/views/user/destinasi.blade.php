@@ -45,67 +45,6 @@
     @endforeach
 </div>
 
-
-{{-- Pemberitahuan Modern --}}
-<h2 class="text-3xl font-bold text-blue-600 mb-8 text-center">Pemberitahuan</h2>
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto mb-12">
-    <div class="bg-yellow-100 p-6 rounded-2xl shadow hover:shadow-xl transition transform hover:-translate-y-1">
-        <span class="badge bg-yellow-600 text-white mb-2">Maintenance</span>
-        <h3 class="text-xl font-bold mb-2">Sistem Maintenance</h3>
-        <p>Sistem akan maintenance pada Sabtu, 7 September 2025 pukul 02.00-04.00 WIB. Mohon simpan pekerjaan Anda sebelumnya.</p>
-    </div>
-
-    <div class="bg-blue-100 p-6 rounded-2xl shadow hover:shadow-xl transition transform hover:-translate-y-1">
-        <span class="badge bg-blue-700 text-white mb-2">Promo</span>
-        <h3 class="text-xl font-bold mb-2">Diskon Tiket</h3>
-        <p>Dapatkan diskon 20% untuk destinasi wisata X sampai akhir bulan ini. Buruan pesan tiketnya!</p>
-    </div>
-
-    <div class="bg-red-100 p-6 rounded-2xl shadow hover:shadow-xl transition transform hover:-translate-y-1">
-        <span class="badge bg-red-700 text-white mb-2">Peringatan</span>
-        <h3 class="text-xl font-bold mb-2">Peringatan Cuaca</h3>
-        <p>Cuaca ekstrem diperkirakan di wilayah Y pada hari Minggu. Harap berhati-hati saat berkunjung dan cek info terbaru.</p>
-    </div>
-</div>
-
-{{-- Tips & Info Menarik --}}
-<h2 class="text-3xl font-bold text-blue-600 mb-8 text-center">Tips & Info Menarik</h2>
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto mb-12">
-    <div class="bg-green-100 p-6 rounded-2xl shadow hover:shadow-xl transition transform hover:-translate-y-1">
-        <h3 class="text-xl font-bold mb-2">Jangan Lupa Kamera!</h3>
-        <p>Abadikan momen liburanmu di destinasi favorit.</p>
-    </div>
-
-    <div class="bg-purple-100 p-6 rounded-2xl shadow hover:shadow-xl transition transform hover:-translate-y-1">
-        <h3 class="text-xl font-bold mb-2">Cek Cuaca Terlebih Dahulu</h3>
-        <p>Persiapkan pakaian dan perlengkapan sesuai kondisi cuaca.</p>
-    </div>
-
-    <div class="bg-pink-100 p-6 rounded-2xl shadow hover:shadow-xl transition transform hover:-translate-y-1">
-        <h3 class="text-xl font-bold mb-2">Rencanakan Itinerary</h3>
-        <p>Buat rencana perjalanan agar liburan lebih menyenangkan dan hemat waktu.</p>
-    </div>
-</div>
-
-{{-- Grid Baru: Destinasi Populer --}}
-<h2 class="text-3xl font-bold text-blue-600 mb-8 text-center">Destinasi Populer</h2>
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto mb-12">
-    <div class="bg-gradient-to-br from-yellow-400 to-orange-400 text-white p-6 rounded-3xl shadow-lg hover:shadow-2xl transform hover:scale-105 transition">
-        <h3 class="text-xl font-bold mb-2">Pantai Sunset</h3>
-        <p>Nikmati pemandangan matahari terbenam yang memukau.</p>
-    </div>
-
-    <div class="bg-gradient-to-br from-blue-400 to-indigo-500 text-white p-6 rounded-3xl shadow-lg hover:shadow-2xl transform hover:scale-105 transition">
-        <h3 class="text-xl font-bold mb-2">Gunung Seruni</h3>
-        <p>Rasakan petualangan seru mendaki puncak Gunung Seruni.</p>
-    </div>
-
-    <div class="bg-gradient-to-br from-green-400 to-teal-500 text-white p-6 rounded-3xl shadow-lg hover:shadow-2xl transform hover:scale-105 transition">
-        <h3 class="text-xl font-bold mb-2">Danau Crystal</h3>
-        <p>Air danau jernih seperti kristal, sempurna untuk foto.</p>
-    </div>
-</div>
-
 <script>
 function openModal(id) {
     document.getElementById(id).classList.remove('hidden');
