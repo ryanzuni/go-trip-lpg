@@ -15,20 +15,19 @@ class PaketWisataController extends Controller
     // untuk user
     // untuk user
    public function userIndex()
-{
-    $paket = PaketWisata::with('destinasi')->paginate(9);
-    return view('user.paket_wisata.index', compact('paket')); // ⬅️ ini cocok dengan index.blade.php
-}
+    {
+        $paket = PaketWisata::with('destinasi')->paginate(9);
+        return view('user.paket_wisata.index', compact('paket')); // ⬅️ ini cocok dengan index.blade.php
+    }
 
-// untuk admin
-public function index()
-{
-    $paket = PaketWisata::with('destinasi')->paginate(10);
+    // untuk admin
+    public function index()
+    {
+        $paket = PaketWisata::with('destinasi')->paginate(10);
 
-    // view untuk ADMIN (sidebar)
-    return view('admin.paket_wisata.index', compact('paket'));
-}
-
+        // view untuk ADMIN (sidebar)
+        return view('admin.paket_wisata.index', compact('paket'));
+    }
 
     // public function index($id = null)
     // {

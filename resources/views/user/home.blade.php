@@ -73,20 +73,22 @@
 <!-- Fasilitas -->
 <section class="bg-gray-50 py-16 mt-20">
     <h2 class="text-3xl font-bold text-blue-600 mb-12 text-center">Fasilitas yang Tersedia</h2>
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 max-w-6xl mx-auto px-6 text-center">
+    
+    <div class="grid gap-8 max-w-6xl mx-auto px-6 text-center 
+                grid-cols-2 sm:grid-cols-3 md:grid-cols-[repeat(auto-fit,minmax(150px,1fr))]">
         @php
             $fasilitas = [
-                ['icon'=>'fa-parking','color'=>'blue','label'=>'Parkir Luas'],
                 ['icon'=>'fa-utensils','color'=>'green','label'=>'Kuliner'],
-                ['icon'=>'fa-wifi','color'=>'yellow','label'=>'Free Wifi'],
                 ['icon'=>'fa-restroom','color'=>'red','label'=>'Toilet'],
-                ['icon'=>'fa-tree','color'=>'purple','label'=>'Taman'],
                 ['icon'=>'fa-hotel','color'=>'pink','label'=>'Hotel'],
+                ['icon'=>'fa-parking','color'=>'blue','label'=>'Parkir Luas'],
             ];
         @endphp
+
         @foreach($fasilitas as $item)
         <div class="bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transform hover:-translate-y-2 active:scale-95 transition cursor-pointer">
-            <div class="w-16 h-16 mx-auto flex items-center justify-center bg-{{ $item['color'] }}-100 text-{{ $item['color'] }}-600 rounded-full mb-3 shadow-inner">
+            <div class="w-16 h-16 mx-auto flex items-center justify-center 
+                        bg-{{ $item['color'] }}-100 text-{{ $item['color'] }}-600 rounded-full mb-3 shadow-inner">
                 <i class="fas {{ $item['icon'] }} text-2xl"></i>
             </div>
             <p class="font-medium text-gray-700">{{ $item['label'] }}</p>
@@ -170,7 +172,7 @@
 <section class="py-20 bg-blue-600 text-white text-center rounded-t-3xl shadow-lg mt-20">
     <h2 class="text-3xl md:text-4xl font-bold mb-4">Siap untuk Liburan?</h2>
     <p class="mb-8 text-lg opacity-90">Jelajahi destinasi terbaik di Indonesia sekarang juga.</p>
-    <a href="{{ route('destinasi.index') }}" 
+    <a href="{{ route('gallery.index') }}" 
       class="bg-white text-blue-600 font-semibold px-8 py-3 rounded-full shadow hover:bg-gray-100 transition">
         Lihat Semua Destinasi
     </a>
