@@ -4,7 +4,7 @@
 <div class="container mt-4">
     <div class="card shadow-sm rounded-4">
         <div class="card-body">
-            <h5 class="fw-bold text-primary mb-3">➕ Tambah Destinasi</h5>
+            <h5 class="fw-bold text-primary mb-3">Tambah Destinasi</h5>
             <form action="{{ route('admin.destinasi.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="mb-3">

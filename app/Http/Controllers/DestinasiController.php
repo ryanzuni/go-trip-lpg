@@ -41,7 +41,7 @@ class DestinasiController extends Controller
 
     public function edit(Destinasi $destinasi)
     {
-        return view('admin.destinasi.edit', compact('destinasi'));
+        return view('destinasi.edit', compact('destinasi'));
     }
 
     public function update(Request $request, Destinasi $destinasi)
