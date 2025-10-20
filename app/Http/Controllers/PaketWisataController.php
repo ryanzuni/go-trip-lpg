@@ -109,16 +109,22 @@ class PaketWisataController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(PaketWisata $paketWisata)
+    // public function edit(PaketWisata $paketWisata)
+    // {
+    //     $destinasi = Destinasi::all();
+    //      return view('admin.paket_wisata.edit', compact('paketWisata', 'destinasi'));
+    // }
+
+    public function edit(PaketWisata $paket_wisatum)
     {
         $destinasi = Destinasi::all();
-         return view('admin.paket_wisata.edit', compact('paketWisata', 'destinasi'));
+        return view('admin.paket_wisata.edit', compact('paket_wisatum', 'destinasi'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, PaketWisata $paketWisata)
+    public function update(Request $request, PaketWisata $paket_wisatum)
     {
         $request->validate([
             'nama_paket'    => 'required',
@@ -132,7 +138,7 @@ class PaketWisataController extends Controller
         if ($request->hasFile('foto')) {
             $data['foto'] = $request->file('foto')->store('paket', 'public');
         }
-        $paketWisata->update($data);
+        $paket_wisatum->update($request->all());
 
         return redirect()->route('admin.paket_wisata.index')->with('success','Paket wisata berhasil diperbarui');
     }
