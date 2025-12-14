@@ -67,7 +67,7 @@
         <!-- Kanan: Gambar -->
         <div class="col-md-6 d-none d-md-block p-0">
             <div class="h-100 position-relative">
-                <img src="https://source.unsplash.com/1200x900/?indonesia,travel" 
+                <img src="{{ asset('images/banner3.jpeg') }}" 
                      class="img-fluid w-100 h-100" style="object-fit: cover;">
                 <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-flex flex-column justify-content-center align-items-center text-white text-center p-4">
                     <h1 class="fw-bold">Jelajahi Keindahan Nusantara</h1>

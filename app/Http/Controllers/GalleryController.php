@@ -27,7 +27,14 @@ class GalleryController extends Controller
     public function userShow($id)
     {
         $gallery = Gallery::findOrFail($id);
-        return view('user.gallery.show', compact('gallery'));
+
+        // Increment views count
+        $gallery->increment('views');
+
+        // Get all galleries for recommendations (excluding current)
+        $galleries = Gallery::where('id', '!=', $id)->latest()->get();
+
+        return view('user.gallery.show', compact('gallery', 'galleries'));
     }
 
     public function index()

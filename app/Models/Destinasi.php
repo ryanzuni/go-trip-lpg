@@ -15,5 +15,10 @@ class Destinasi extends Model
         'lokasi',
         'deskripsi',
         'foto',
+        'views',
+    ];
+
+    protected $casts = [
+        'views' => 'integer',
     ];
 }

@@ -10,5 +10,9 @@ class Gallery extends Model
     //
     use HasFactory;
 
-    protected $fillable = ['title', 'description', 'image'];
+    protected $fillable = ['title', 'description', 'image', 'views'];
+
+    protected $casts = [
+        'views' => 'integer',
+    ];
 }

@@ -58,24 +58,60 @@
 
             <!-- Form -->
             <div class="bg-white rounded-2xl shadow-lg p-8 border">
-                <h2 class="text-2xl font-bold text-gray-800 mb-6">Kirim Pesan</h2>
-                <form action="#" method="POST" class="space-y-5">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Kirim Komentar</h2>
+                <form action="{{ route('contact.store') }}" method="POST" class="space-y-5">
                     @csrf
-                    <input type="text" name="name" 
-                        class="w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition text-gray-700" 
-                        placeholder="Nama Anda" required>
-                    <input type="email" name="email" 
-                        class="w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition text-gray-700" 
-                        placeholder="Email Anda" required>
+                    <input type="text" name="name"
+                        class="w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition text-gray-700"
+                        placeholder="Nama Anda" value="{{ old('name') }}" required>
+                    <input type="email" name="email"
+                        class="w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition text-gray-700"
+                        placeholder="Email Anda" value="{{ old('email') }}" required>
                     <textarea name="message" rows="5"
-                        class="w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition text-gray-700" 
-                        placeholder="Tulis pesan Anda..." required></textarea>
-                    <button type="submit" 
+                        class="w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition text-gray-700"
+                        placeholder="Tulis komentar Anda..." required>{{ old('message') }}</textarea>
+                    <button type="submit"
                         class="w-full bg-gradient-to-r from-blue-500 to-cyan-400 text-white font-semibold px-6 py-3 rounded-lg shadow-md hover:shadow-xl transition">
-                        Kirim Pesan
+                        Kirim Komentar
                     </button>
                 </form>
+
+                @if(session('success'))
+                    <div class="mt-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                @if($errors->any())
+                    <div class="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                        <ul class="list-disc list-inside">
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
             </div>
+        </div>
+
+        <!-- Comments Section -->
+        <div class="mt-20">
+            <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">Komentar Pengunjung</h2>
+
+            @if($comments->count() > 0)
+                <div class="space-y-6">
+                    @foreach($comments as $comment)
+                        @include('partials.comment', ['comment' => $comment, 'level' => 0])
+                    @endforeach
+                </div>
+
+                <!-- Pagination -->
+                <div class="mt-8 flex justify-center">
+                    {{ $comments->links() }}
+                </div>
+            @else
+                <p class="text-gray-500 text-center text-lg">Belum ada komentar.</p>
+            @endif
         </div>
 
         <!-- Map -->

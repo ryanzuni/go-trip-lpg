@@ -86,6 +86,10 @@ class DestinasiController extends Controller
     public function show($id)
     {
         $destinasi = Destinasi::findOrFail($id);
-        return view('user.destinasi-show', compact('destinasi'));
+        $destinasi->increment('views');
+
+        $related = Destinasi::where('id', '!=', $destinasi->id)->inRandomOrder()->take(3)->get();
+
+        return view('user.destinasi-show', compact('destinasi', 'related'));
     }
 }

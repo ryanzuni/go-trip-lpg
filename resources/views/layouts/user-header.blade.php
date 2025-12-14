@@ -40,6 +40,14 @@
         <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-blue-600 transition-all duration-300
           {{ Request::routeIs('paket.*') ? 'w-full' : 'group-hover:w-full' }}"></span>
       </a>
+
+      <a href="{{ route('contact') }}"
+        class="relative font-medium transition duration-300 
+        {{ Request::routeIs('contact.*') ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600' }}">
+        Contact
+        <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-blue-600 transition-all duration-300
+          {{ Request::routeIs('contact.*') ? 'w-full' : 'group-hover:w-full' }}"></span>
+      </a>
     </nav>
 
     <!-- Mobile Menu Button -->
@@ -62,10 +70,10 @@
         class="font-medium {{ Request::routeIs('destinasi.index') ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600' }}">
           Destinasi
       </a>
-      <!-- <a href="#contact" class="font-medium text-gray-700 hover:text-blue-600">Contact</a>
+      <a href="#contact" class="font-medium text-gray-700 hover:text-blue-600">Contact</a>
       <a href="#explore" class="bg-gradient-to-r from-blue-500 to-cyan-400 text-white px-4 py-2 rounded-full shadow-md text-center">
         Explore
-      </a> -->
+      </a>
     </nav>
   </div>
 </header>

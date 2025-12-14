@@ -49,7 +49,11 @@ Route::get('/gallery/{id}', [GalleryController::class, 'userShow'])->name('galle
 Route::post('/booking/{paket}', [BookingController::class, 'store'])->name('booking.store');
 
 // Contact
-Route::get('/contact', fn() => view('user.contact'))->name('contact');
+Route::get('/contact', function () {
+    $comments = \App\Models\Comment::whereNull('parent_id')->approved()->latest()->paginate(10);
+    return view('user.contact', compact('comments'));
+})->name('contact');
+Route::post('/contact', [App\Http\Controllers\CommentController::class, 'store'])->name('contact.store');
 
 /*
 |--------------------------------------------------------------------------
@@ -68,6 +72,12 @@ Route::prefix('admin')->middleware('auth')->name('admin.')->group(function () {
 
     // Gallery CRUD
     Route::resource('galleries', GalleryController::class);
+
+    // Comments Management
+    Route::get('comments', [App\Http\Controllers\CommentController::class, 'index'])->name('comments.index');
+    Route::post('comments/{id}/approve', [App\Http\Controllers\CommentController::class, 'approve'])->name('comments.approve');
+    Route::post('comments/{id}/reject', [App\Http\Controllers\CommentController::class, 'reject'])->name('comments.reject');
+    Route::delete('comments/{id}', [App\Http\Controllers\CommentController::class, 'destroy'])->name('comments.destroy');
 
     // Transaksi
     Route::resource('transaksi', TransaksiController::class);

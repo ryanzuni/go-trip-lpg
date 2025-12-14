@@ -43,11 +43,21 @@
 
             <!-- Gallery -->
             <li class="nav-item mb-1">
-                <a class="nav-link d-flex align-items-center 
-                {{ request()->routeIs('admin.galleries.*') ? 'active text-white bg-primary rounded-3' : 'text-dark' }}" 
+                <a class="nav-link d-flex align-items-center
+                {{ request()->routeIs('admin.galleries.*') ? 'active text-white bg-primary rounded-3' : 'text-dark' }}"
                 href="{{ route('admin.galleries.index') }}">
                     <i class="bi bi-image me-2"></i>
                     <span class="sidebar-text">Gallery</span>
+                </a>
+            </li>
+
+            <!-- Comments -->
+            <li class="nav-item mb-1">
+                <a class="nav-link d-flex align-items-center
+                {{ request()->routeIs('admin.comments.*') ? 'active text-white bg-primary rounded-3' : 'text-dark' }}"
+                href="{{ route('admin.comments.index') }}">
+                    <i class="bi bi-chat-dots me-2"></i>
+                    <span class="sidebar-text">Komentar</span>
                 </a>
             </li>
 
