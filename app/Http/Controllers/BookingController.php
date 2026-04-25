@@ -7,6 +7,7 @@ use App\Models\PaketWisata;
 use App\Models\Booking;
 use Carbon\Carbon;
 use App\Notifications\BookingConfirmed;
+use Illuminate\Support\Facades\Notification;
 
 class BookingController extends Controller
 {
@@ -82,6 +83,36 @@ class BookingController extends Controller
     //     return redirect()->back()->with('success', 'Pemesanan berhasil dikirim!');
     // }
 
+    public function confirmPayment($id)
+    {
+        $booking = Booking::findOrFail($id);
+
+        $booking->update([
+            'status' => 'paid'
+        ]);
+
+        // ✅ BARU KIRIM EMAIL
+        Notification::route('mail', $booking->email)
+            ->notify(new BookingConfirmed($booking));
+
+        // ✅ BARU KIRIM WA
+        // wa logic di sini
+
+        return back()->with('success', 'Pembayaran berhasil dikonfirmasi');
+    }
+
+    public function payment($id)
+    {
+        $booking = Booking::with('paketWisata')->findOrFail($id);
+
+        // pastikan belum dibayar
+        if ($booking->status !== 'pending') {
+            abort(403, 'Booking sudah diproses');
+        }
+
+        return view('user.booking.payment', compact('booking'));
+    }
+
     // Hitung harga berdasarkan weekday/weekend
     public function store(Request $request, PaketWisata $paket)
     {
@@ -108,6 +139,18 @@ class BookingController extends Controller
         $totalHarga = $hargaSatuan * $validated['jumlah_orang'];
 
         // Simpan booking ke database
+        // $booking = Booking::create([
+        //     'paket_id'        => $paket->id,
+        //     'nama'            => $validated['nama'],
+        //     'email'           => $validated['email'],
+        //     'telepon'         => $validated['telepon'],
+        //     'jumlah_orang'    => $validated['jumlah_orang'],
+        //     'tanggal_booking' => $validated['tanggal_booking'],
+        //     'harga_satuan'    => $hargaSatuan,
+        //     'total_harga'     => $totalHarga,
+        //     'catatan'         => $validated['catatan'] ?? null,
+        //     'status'          => 'pending',
+        // ]);
         $booking = Booking::create([
             'paket_id'        => $paket->id,
             'nama'            => $validated['nama'],
@@ -118,10 +161,10 @@ class BookingController extends Controller
             'harga_satuan'    => $hargaSatuan,
             'total_harga'     => $totalHarga,
             'catatan'         => $validated['catatan'] ?? null,
-            'status'          => 'pending',
+            'status'          => 'pending', // ⬅️ BELUM BAYAR
         ]);
 
-        $booking->notify(new BookingConfirmed($booking));
+        // $booking->notify(new BookingConfirmed($booking));
 
         // Buat link WhatsApp ke customer
         $waNumber = preg_replace('/[^0-9]/', '', $booking->telepon); // bersihkan input, hanya angka
@@ -145,6 +188,8 @@ class BookingController extends Controller
             ->with('success', 'Pemesanan berhasil dikirim!')
             ->with('booking_id', $booking->id)
             ->with('wa_link', $waLink);
+
+        return redirect()->route('booking.payment', $booking->id);
 
         // return redirect()->back()
         //     ->with('success', 'Pemesanan berhasil dikirim!')

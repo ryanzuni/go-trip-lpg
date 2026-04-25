@@ -46,6 +46,14 @@ Route::get('/gallery', [GalleryController::class, 'userIndex'])->name('gallery.i
 Route::get('/gallery/{id}', [GalleryController::class, 'userShow'])->name('gallery.show');
 
 // Booking
+// Booking
+Route::post('/booking/{paket}', [BookingController::class, 'store'])
+    ->name('booking.store');
+
+// ⬇️ TAMBAHKAN INI
+Route::get('/booking/{id}/payment', [BookingController::class, 'payment'])
+    ->name('booking.payment');
+
 Route::post('/booking/{paket}', [BookingController::class, 'store'])->name('booking.store');
 
 // Contact

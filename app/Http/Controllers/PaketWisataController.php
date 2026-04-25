@@ -98,7 +98,7 @@ class PaketWisataController extends Controller
 
         return view('user.paket_wisata.show', compact('paket', 'paketLain'));
         // $paket = PaketWisata::with('destinasi')->findOrFail($id);
-        // return view('user.paket.show', compact('paket')); // ⬅️ pastikan file show.blade.php ada
+        // return view('user.paket.show', compact('paket')); // pastikan file show.blade.php ada
     }
 
     public function show(PaketWisata $paketWisata)

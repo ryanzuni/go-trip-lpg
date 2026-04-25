@@ -62,7 +62,7 @@
             </li>
 
             <!-- Dropdown Transaksi -->
-            <!-- <li class="nav-item">
+            <li class="nav-item">
                 <a href="#!" class="nav-link d-flex align-items-center justify-content-between text-dark" 
                 onclick="toggleDropdown('transaksiMenu')">
                     <span>
@@ -85,7 +85,7 @@
                         </a>
                     </li>
                 </ul>
-            </li> -->
+            </li>
 
             <!-- Dropdown Laporan -->
             <!-- <li class="nav-item">
@@ -98,20 +98,20 @@
                     <i class="fas fa-chevron-down small-chevron" id="chevron-laporan"></i>
                 </a>
                 <ul class="nav flex-column ms-3" id="laporanMenu" style="display:none;"> -->
-                    <!-- <li class="nav-item">
+                    <li class="nav-item">
                         <a class="nav-link {{ request()->is('laporan/transaksi') ? 'active text-white bg-primary rounded-3' : 'text-dark' }}" 
                         href="{{ route('admin.laporan.transaksi') }}">
                             <i class="far fa-circle me-2 fs-6"></i>
                             <span class="sidebar-text">Transaksi</span>
                         </a>
-                    </li> -->
-                    <!-- <li class="nav-item">
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link {{ request()->is('laporan/booking') ? 'active text-white bg-primary rounded-3' : 'text-dark' }}" 
                         href="{{ route('admin.laporan.booking') }}">
                             <i class="far fa-circle me-2 fs-6"></i>
                             <span class="sidebar-text">Booking</span>
                         </a>
-                    </li> -->
+                    </li>
                     <!-- <li class="nav-item">
                         <a class="nav-link {{ request()->is('laporan/pendapatan') ? 'active text-white bg-primary rounded-3' : 'text-dark' }}" 
                         href="{{ route('admin.laporan.pendapatan') }}">

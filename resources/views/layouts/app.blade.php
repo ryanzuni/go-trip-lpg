@@ -30,25 +30,25 @@
             flex: 1; /* biar footer tetap di bawah */
         }
         /* Sidebar default lebar */
-.sidebar {
-    width: 220px;
-    transition: width 0.3s;
-}
+        .sidebar {
+            width: 220px;
+            transition: width 0.3s;
+        }
 
-/* Sidebar shrink */
-.sidebar.collapsed {
-    width: 60px;
-}
+        /* Sidebar shrink */
+        .sidebar.collapsed {
+            width: 60px;
+        }
 
-.sidebar.collapsed .sidebar-text {
-    display: none; /* sembunyikan teks saat collapse */
-}
+        .sidebar.collapsed .sidebar-text {
+            display: none; /* sembunyikan teks saat collapse */
+        }
 
-.sidebar .nav-link i {
-    font-size: 1.2rem;
-}
-
+        .sidebar .nav-link i {
+            font-size: 1.2rem;
+        }
     </style>
+    
 </head>
 <body>
     <div class="d-flex">
