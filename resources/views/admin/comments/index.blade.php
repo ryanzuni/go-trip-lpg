@@ -3,189 +3,241 @@
 @section('title', 'Kelola Komentar')
 
 @section('content')
-<div class="container-fluid">
 
-    {{-- PAGE HEADER --}}
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+<div class="p-6">
+
+    <!-- HEADER -->
+    <div class="flex justify-between items-center mb-6">
         <div>
-            <h2 class="fw-bold mb-1">Komentar Pengunjung</h2>
-            <p class="text-muted mb-0">Panel moderasi komentar & balasan</p>
+            <h2 class="text-2xl font-bold text-gray-800">Komentar Pengunjung</h2>
+            <p class="text-gray-500 text-sm">Panel moderasi komentar & balasan</p>
         </div>
 
-        <span class="badge bg-primary fs-6 px-3 py-2">
+        <div class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold">
             Total: {{ $comments->total() }}
-        </span>
+        </div>
     </div>
 
-    {{-- FLASH --}}
+    <!-- FLASH -->
     @if(session('success'))
-        <div class="alert alert-success shadow-sm">
-            <i class="bi bi-check-circle me-1"></i>
-            {{ session('success') }}
-        </div>
+    <div class="mb-4 flex items-center gap-2 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg">
+
+        <!-- HEROICON CHECK -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5"
+            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                stroke-width="2" d="M5 13l4 4L19 7"/>
+        </svg>
+
+        {{ session('success') }}
+    </div>
     @endif
 
-    {{-- TABLE CARD --}}
-    <div class="card border-0 shadow-sm">
-        <div class="card-body p-0">
+    <!-- TABLE -->
+    <div class="bg-white rounded-2xl shadow overflow-hidden">
 
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm">
 
-                    {{-- TABLE HEADER --}}
-                    <thead style="background:#f1f5f9">
-                        <tr class="text-secondary small text-uppercase">
-                            <th class="ps-4">Pengguna</th>
-                            <th>Komentar</th>
-                            <th class="text-center">Balasan</th>
-                            <th class="text-center">Status</th>
-                            <th class="text-center">Tanggal</th>
-                            <th class="text-center pe-4">Aksi</th>
-                        </tr>
-                    </thead>
+                <!-- HEAD -->
+                <thead class="bg-gray-50 text-gray-600 uppercase text-xs">
+                    <tr>
+                        <th class="px-6 py-4 text-left">Pengguna</th>
+                        <th class="px-6 py-4 text-left">Komentar</th>
+                        <th class="px-6 py-4 text-center">Balasan</th>
+                        <th class="px-6 py-4 text-center">Status</th>
+                        <th class="px-6 py-4 text-center">Tanggal</th>
+                        <th class="px-6 py-4 text-center">Aksi</th>
+                    </tr>
+                </thead>
 
-                    <tbody>
-                    @forelse($comments as $comment)
-                        <tr>
-                            {{-- USER --}}
-                            <td class="ps-4">
-                                <div class="fw-semibold">{{ $comment->name }}</div>
-                                <small class="text-muted">{{ $comment->email }}</small>
-                            </td>
+                <tbody class="divide-y">
 
-                            {{-- COMMENT --}}
-                            <td style="max-width:420px">
-                                {{ Str::limit($comment->message, 120) }}
-                            </td>
+                @forelse($comments as $comment)
+                    <tr class="hover:bg-gray-50 transition">
 
-                            {{-- REPLIES --}}
-                            <td class="text-center">
-                                @if($comment->replies->count())
-                                    <button class="btn btn-outline-primary btn-sm"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#replyModal{{ $comment->id }}">
-                                        <i class="bi bi-chat-dots"></i>
-                                        {{ $comment->replies->count() }}
-                                    </button>
-                                @else
-                                    <span class="text-muted">-</span>
-                                @endif
-                            </td>
-
-                            {{-- STATUS --}}
-                            <td class="text-center">
-                                @if($comment->status === 'approved')
-                                    <span class="badge bg-success-subtle text-success">Approved</span>
-                                @elseif($comment->status === 'rejected')
-                                    <span class="badge bg-danger-subtle text-danger">Rejected</span>
-                                @else
-                                    <span class="badge bg-warning-subtle text-warning">Pending</span>
-                                @endif
-                            </td>
-
-                            {{-- DATE --}}
-                            <td class="text-center small text-muted">
-                                {{ $comment->created_at->format('d M Y') }}<br>
-                                {{ $comment->created_at->format('H:i') }}
-                            </td>
-
-                            {{-- ACTION --}}
-                            <td class="text-center pe-4">
-                                <div class="d-flex justify-content-center gap-1 flex-wrap">
-                                    @if($comment->status === 'pending')
-                                        <form method="POST" action="{{ route('admin.comments.approve', $comment->id) }}">
-                                            @csrf
-                                            <button class="btn btn-success btn-sm">
-                                                <i class="bi bi-check-lg"></i>
-                                            </button>
-                                        </form>
-                                        <form method="POST" action="{{ route('admin.comments.reject', $comment->id) }}">
-                                            @csrf
-                                            <button class="btn btn-danger btn-sm">
-                                                <i class="bi bi-x-lg"></i>
-                                            </button>
-                                        </form>
-                                    @endif
-
-                                    <form method="POST" action="{{ route('admin.comments.destroy', $comment->id) }}">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button onclick="return confirm('Hapus komentar ini?')"
-                                                class="btn btn-outline-secondary btn-sm">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-
-                        {{-- ================= MODAL REPLIES ================= --}}
-                        <div class="modal fade" id="replyModal{{ $comment->id }}" tabindex="-1">
-                            <div class="modal-dialog modal-lg modal-dialog-scrollable">
-                                <div class="modal-content">
-
-                                    <div class="modal-header">
-                                        <h5 class="modal-title fw-bold">
-                                            Balasan untuk: {{ $comment->name }}
-                                        </h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                    </div>
-
-                                    <div class="modal-body">
-                                        @forelse($comment->replies as $reply)
-                                            <div class="border rounded p-3 mb-3">
-                                                <div class="d-flex justify-content-between">
-                                                    <div>
-                                                        <strong>{{ $reply->name }}</strong><br>
-                                                        <small class="text-muted">{{ $reply->email }}</small>
-                                                    </div>
-                                                    <small class="text-muted">
-                                                        {{ $reply->created_at->format('d M Y H:i') }}
-                                                    </small>
-                                                </div>
-
-                                                <p class="mt-2 mb-0">
-                                                    {{ $reply->message }}
-                                                </p>
-                                            </div>
-                                        @empty
-                                            <p class="text-muted text-center">
-                                                Tidak ada balasan
-                                            </p>
-                                        @endforelse
-                                    </div>
-
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary btn-sm"
-                                                data-bs-dismiss="modal">
-                                            Tutup
-                                        </button>
-                                    </div>
-
-                                </div>
+                        <!-- USER -->
+                        <td class="px-6 py-4">
+                            <div class="font-semibold text-gray-800">
+                                {{ $comment->name }}
                             </div>
+                            <div class="text-gray-400 text-xs">
+                                {{ $comment->email }}
+                            </div>
+                        </td>
+
+                        <!-- COMMENT -->
+                        <td class="px-6 py-4 text-gray-600 max-w-md">
+                            {{ Str::limit($comment->message, 120) }}
+                        </td>
+
+                        <!-- REPLIES -->
+                        <td class="px-6 py-4 text-center">
+                            @if($comment->replies->count())
+
+                                <button onclick="openModal('reply{{ $comment->id }}')"
+                                        class="flex items-center gap-1 justify-center mx-auto px-3 py-1 rounded-lg bg-blue-100 text-blue-600 hover:bg-blue-200">
+
+                                    <!-- HEROICON CHAT -->
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                        class="w-4 h-4"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.77 9.77 0 01-4-.8L3 20l1.8-3A7.963 7.963 0 013 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                                    </svg>
+
+                                    {{ $comment->replies->count() }}
+                                </button>
+
+                            @else
+                                <span class="text-gray-400">-</span>
+                            @endif
+                        </td>
+
+                        <!-- STATUS -->
+                        <td class="px-6 py-4 text-center">
+                            @if($comment->status === 'approved')
+                                <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-600">Approved</span>
+                            @elseif($comment->status === 'rejected')
+                                <span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-600">Rejected</span>
+                            @else
+                                <span class="px-2 py-1 text-xs rounded-full bg-yellow-100 text-yellow-600">Pending</span>
+                            @endif
+                        </td>
+
+                        <!-- DATE -->
+                        <td class="px-6 py-4 text-center text-xs text-gray-400">
+                            {{ $comment->created_at->format('d M Y') }}<br>
+                            {{ $comment->created_at->format('H:i') }}
+                        </td>
+
+                        <!-- ACTION -->
+                        <td class="px-6 py-4 text-center">
+                            <div class="flex justify-center gap-2">
+
+                                @if($comment->status === 'pending')
+
+                                <!-- APPROVE -->
+                                <form method="POST" action="{{ route('admin.comments.approve', $comment->id) }}">
+                                    @csrf
+                                    <button class="p-2 rounded-lg bg-green-100 text-green-600 hover:bg-green-200">
+
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                            class="w-5 h-5"
+                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                stroke-width="2"
+                                                d="M5 13l4 4L19 7"/>
+                                        </svg>
+
+                                    </button>
+                                </form>
+
+                                <!-- REJECT -->
+                                <form method="POST" action="{{ route('admin.comments.reject', $comment->id) }}">
+                                    @csrf
+                                    <button class="p-2 rounded-lg bg-red-100 text-red-600 hover:bg-red-200">
+
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                            class="w-5 h-5"
+                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                stroke-width="2"
+                                                d="M6 18L18 6M6 6l12 12"/>
+                                        </svg>
+
+                                    </button>
+                                </form>
+
+                                @endif
+
+                                <!-- DELETE -->
+                                <form method="POST" action="{{ route('admin.comments.destroy', $comment->id) }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button onclick="return confirm('Hapus komentar ini?')"
+                                            class="p-2 rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200">
+
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                            class="w-5 h-5"
+                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                stroke-width="2"
+                                                d="M19 7l-1 12H6L5 7m5-3h4m-6 3h8"/>
+                                        </svg>
+
+                                    </button>
+                                </form>
+
+                            </div>
+                        </td>
+
+                    </tr>
+
+                    <!-- MODAL -->
+                    <div id="reply{{ $comment->id }}" class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+
+                        <div class="bg-white w-full max-w-xl rounded-2xl shadow-lg p-6">
+
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="font-semibold text-gray-800">
+                                    Balasan: {{ $comment->name }}
+                                </h3>
+
+                                <button onclick="closeModal('reply{{ $comment->id }}')">
+                                    ✕
+                                </button>
+                            </div>
+
+                            <div class="space-y-3 max-h-80 overflow-y-auto">
+
+                                @forelse($comment->replies as $reply)
+                                <div class="border rounded-lg p-3">
+                                    <div class="text-sm font-semibold">{{ $reply->name }}</div>
+                                    <div class="text-xs text-gray-400 mb-1">{{ $reply->email }}</div>
+                                    <p class="text-sm text-gray-600">{{ $reply->message }}</p>
+                                </div>
+                                @empty
+                                <p class="text-gray-400 text-center">Tidak ada balasan</p>
+                                @endforelse
+
+                            </div>
+
                         </div>
-                        {{-- ================= END MODAL ================= --}}
 
-                    @empty
-                        <tr>
-                            <td colspan="6" class="text-center text-muted py-5">
-                                Tidak ada komentar
-                            </td>
-                        </tr>
-                    @endforelse
-                    </tbody>
+                    </div>
 
-                </table>
-            </div>
+                @empty
+                    <tr>
+                        <td colspan="6" class="text-center py-12 text-gray-400">
+                            Tidak ada komentar
+                        </td>
+                    </tr>
+                @endforelse
 
+                </tbody>
+
+            </table>
         </div>
+
     </div>
 
-    {{-- PAGINATION --}}
-    <div class="mt-4 d-flex justify-content-center">
+    <!-- PAGINATION -->
+    <div class="mt-4">
         {{ $comments->links() }}
     </div>
 
 </div>
+
+<!-- MODAL SCRIPT -->
+<script>
+function openModal(id){
+    document.getElementById(id).classList.remove('hidden');
+}
+function closeModal(id){
+    document.getElementById(id).classList.add('hidden');
+}
+</script>
+
 @endsection

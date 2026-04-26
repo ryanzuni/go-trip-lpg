@@ -1,219 +1,146 @@
-<!-- Toggle Button (Navbar Atas untuk mobile) -->
-<button class="btn btn-primary d-md-none mb-2" id="sidebarToggle">
-    <i class="bi bi-list"></i>
+<!-- Toggle Mobile -->
+<button id="toggleSidebar"
+class="lg:hidden fixed top-4 left-4 z-50 bg-blue-600 text-white p-2 rounded-lg shadow">
+    ☰
 </button>
 
-<!-- Sidebar -->
-<div id="sidebar" class="sidebar card shadow-sm border-0 rounded-4 d-flex flex-column sidebar-expanded">
-    <div class="card-body d-flex flex-column p-3">
+<!-- SIDEBAR -->
+<aside id="sidebar"
+class="bg-white shadow-xl h-screen fixed top-0 left-0 z-40 transition-all duration-300 w-64 flex flex-col">
 
-        <!-- Logo -->
-        <div class="d-flex align-items-center mb-4">
-            <span class="fw-bold fs-5 text-primary sidebar-text">GoTrip Lampung</span>
+    <!-- LOGO -->
+    <div class="flex items-center px-5 py-4 border-b">
+        <h1 class="text-xl font-bold text-blue-600 sidebar-text">GoTrip</h1>
+    </div>
+
+    <!-- MENU -->
+    <nav class="flex-1 px-3 py-4 space-y-2">
+
+        <!-- Dashboard -->
+        <a href="{{ route('admin.dashboard') }}"
+        class="group flex items-center gap-3 px-4 py-3 rounded-xl transition
+        {{ request()->routeIs('admin.dashboard') ? 'bg-blue-100 text-blue-600 font-semibold' : 'text-gray-600 hover:bg-gray-100' }}">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 group-hover:text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M3 12l2-2 7-7 7 7 2 2M4 10v10a1 1 0 001 1h3m10-11v10a1 1 0 01-1 1h-3"/>
+            </svg>
+
+            <span class="sidebar-text">Dashboard</span>
+        </a>
+
+        <!-- Destinasi -->
+        <a href="{{ route('admin.destinasi.index') }}"
+        class="group flex items-center gap-3 px-4 py-3 rounded-xl transition
+        {{ request()->routeIs('destinasi.*') ? 'bg-blue-100 text-blue-600 font-semibold' : 'text-gray-600 hover:bg-gray-100' }}">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 group-hover:text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+
+            <span class="sidebar-text">Destinasi</span>
+        </a>
+
+        <!-- Paket -->
+        <a href="{{ route('admin.paket_wisata.index') }}"
+        class="group flex items-center gap-3 px-4 py-3 rounded-xl transition
+        {{ request()->routeIs('paket_wisata.*') ? 'bg-blue-100 text-blue-600 font-semibold' : 'text-gray-600 hover:bg-gray-100' }}">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 group-hover:text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M20 13V7a2 2 0 00-2-2h-4V3H10v2H6a2 2 0 00-2 2v6m16 0v6a2 2 0 01-2 2H6a2 2 0 01-2-2v-6"/>
+            </svg>
+
+            <span class="sidebar-text">Paket Wisata</span>
+        </a>
+
+        <!-- Gallery -->
+        <a href="{{ route('admin.galleries.index') }}"
+        class="group flex items-center gap-3 px-4 py-3 rounded-xl transition
+        {{ request()->routeIs('admin.galleries.*') ? 'bg-blue-100 text-blue-600 font-semibold' : 'text-gray-600 hover:bg-gray-100' }}">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 group-hover:text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M4 16l4-4a3 3 0 014.243 0L16 16m-2-2l1-1a3 3 0 014.243 0L20 14"/>
+            </svg>
+
+            <span class="sidebar-text">Gallery</span>
+        </a>
+
+        <!-- Komentar -->
+        <a href="{{ route('admin.comments.index') }}"
+        class="group flex items-center gap-3 px-4 py-3 rounded-xl transition
+        {{ request()->routeIs('admin.comments.*') ? 'bg-blue-100 text-blue-600 font-semibold' : 'text-gray-600 hover:bg-gray-100' }}">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 group-hover:text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.77 9.77 0 01-4-.8L3 20l1.8-3.6A7.93 7.93 0 013 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+            </svg>
+
+            <span class="sidebar-text">Komentar</span>
+        </a>
+
+        <!-- TRANSAKSI -->
+        <div class="space-y-1">
+
+            <button onclick="toggleDropdown()"
+                class="group w-full flex items-center justify-between px-4 py-3 rounded-xl transition text-gray-600 hover:bg-gray-100">
+
+                <span class="flex items-center gap-3">
+
+                    <!-- ✅ CREDIT CARD ICON -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 group-hover:text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <rect x="2" y="5" width="20" height="14" rx="2" stroke-width="2"/>
+                        <path d="M2 10h20" stroke-width="2"/>
+                    </svg>
+
+                    <span class="sidebar-text">Transaksi</span>
+                </span>
+
+                <svg id="chevron" class="w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                </svg>
+            </button>
+
+            <!-- SUBMENU -->
+            <div id="submenu" class="hidden ml-8 pl-4 border-l space-y-1">
+
+                <a href="{{ route('admin.transaksi.index') }}"
+                    class="block text-sm px-3 py-2 rounded-lg transition text-gray-500 hover:bg-blue-50 hover:text-blue-600">
+                    Data Transaksi
+                </a>
+
+                <a href="{{ route('admin.data-masters.index') }}"
+                    class="block text-sm px-3 py-2 rounded-lg transition text-gray-500 hover:bg-blue-50 hover:text-blue-600">
+                    Data Master
+                </a>
+
+            </div>
+
         </div>
 
-        <ul class="nav flex-column gap-2 flex-fill">
+    </nav>
+</aside>
 
-            <!-- Dashboard -->
-            <li class="nav-item">
-                <a class="nav-link d-flex align-items-center {{ request()->routeIs('dashboard') ? 'active text-white bg-primary rounded-3' : 'text-dark' }}" 
-                   href="{{ route('admin.dashboard') }}">
-                    <i class="bi bi-speedometer2 me-2"></i>
-                    <span class="sidebar-text">Dashboard</span>
-                </a>
-            </li>
-
-            <!-- Destinasi -->
-            <li class="nav-item">
-                <a class="nav-link d-flex align-items-center {{ request()->routeIs('destinasi.*') ? 'active text-white bg-primary rounded-3' : 'text-dark' }}" 
-                   href="{{ route('admin.destinasi.index') }}">
-                    <i class="bi bi-geo-alt me-2"></i>
-                    <span class="sidebar-text">Destinasi Wisata</span>
-                </a>
-            </li>
-
-            <!-- Paket Wisata -->
-            <li class="nav-item">
-                <a class="nav-link d-flex align-items-center {{ request()->routeIs('paket_wisata.*') ? 'active text-white bg-primary rounded-3' : 'text-dark' }}" 
-                   href="{{ route('admin.paket_wisata.index') }}">
-                    <i class="bi bi-box-seam me-2"></i>
-                    <span class="sidebar-text">Paket Wisata</span>
-                </a>
-            </li>
-
-            <!-- Gallery -->
-            <li class="nav-item mb-1">
-                <a class="nav-link d-flex align-items-center
-                {{ request()->routeIs('admin.galleries.*') ? 'active text-white bg-primary rounded-3' : 'text-dark' }}"
-                href="{{ route('admin.galleries.index') }}">
-                    <i class="bi bi-image me-2"></i>
-                    <span class="sidebar-text">Gallery</span>
-                </a>
-            </li>
-
-            <!-- Comments -->
-            <li class="nav-item mb-1">
-                <a class="nav-link d-flex align-items-center
-                {{ request()->routeIs('admin.comments.*') ? 'active text-white bg-primary rounded-3' : 'text-dark' }}"
-                href="{{ route('admin.comments.index') }}">
-                    <i class="bi bi-chat-dots me-2"></i>
-                    <span class="sidebar-text">Komentar</span>
-                </a>
-            </li>
-
-            <!-- Dropdown Transaksi -->
-            <li class="nav-item">
-                <a href="#!" class="nav-link d-flex align-items-center justify-content-between text-dark" 
-                onclick="toggleDropdown('transaksiMenu')">
-                    <span>
-                        <i class="fas fa-cash-register me-2"></i>
-                        <span class="sidebar-text">Transaksi</span>
-                    </span>
-                    <i class="fas fa-chevron-down small-chevron" id="chevron-transaksi"></i>
-                </a>
-                <ul class="nav flex-column ms-3" id="transaksiMenu" style="display: none;">
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->is('transaksi') ? 'active text-white bg-primary rounded-3' : 'text-dark' }}" 
-                        href="{{ route('admin.transaksi.index') }}">
-                            <i class="far fa-circle me-2 fs-6"></i><span class="sidebar-text">Data Transaksi</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->is('data-masters') ? 'active text-white bg-primary rounded-3' : 'text-dark' }}" 
-                        href="{{ route('admin.data-masters.index') }}">
-                            <i class="far fa-circle me-2 fs-6"></i><span class="sidebar-text">Data Master</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-
-            <!-- Dropdown Laporan -->
-            <!-- <li class="nav-item">
-                <a href="#!" class="nav-link d-flex align-items-center justify-content-between text-dark"
-                onclick="toggleDropdown('laporanMenu')">
-                    <span>
-                        <i class="fas fa-file-alt me-2"></i>
-                        <span class="sidebar-text">Laporan</span>
-                    </span>
-                    <i class="fas fa-chevron-down small-chevron" id="chevron-laporan"></i>
-                </a>
-                <ul class="nav flex-column ms-3" id="laporanMenu" style="display:none;"> -->
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->is('laporan/transaksi') ? 'active text-white bg-primary rounded-3' : 'text-dark' }}" 
-                        href="{{ route('admin.laporan.transaksi') }}">
-                            <i class="far fa-circle me-2 fs-6"></i>
-                            <span class="sidebar-text">Transaksi</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->is('laporan/booking') ? 'active text-white bg-primary rounded-3' : 'text-dark' }}" 
-                        href="{{ route('admin.laporan.booking') }}">
-                            <i class="far fa-circle me-2 fs-6"></i>
-                            <span class="sidebar-text">Booking</span>
-                        </a>
-                    </li>
-                    <!-- <li class="nav-item">
-                        <a class="nav-link {{ request()->is('laporan/pendapatan') ? 'active text-white bg-primary rounded-3' : 'text-dark' }}" 
-                        href="{{ route('admin.laporan.pendapatan') }}">
-                            <i class="far fa-circle me-2 fs-6"></i>
-                            <span class="sidebar-text">Pendapatan</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->is('laporan/paket_wisata') ? 'active text-white bg-primary rounded-3' : 'text-dark' }}" 
-                        href="{{ route('admin.laporan.paket_wisata') }}">
-                            <i class="far fa-circle me-2 fs-6"></i>
-                            <span class="sidebar-text">Paket Wisata</span>
-                        </a>
-                    </li> -->
-                <!-- </ul>
-            </li> -->
-
-            <!-- Settings Admin -->
-            <!-- <li class="nav-item">
-                <a class="nav-link d-flex align-items-center justify-content-between text-dark" 
-                href="#!" onclick="toggleDropdown('settingsMenu')">
-                    <span>
-                        <i class="fas fa-cog me-2"></i>
-                        <span class="sidebar-text">Pengaturan</span>
-                    </span>
-                    <i class="fas fa-chevron-down small-chevron" id="chevron-settings"></i>
-                </a>
-                <ul class="nav flex-column ms-3" id="settingsMenu" style="display:none;">
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->is('settings/profile') ? 'active text-white bg-primary rounded-3' : 'text-dark' }}" 
-                        href="{{ route('admin.settings.profile') }}">
-                        <i class="far fa-user me-2 fs-6"></i> Profil
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->is('settings/password') ? 'active text-white bg-primary rounded-3' : 'text-dark' }}" 
-                        href="{{ route('admin.settings.password') }}">
-                        <i class="fas fa-lock me-2 fs-6"></i> Ubah Password
-                        </a>
-                    </li>
-                </ul>
-            </li> -->
-
-        </ul>
-    </div>
-</div>
-
-<!-- Script -->
 <script>
-function toggleDropdown(id) {
-    const menu = document.getElementById(id);
-    const chevron = document.getElementById('chevron-' + id.split('Menu')[0]);
+function toggleDropdown() {
+    const menu = document.getElementById('submenu');
+    const icon = document.getElementById('chevron');
 
-    // Tutup semua dropdown lain dulu
-    document.querySelectorAll('ul[id$="Menu"]').forEach(m => {
-        if (m.id !== id) {
-            m.style.display = 'none';
-            const ch = document.getElementById('chevron-' + m.id.split('Menu')[0]);
-            if (ch) ch.classList.remove('rotate-180');
-        }
-    });
-
-    // Toggle menu yang dipilih
-    if (menu.style.display === 'none' || menu.style.display === '') {
-        menu.style.display = 'block';
-        chevron.classList.add('rotate-180');
-    } else {
-        menu.style.display = 'none';
-        chevron.classList.remove('rotate-180');
-    }
+    menu.classList.toggle('hidden');
+    icon.classList.toggle('rotate-180');
 }
 
-// Toggle collapse sidebar
-document.getElementById("sidebarToggle").addEventListener("click", function () {
-    const sidebar = document.getElementById("sidebar");
-    sidebar.classList.toggle("collapsed");
+document.getElementById('toggleSidebar').addEventListener('click', () => {
+    const sidebar = document.getElementById('sidebar');
+    sidebar.classList.toggle('w-64');
+    sidebar.classList.toggle('w-20');
+
+    document.querySelectorAll('.sidebar-text').forEach(el => {
+        el.classList.toggle('hidden');
+    });
 });
 </script>
-
-<!-- Style -->
-<style>
-/* Sidebar default */
-.sidebar {
-    width: 220px;
-    transition: width 0.3s;
-}
-
-/* Sidebar collapsed */
-.sidebar.collapsed {
-    width: 60px;
-}
-.sidebar.collapsed .sidebar-text,
-.sidebar.collapsed .small-chevron {
-    display: none !important;
-}
-
-/* Chevron styling */
-.small-chevron {
-    font-size: 0.8rem;
-    transition: transform 0.3s ease;
-}
-.rotate-180 {
-    transform: rotate(180deg);
-}
-</style>

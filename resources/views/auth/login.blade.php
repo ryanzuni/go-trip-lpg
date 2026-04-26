@@ -3,210 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login - GoTrip Lampung</title>
+    <title>Login Admin - GoTrip</title>
 
-    <!-- Bootstrap 5 -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
-
-    <style>
-        body {
-            background-color: #f4f6f9;
-        }
-
-        /* ================= CARD ================= */
-        .login-card {
-            background: #ffffff;
-            border-radius: 14px;
-            padding: 36px;
-            box-shadow: 0 18px 40px rgba(0,0,0,.08);
-            max-width: 420px;
-            width: 100%;
-        }
-
-        /* ================= BRAND ================= */
-        .brand-icon {
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            background: #0d6efd;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-size: 26px;
-            margin: 0 auto 14px;
-        }
-
-        /* ================= FORM ================= */
-        .form-label {
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        .form-control {
-            border-radius: 10px;
-            padding: 12px 14px;
-            font-size: 14px;
-        }
-
-        .form-control:focus {
-            border-color: #0d6efd;
-            box-shadow: 0 0 0 .2rem rgba(13,110,253,.15);
-        }
-
-        /* ================= BUTTON ================= */
-        .btn-login {
-            height: 48px;
-            border-radius: 10px;
-            font-weight: 600;
-            background-color: #0d6efd;
-            border: none;
-        }
-
-        .btn-login:hover {
-            background-color: #0b5ed7;
-        }
-
-        /* ================= PASSWORD ICON ================= */
-        .toggle-password {
-            cursor: pointer;
-            color: #6c757d;
-        }
-
-        .toggle-password:hover {
-            color: #0d6efd;
-        }
-
-        /* Password toggle button */
-        .password-toggle {
-            position: absolute;
-            top: 50%;
-            right: 14px;
-            transform: translateY(-50%);
-            background: transparent;
-            border: none;
-            padding: 0;
-            height: 20px;
-            width: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #6c757d;
-            cursor: pointer;
-        }
-
-        .password-toggle:hover {
-            color: #0d6efd;
-        }
-
-        /* ================= RIGHT PANEL ================= */
-        .hero-overlay {
-            background: linear-gradient(
-                to bottom,
-                rgba(13,110,253,.65),
-                rgba(0,0,0,.75)
-            );
-        }
-    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
 
-<div class="container-fluid vh-100">
-    <div class="row h-100">
+<body class="relative min-h-screen">
 
-        <!-- LEFT : LOGIN -->
-        <div class="col-md-6 d-flex align-items-center justify-content-center">
-            <div class="login-card">
+<!-- BACKGROUND IMAGE -->
+<div class="absolute inset-0">
+    <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e"
+         class="w-full h-full object-cover">
+</div>
 
-                <div class="text-center mb-4">
-                    <div class="brand-icon">
-                        <i class="bi bi-globe2"></i>
-                    </div>
-                    <h4 class="fw-bold mb-1">GoTrip Lampung</h4>
-                    <p class="text-muted mb-0">Admin Panel Login</p>
-                </div>
+<!-- OVERLAY -->
+<div class="absolute inset-0 bg-gradient-to-br from-blue-700/70 via-blue-500/50 to-black/70"></div>
 
-                <form method="POST" action="{{ url('/login') }}">
-                    @csrf
+<!-- CONTENT -->
+<div class="relative z-10 flex items-center justify-center min-h-screen px-4">
 
-                    <div class="mb-3">
-                        <label class="form-label">Email</label>
-                        <input type="email"
-                               name="email"
-                               class="form-control"
-                               placeholder="admin@gotrip.id"
-                               required>
-                    </div>
+    <div class="w-full max-w-md">
 
-                    <div class="mb-3">
-                        <label class="form-label">Password</label>
-
-                        <div class="position-relative">
-                            <input type="password"
-                                name="password"
-                                id="password"
-                                class="form-control pe-5"
-                                placeholder="••••••••"
-                                required>
-
-                            <button type="button"
-                                    class="password-toggle"
-                                    onclick="togglePassword()">
-                                <i id="toggleIcon" class="bi bi-eye"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="remember">
-                            <label class="form-check-label small" for="remember">
-                                Ingat saya
-                            </label>
-                        </div>
-                        <a href="#" class="small text-decoration-none">
-                            Lupa password?
-                        </a>
-                    </div>
-
-                    <button type="submit" class="btn btn-login w-100 text-white">
-                        Login
-                    </button>
-                </form>
-
+        <!-- BRAND -->
+        <div class="text-center mb-6 text-white">
+            <div class="w-14 h-14 bg-white/20 backdrop-blur rounded-full flex items-center justify-center mx-auto mb-3 shadow">
+                
+                <!-- Heroicon -->
+                <svg xmlns="http://www.w3.org/2000/svg" 
+                     class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M12 2a10 10 0 100 20 10 10 0 000-20z"/>
+                </svg>
             </div>
+
+            <h1 class="text-2xl font-bold">GoTrip Lampung</h1>
+            <p class="text-sm opacity-80">Admin Panel</p>
         </div>
 
-        <!-- RIGHT : IMAGE -->
-        <div class="col-md-6 d-none d-md-block p-0">
-            <div class="h-100 position-relative">
-                <img src="{{ asset('images/banner3.jpeg') }}"
-                     class="w-100 h-100"
-                     style="object-fit: cover;">
-                <div class="position-absolute top-0 start-0 w-100 h-100 hero-overlay
-                            d-flex flex-column justify-content-center align-items-center
-                            text-white text-center px-4">
-                    <h1 class="fw-bold">Admin System</h1>
-                    <p class="lead mb-0">GoTrip Lampung Management</p>
+        <!-- CARD -->
+        <div class="bg-white/20 backdrop-blur-xl p-6 rounded-2xl shadow-xl border border-white/20">
+
+            <form method="POST" action="{{ url('/login') }}" class="space-y-4 text-white">
+                @csrf
+
+                <!-- EMAIL -->
+                <div>
+                    <label class="text-sm">Email</label>
+                    <input type="email" name="email"
+                        class="mt-1 w-full px-4 py-2 rounded-lg bg-white/20 border border-white/30 placeholder-white/60 focus:ring-2 focus:ring-white outline-none"
+                        placeholder="admin@gotrip.id"
+                        required>
                 </div>
-            </div>
+
+                                                                                                                                                                            <!-- PASSWORD -->
+                <!-- PASSWORD -->
+                <div>
+                    <label class="text-sm">Password</label>
+                    <div class="relative mt-1">
+                        <input type="password" name="password" id="password"
+                            class="w-full px-4 py-2 rounded-lg bg-white/20 border border-white/30 placeholder-white/60 focus:ring-2 focus:ring-white outline-none"
+                            placeholder="••••••••"
+                            required>
+
+                        <!-- HEROICON BUTTON -->
+                        <button type="button"
+                            onclick="togglePassword()"
+                            class="absolute right-3 top-2.5 text-white/70 hover:text-white">
+
+                            <!-- Eye -->
+                            <svg id="eyeOpen" xmlns="http://www.w3.org/2000/svg"
+                                class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M2.458 12C3.732 7.943 7.523 5 12 5
+                                    c4.477 0 8.268 2.943 9.542 7
+                                    -1.274 4.057-5.065 7-9.542 7
+                                    -4.477 0-8.268-2.943-9.542-7z"/>
+                            </svg>
+
+                            <!-- Eye Slash -->
+                            <svg id="eyeClose" xmlns="http://www.w3.org/2000/svg"
+                                class="w-5 h-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13.875 18.825A10.05 10.05 0 0112 19
+                                    c-4.478 0-8.268-2.943-9.542-7
+                                    a9.956 9.956 0 012.042-3.368m3.132-2.446
+                                    A9.956 9.956 0 0112 5c4.477 0 8.268 2.943 9.542 7
+                                    a9.97 9.97 0 01-4.132 5.411M15 12a3 3 0 00-3-3
+                                    m0 0a3 3 0 00-2.83 2M3 3l18 18"/>
+                            </svg>
+
+                        </button>
+                    </div>
+                </div>
+
+                <!-- REMEMBER -->
+                <div class="flex justify-between text-sm">
+                    <label class="flex items-center gap-2">
+                        <input type="checkbox" class="accent-white">
+                        Ingat saya
+                    </label>
+                    <a href="#" class="underline hover:text-blue-200">Lupa password?</a>
+                </div>
+
+                <!-- BUTTON -->
+                <button type="submit"
+                    class="w-full bg-white text-blue-700 font-semibold py-2 rounded-lg hover:bg-blue-100 transition">
+                    Login
+                </button>
+
+            </form>
         </div>
+
+        <!-- FOOTER -->
+        <p class="text-center text-white/70 text-xs mt-4">
+            © 2026 GoTrip Lampung
+        </p>
 
     </div>
+
 </div>
 
 <script>
 function togglePassword() {
-    const input = document.getElementById("password");
-    const icon = document.getElementById("toggleIcon");
+    const input = document.getElementById('password');
+    const open = document.getElementById('eyeOpen');
+    const close = document.getElementById('eyeClose');
 
-    if (input.type === "password") {
-        input.type = "text";
-        icon.classList.replace("bi-eye", "bi-eye-slash");
+    if (input.type === 'password') {
+        input.type = 'text';
+        open.classList.add('hidden');
+        close.classList.remove('hidden');
     } else {
-        input.type = "password";
-        icon.classList.replace("bi-eye-slash", "bi-eye");
+        input.type = 'password';
+        open.classList.remove('hidden');
+        close.classList.add('hidden');
     }
 }
 </script>

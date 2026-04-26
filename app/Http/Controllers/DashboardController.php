@@ -5,31 +5,66 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Destinasi;
 use App\Models\Transaksi;
+use App\Models\PaketWisata;
+use Carbon\Carbon;
+use DB;
 
 class DashboardController extends Controller
 {
-    //
     public function index()
     {
-        // Jumlah Destinasi
         $jumlahDestinasi = Destinasi::count();
-
-        // Jumlah Pengunjung (jumlah total orang dari transaksi)
         $jumlahPengunjung = Transaksi::sum('jumlah_orang');
-
-        // Pendapatan (hanya yang status Lunas)
         $pendapatan = Transaksi::where('status','lunas')->sum('total_harga');
+        $jumlahBooking = Transaksi::count();
 
-        // Statistik: persentase transaksi lunas dari total transaksi
-        $totalTransaksi = Transaksi::count();
-        $lunas = Transaksi::where('status','lunas')->count();
-        $persentaseLunas = $totalTransaksi > 0 ? round(($lunas / $totalTransaksi) * 100) : 0;
+        // DATA PER BULAN (CHART)
+        $chartData = Transaksi::select(
+            DB::raw('MONTH(tanggal_berangkat) as bulan'),
+            DB::raw('COUNT(*) as total')
+        )
+        ->groupBy('bulan')
+        ->orderBy('bulan')
+        ->pluck('total','bulan');
+
+        // Format ke array 12 bulan
+        $dataChart = [];
+        for ($i = 1; $i <= 12; $i++) {
+            $dataChart[] = $chartData[$i] ?? 0;
+        }
+
+        $events = Transaksi::with('paketWisata')
+            ->get()
+            ->map(function ($t) {
+                return [
+                    'title' => $t->nama_pelanggan,
+                    'start' => \Carbon\Carbon::parse($t->tanggal_berangkat)->format('Y-m-d'),
+
+                    // DETAIL TAMBAHAN
+                    'extendedProps' => [
+                        'paket' => $t->paketWisata->nama_paket ?? '-',
+                        'jumlah' => $t->jumlah_orang,
+                        'total' => $t->total_harga,
+                        'status' => $t->status,
+                        'tanggal' => $t->tanggal_berangkat,
+                    ]
+                ];
+            });
+
+        // PAKET TERBARU
+        $paketTerbaru = PaketWisata::with('destinasi')
+            ->latest()
+            ->take(5)
+            ->get();
 
         return view('dashboard', compact(
             'jumlahDestinasi',
             'jumlahPengunjung',
             'pendapatan',
-            'persentaseLunas'
+            'dataChart',
+            'paketTerbaru',
+            'events',
+            'jumlahBooking'
         ));
     }
 }

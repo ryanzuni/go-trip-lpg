@@ -1,187 +1,143 @@
 @extends('layouts.app')
 
 @section('content')
-<style>
-/* Backdrop blur */
-.modal-backdrop.show {
-    backdrop-filter: blur(6px);
-    background-color: rgba(0,0,0,0.35);
-}
 
-/* Modal card-style premium */
-.modal-content {
-    border-radius: 1.5rem;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.4);
-    padding: 0;
-    position: relative;
-    background: #fff;
-    transform: scale(0.95);
-    opacity: 0;
-    transition: transform 0.25s ease-out, opacity 0.25s ease-out;
-}
+<div class="p-6 space-y-6">
 
-.modal.show .modal-content {
-    transform: scale(1);
-    opacity: 1;
-}
+    <!-- HEADER -->
+    <div class="flex justify-between items-center">
+        <h2 class="text-2xl font-bold text-gray-800">Destinasi Wisata</h2>
 
-/* Floating Close X di atas modal */
-.modal-close-float {
-    position: absolute;
-    top: -20px;
-    right: -20px;
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    background: #ff5e5e;
-    color: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.5rem;
-    font-weight: bold;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.5);
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s, background 0.2s, filter 0.2s;
-
-    /* Fix biar bisa diklik */
-    z-index: 9999;
-    pointer-events: auto;
-}
-
-.modal-close-float:hover {
-    transform: scale(1.2) rotate(15deg);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.7);
-    filter: drop-shadow(0 0 8px #ff7878);
-    background: #ff7878;
-}
-
-/* Foto atas */
-.modal-img {
-    width: 100%;
-    height: auto;
-    max-height: 350px;
-    object-fit: cover;
-    border-radius: 1.5rem 1.5rem 0 0;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.25);
-    transition: transform 0.4s, opacity 0.4s;
-    opacity: 0;
-    transform: scale(0.95);
-}
-
-.modal.show .modal-img {
-    opacity: 1;
-    transform: scale(1);
-}
-
-.modal-img:hover {
-    transform: scale(1.03);
-}
-
-/* Deskripsi bawah */
-.modal-description {
-    padding: 1rem 1.5rem 1.5rem 1.5rem;
-    max-height: 300px;
-    overflow-y: auto;
-    background: linear-gradient(180deg, #fff, #f9f9f9);
-    border-top: 1px solid #e0e0e0;
-    box-shadow: inset 0 2px 8px rgba(0,0,0,0.05);
-}
-
-.modal-description h6 {
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-}
-
-.modal-description p {
-    font-size: 0.95rem;
-    line-height: 1.6;
-    margin: 0;
-}
-</style>
-
-<div class="container mt-4">
-    <div class="card shadow-sm rounded-4">
-        <div class="card-body">
-            <div class="d-flex justify-content-between mb-3">
-                <h5 class="fw-bold text-primary">Daftar Destinasi Wisata</h5>
-                <a href="{{ route('admin.destinasi.create') }}" class="btn btn-primary btn-sm">
-                    <i class="bi bi-plus-circle"></i> Tambah
-                </a>
-            </div>
-
-            @if(session('success'))
-                <div class="alert alert-success">{{ session('success') }}</div>
-            @endif
-
-            <table class="table table-striped align-middle">
-                <thead class="table-light">
-                    <tr>
-                        <th>#</th>
-                        <th>Nama</th>
-                        <th>Lokasi</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($destinasi as $item)
-                    <tr>
-                        <td>{{ $loop->iteration + ($destinasi->currentPage()-1) * $destinasi->perPage() }}</td>
-                        <td>{{ $item->nama }}</td>
-                        <td>{{ $item->lokasi }}</td>
-                        <td>
-                            <!-- Tombol View (Modal) -->
-                            <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#viewModal{{ $item->id }}">
-                                <i class="bi bi-eye"></i>
-                            </button>
-
-                            <a href="{{ route('admin.destinasi.edit',$item->id) }}" class="btn btn-warning btn-sm">
-                                <i class="bi bi-pencil"></i>
-                            </a>
-
-                            <form action="{{ route('admin.destinasi.destroy',$item->id) }}" method="POST" class="d-inline">
-                                @csrf @method('DELETE')
-                                <button class="btn btn-danger btn-sm" onclick="return confirm('Yakin hapus?')">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-
-                    <!-- Modal foto & deskripsi bawah -->
-                    <div class="modal fade" id="viewModal{{ $item->id }}" tabindex="-1"
-                         aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-                        <div class="modal-dialog modal-dialog-centered modal-lg position-relative">
-
-                            <!-- Floating Close X (di luar modal-content) -->
-                            <div class="modal-close-float" data-bs-dismiss="modal">&times;</div>
-
-                            <div class="modal-content">
-                                <!-- Foto -->
-                                @if($item->foto)
-                                <img src="{{ asset('storage/'.$item->foto) }}" class="modal-img">
-                                @endif
-
-                                <!-- Deskripsi bawah -->
-                                @if($item->deskripsi)
-                                <div class="modal-description">
-                                    <h6>Deskripsi:</h6>
-                                    <p>{{ $item->deskripsi }}</p>
-                                </div>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-
-                    @endforeach
-                </tbody>
-            </table>
-
-            <!-- Pagination -->
-            <div class="mt-3">
-                {{ $destinasi->links() }}
-            </div>
-        </div>
+        <a href="{{ route('admin.destinasi.create') }}"
+        class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition">
+            + Tambah
+        </a>
     </div>
+
+    <!-- SUCCESS -->
+    @if(session('success'))
+        <div class="bg-green-100 text-green-700 px-4 py-3 rounded-lg">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    <!-- TABLE CARD -->
+    <div class="bg-white rounded-2xl shadow overflow-hidden">
+
+        <table class="w-full text-sm">
+            <thead class="bg-gray-50 text-gray-600">
+                <tr>
+                    <th class="p-4 text-left">#</th>
+                    <th class="p-4 text-left">Nama</th>
+                    <th class="p-4 text-left">Lokasi</th>
+                    <th class="p-4 text-center">Aksi</th>
+                </tr>
+            </thead>
+
+            <tbody class="divide-y">
+
+                @forelse($destinasi as $item)
+                <tr class="hover:bg-gray-50 transition">
+
+                    <td class="p-4">
+                        {{ $loop->iteration + ($destinasi->currentPage()-1) * $destinasi->perPage() }}
+                    </td>
+
+                    <td class="p-4 font-medium text-gray-800">
+                        {{ $item->nama }}
+                    </td>
+
+                    <td class="p-4 text-gray-500">
+                        {{ $item->lokasi }}
+                    </td>
+
+                    <td class="p-4 text-center space-x-2">
+
+                        <!-- VIEW -->
+                        <button onclick="openModal({{ $item->id }})"
+                        class="bg-blue-100 text-blue-600 px-3 py-1 rounded-lg hover:bg-blue-200">
+                            👁
+                        </button>
+
+                        <!-- EDIT -->
+                        <a href="{{ route('admin.destinasi.edit',$item->id) }}"
+                        class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-lg hover:bg-yellow-200">
+                            ✏️
+                        </a>
+
+                        <!-- DELETE -->
+                        <form action="{{ route('admin.destinasi.destroy',$item->id) }}" method="POST" class="inline">
+                            @csrf @method('DELETE')
+                            <button onclick="return confirm('Yakin hapus?')"
+                            class="bg-red-100 text-red-600 px-3 py-1 rounded-lg hover:bg-red-200">
+                                🗑
+                            </button>
+                        </form>
+
+                    </td>
+                </tr>
+
+                <!-- MODAL -->
+                <div id="modal{{ $item->id }}"
+                class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+
+                    <div class="bg-white rounded-2xl w-full max-w-xl shadow-xl overflow-hidden">
+
+                        <!-- CLOSE -->
+                        <div class="flex justify-end p-3">
+                            <button onclick="closeModal({{ $item->id }})"
+                            class="text-gray-400 hover:text-red-500 text-xl">
+                                ✕
+                            </button>
+                        </div>
+
+                        <!-- IMAGE -->
+                        @if($item->foto)
+                        <img src="{{ asset('storage/'.$item->foto) }}"
+                        class="w-full h-64 object-cover">
+                        @endif
+
+                        <!-- DESC -->
+                        <div class="p-5">
+                            <h3 class="font-bold text-lg mb-2">{{ $item->nama }}</h3>
+                            <p class="text-gray-600 text-sm">
+                                {{ $item->deskripsi ?? 'Tidak ada deskripsi' }}
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+
+                @empty
+                <tr>
+                    <td colspan="4" class="text-center p-6 text-gray-400">
+                        Belum ada data
+                    </td>
+                </tr>
+                @endforelse
+
+            </tbody>
+        </table>
+
+    </div>
+
+    <!-- PAGINATION -->
+    <div>
+        {{ $destinasi->links() }}
+    </div>
+
 </div>
+
+<!-- SCRIPT -->
+<script>
+function openModal(id) {
+    document.getElementById('modal'+id).classList.remove('hidden');
+    document.getElementById('modal'+id).classList.add('flex');
+}
+
+function closeModal(id) {
+    document.getElementById('modal'+id).classList.add('hidden');
+}
+</script>
+
 @endsection

@@ -12,6 +12,8 @@ use App\Http\Controllers\SettingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\GalleryController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\MidtransCallbackController;
 
 
 
@@ -46,13 +48,23 @@ Route::get('/gallery', [GalleryController::class, 'userIndex'])->name('gallery.i
 Route::get('/gallery/{id}', [GalleryController::class, 'userShow'])->name('gallery.show');
 
 // Booking
-// Booking
 Route::post('/booking/{paket}', [BookingController::class, 'store'])
     ->name('booking.store');
 
-// ⬇️ TAMBAHKAN INI
 Route::get('/booking/{id}/payment', [BookingController::class, 'payment'])
     ->name('booking.payment');
+
+Route::get('/booking-success/{id}', [BookingController::class, 'success'])
+    ->name('booking.success');
+
+Route::get('/booking/{id}/confirm', [BookingController::class, 'confirmPayment'])
+    ->name('booking.confirm');
+
+Route::post('/midtrans/callback', [MidtransCallbackController::class, 'handle']);
+Route::post('/midtrans/callback', [MidtransController::class, 'callback']);
+
+Route::get('/invoice/{id}', [BookingController::class, 'invoice'])
+    ->name('booking.invoice');
 
 Route::post('/booking/{paket}', [BookingController::class, 'store'])->name('booking.store');
 
@@ -70,7 +82,7 @@ Route::post('/contact', [App\Http\Controllers\CommentController::class, 'store']
 */
 Route::prefix('admin')->middleware('auth')->name('admin.')->group(function () {
     // Dashboard
-    Route::get('/dashboard', fn() => view('dashboard'))->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Destinasi CRUD
     Route::resource('destinasi', DestinasiController::class);

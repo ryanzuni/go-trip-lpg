@@ -19,7 +19,7 @@
             {{ $paket->nama_paket }}
         </h1>
         <p class="text-lg md:text-xl opacity-90">
-            {{ $paket->destinasi->nama }} - {{ $paket->durasi_hari }} Hari
+            {{ $paket->destinasi->nama ?? 'Tidak ada destinasi' }} - {{ $paket->durasi_hari }} Hari
         </p>
     </div>
 
@@ -40,7 +40,9 @@
                 <i class="bi bi-geo-alt text-blue-600 text-3xl"></i>
                 <div>
                     <p class="text-gray-500 text-sm">Lokasi</p>
-                    <p class="text-lg font-semibold text-gray-800">{{ $paket->destinasi->nama }}</p>
+                    <p class="text-lg md:text-xl opacity-90">
+                        {{ optional($paket->destinasi)->nama ?? '-' }} - {{ $paket->durasi_hari }} Hari
+                    </p>
                 </div>
             </div>
             <div class="flex items-center gap-4 bg-gray-50 p-6 rounded-2xl shadow-sm">
@@ -95,114 +97,51 @@
     </div>
 
     <!-- Tombol Aksi + Form Booking -->
-    <div x-data="{ openForm: false }">
+    <!-- <div x-data="{ openForm: false }"> -->
         <!-- Tombol -->
-        <div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row gap-4 mb-12">
-            <a href="{{ route('paket.index') }}" 
-            class="px-6 py-3 w-full sm:w-auto rounded-xl bg-gray-200 text-gray-700 font-medium hover:bg-gray-300 transition">
-            Kembali
-            </a>
+        <div x-data="{ openModal: false }">
 
-            <button @click="openForm = !openForm" 
-                    class="px-6 py-3 w-full sm:w-auto rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold shadow-lg hover:scale-[1.02] hover:shadow-xl transition transform">
+            <!-- BUTTON -->
+            <button @click="openModal = true"
+                class="px-6 py-3 bg-blue-600 text-white rounded-xl">
                 Pesan Sekarang
             </button>
-        </div>
 
-        <!-- Form Booking (tersembunyi default) -->
-        <div x-show="openForm" 
-            x-transition.opacity.duration.300ms 
-            x-cloak
-            class="bg-gray-50 p-8 rounded-3xl shadow-lg">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6">Formulir Pemesanan</h2>
+            <!-- MODAL -->
+            <div x-show="openModal"
+                x-transition
+                class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
 
-            @if(session('success'))
-                <div 
-                    x-data="{ show: true }" 
-                    x-show="show"
-                    x-transition 
-                    class="mb-6 p-4 rounded-xl bg-green-100 text-green-800 flex justify-between items-center shadow">
-                    <span>{{ session('success') }}</span>
-                    <button @click="show = false" class="font-bold text-green-600 hover:text-green-800">&times;</button>
-                </div>
+                <div @click.away="openModal = false"
+                    class="bg-white w-full max-w-lg p-6 rounded-2xl shadow-lg">
 
-                @if(session('wa_link'))
-                    <div class="mb-6 p-4 rounded-xl bg-green-100 text-green-800 flex items-center gap-4 shadow">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h11M9 21V3m0 0L3 10m6-7l6 7" />
-                        </svg>
-                        <div>
-                            <p>Untuk konfirmasi lebih lanjut, silakan klik tombol WhatsApp berikut:</p>
-                            @if(session('wa_link'))
-                                <a href="{{ session('wa_link') }}" target="_blank" class="btn btn-success">
-                                    Hubungi via WhatsApp
-                                </a>
-                            @endif
+                    <h2 class="text-xl font-bold mb-4">Booking Paket</h2>
+
+                    <form action="{{ route('booking.store', $paket->id) }}" method="POST">
+                        @csrf
+
+                        <input type="text" name="nama" placeholder="Nama" class="w-full mb-3 p-2 border rounded" required>
+                        <input type="email" name="email" placeholder="Email" class="w-full mb-3 p-2 border rounded" required>
+                        <input type="text" name="telepon" placeholder="Telepon" class="w-full mb-3 p-2 border rounded" required>
+                        <input type="number" name="jumlah_orang" placeholder="Jumlah Orang" class="w-full mb-3 p-2 border rounded" required>
+                        <input type="date" name="tanggal_booking" class="w-full mb-3 p-2 border rounded" required>
+
+                        <div class="flex justify-end gap-2">
+                            <button type="button" @click="openModal=false"
+                                class="px-4 py-2 bg-gray-300 rounded">
+                                Batal
+                            </button>
+
+                            <button type="submit"
+                                class="px-4 py-2 bg-blue-600 text-white rounded">
+                                Booking
+                            </button>
                         </div>
-                    </div>
-                @endif
-            @endif
+                    </form>
 
-            <form action="{{ route('booking.store', $paket->id) }}" method="POST" class="space-y-6">
-                @csrf
-
-                <!-- Nama -->
-                <div>
-                    <label for="nama" class="block text-gray-700 font-medium mb-2">Nama Lengkap</label>
-                    <input type="text" name="nama" id="nama" 
-                        class="w-full rounded-xl border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 px-4 py-3"
-                        placeholder="Masukkan nama lengkap" required>
                 </div>
+            </div>
 
-                <!-- Email -->
-                <div>
-                    <label for="email" class="block text-gray-700 font-medium mb-2">Email</label>
-                    <input type="email" name="email" id="email" 
-                        class="w-full rounded-xl border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 px-4 py-3"
-                        placeholder="Masukkan email aktif" required>
-                </div>
-
-                <!-- No. Telepon -->
-                <div>
-                    <label for="telepon" class="block text-gray-700 font-medium mb-2">No. Telepon / WhatsApp</label>
-                    <input type="text" name="telepon" id="telepon" 
-                        class="w-full rounded-xl border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 px-4 py-3"
-                        placeholder="08xxxxxxxxxx" required>
-                </div>
-
-                <!-- Jumlah Peserta -->
-                <div>
-                    <label for="jumlah_orang" class="block text-gray-700 font-medium mb-2">Jumlah Peserta</label>
-                    <input type="number" name="jumlah_orang" id="jumlah_orang" min="1"
-                        class="w-full rounded-xl border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 px-4 py-3"
-                        placeholder="Masukkan jumlah peserta" required>
-                </div>
-
-                <!-- Tanggal Booking -->
-                <div>
-                    <label for="tanggal_booking" class="block text-gray-700 font-medium mb-2">Tanggal Booking</label>
-                    <input type="date" name="tanggal_booking" id="tanggal_booking" 
-                        value="{{ old('tanggal_booking') }}"
-                        class="w-full rounded-xl border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 px-4 py-3"
-                        required>
-                </div>
-
-                <!-- Catatan -->
-                <div>
-                    <label for="catatan" class="block text-gray-700 font-medium mb-2">Catatan (Opsional)</label>
-                    <textarea name="catatan" id="catatan" rows="4"
-                            class="w-full rounded-xl border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 px-4 py-3"
-                            placeholder="Tambahkan catatan jika ada"></textarea>
-                </div>
-
-                <!-- Tombol Submit -->
-                <div class="flex justify-end">
-                    <button type="submit"
-                            class="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold rounded-xl shadow-lg hover:scale-[1.02] hover:shadow-xl transition">
-                        Lanjutkan Pemesanan
-                    </button>
-                </div>
-            </form>
         </div>
 
 

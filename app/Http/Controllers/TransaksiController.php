@@ -15,7 +15,7 @@ class TransaksiController extends Controller
     {
         //
           $transaksis = Transaksi::with('paketWisata')->paginate(10); // <-- paginate 10 data per halaman
-    return view('admin.transaksi.index', compact('transaksis'));
+            return view('admin.transaksi.index', compact('transaksis'));
     }
 
     /**
@@ -60,9 +60,8 @@ class TransaksiController extends Controller
      */
     public function edit(Transaksi $transaksi)
     {
-        //
-        $paketwisata = PaketWisata::all();
-        return view('admin.transaksi.edit', compact('transaksi','paketwisata'));
+        $paket = PaketWisata::all();
+        return view('admin.transaksi.edit', compact('transaksi','paket'));
     }
 
     /**

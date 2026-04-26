@@ -1,74 +1,151 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mt-4">
-    <div class="card shadow-sm rounded-4">
-        <div class="card-body">
-            <h5 class="fw-bold text-primary mb-3">Edit Paket Wisata</h5>
 
-            <form action="{{ route('admin.paket_wisata.update', $paket_wisatum->id) }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                @method('PUT')
+<div class="p-6 max-w-6xl">
 
-                <div class="mb-3">
-                    <label class="form-label">Nama Paket</label>
-                    <input type="text" name="nama_paket" class="form-control" 
-                           value="{{ old('nama_paket', $paket_wisatum->nama_paket) }}" required>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Destinasi</label>
-                    <select name="destinasi_id" class="form-select" required>
-                        @foreach($destinasi as $d)
-                            <option value="{{ $d->id }}" 
-                                {{ old('destinasi_id', $paket_wisatum->destinasi_id) == $d->id ? 'selected' : '' }}>
-                                {{ $d->nama }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Deskripsi</label>
-                    <textarea name="deskripsi" rows="3" class="form-control">{{ old('deskripsi', $paket_wisatum->deskripsi) }}</textarea>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Harga Weekday</label>
-                    <input type="number" name="harga_weekday" class="form-control" 
-                           value="{{ old('harga_weekday', $paket_wisatum->harga_weekday) }}" required>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Harga Weekend / Long Weekend</label>
-                    <input type="number" name="harga_weekend" class="form-control" 
-                           value="{{ old('harga_weekend', $paket_wisatum->harga_weekend) }}" required>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Durasi (Hari)</label>
-                    <input type="number" name="durasi_hari" class="form-control" 
-                           value="{{ old('durasi_hari', $paket_wisatum->durasi_hari) }}" required>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Fasilitas</label>
-                    <input type="text" name="fasilitas" class="form-control" 
-                           value="{{ old('fasilitas', $paket_wisatum->fasilitas) }}">
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Foto</label><br>
-                    @if($paket_wisatum->foto)
-                        <img src="{{ asset('storage/'.$paket_wisatum->foto) }}" width="120" class="mb-2 rounded-3">
-                    @endif
-                    <input type="file" name="foto" class="form-control">
-                </div>
-
-                <button type="submit" class="btn btn-success"><i class="bi bi-check-circle"></i> Update</button>
-                <a href="{{ route('admin.paket_wisata.index') }}" class="btn btn-secondary">Batal</a>
-            </form>
-        </div>
+    <!-- HEADER -->
+    <div class="mb-6">
+        <h2 class="text-2xl font-bold text-gray-800">Edit Paket Wisata</h2>
     </div>
+
+    <!-- CARD -->
+    <div class="bg-white rounded-2xl shadow p-6">
+
+        <form action="{{ route('admin.paket_wisata.update', $paket_wisatum->id) }}"
+              method="POST"
+              enctype="multipart/form-data"
+              class="space-y-6">
+            @csrf
+            @method('PUT')
+
+            <!-- GRID -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <!-- LEFT -->
+                <div class="space-y-5">
+
+                    <!-- Nama -->
+                    <div>
+                        <label class="text-sm text-gray-600 mb-1 block">Nama Paket</label>
+                        <input type="text" name="nama_paket"
+                            value="{{ old('nama_paket', $paket_wisatum->nama_paket) }}"
+                            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                            required>
+                    </div>
+
+                    <!-- Destinasi -->
+                    <div>
+                        <label class="text-sm text-gray-600 mb-1 block">Destinasi</label>
+                        <select name="destinasi_id"
+                            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+
+                            @foreach($destinasi as $d)
+                                <option value="{{ $d->id }}"
+                                    {{ old('destinasi_id', $paket_wisatum->destinasi_id) == $d->id ? 'selected' : '' }}>
+                                    {{ $d->nama }}
+                                </option>
+                            @endforeach
+
+                        </select>
+                    </div>
+
+                    <!-- Deskripsi -->
+                    <div>
+                        <label class="text-sm text-gray-600 mb-1 block">Deskripsi</label>
+                        <textarea name="deskripsi" rows="4"
+                            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">{{ old('deskripsi', $paket_wisatum->deskripsi) }}</textarea>
+                    </div>
+
+                    <!-- Fasilitas -->
+                    <div>
+                        <label class="text-sm text-gray-600 mb-1 block">Fasilitas</label>
+                        <input type="text" name="fasilitas"
+                            value="{{ old('fasilitas', $paket_wisatum->fasilitas) }}"
+                            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                    </div>
+
+                </div>
+
+                <!-- RIGHT -->
+                <div class="space-y-5">
+
+                    <!-- Harga Weekday -->
+                    <div>
+                        <label class="text-sm text-gray-600 mb-1 block">Harga Weekday</label>
+                        <input type="number" name="harga_weekday"
+                            value="{{ old('harga_weekday', $paket_wisatum->harga_weekday) }}"
+                            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                            required>
+                    </div>
+
+                    <!-- Harga Weekend -->
+                    <div>
+                        <label class="text-sm text-gray-600 mb-1 block">Harga Weekend</label>
+                        <input type="number" name="harga_weekend"
+                            value="{{ old('harga_weekend', $paket_wisatum->harga_weekend) }}"
+                            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                            required>
+                    </div>
+
+                    <!-- Durasi -->
+                    <div>
+                        <label class="text-sm text-gray-600 mb-1 block">Durasi (Hari)</label>
+                        <input type="number" name="durasi_hari"
+                            value="{{ old('durasi_hari', $paket_wisatum->durasi_hari) }}"
+                            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                            required>
+                    </div>
+
+                    <!-- FOTO -->
+                    <div>
+                        <label class="text-sm text-gray-600 mb-2 block">Foto</label>
+
+                        @if($paket_wisatum->foto)
+                            <img src="{{ asset('storage/'.$paket_wisatum->foto) }}"
+                                 class="w-full h-40 object-cover rounded-xl mb-3 border">
+                        @endif
+
+                        <input type="file" name="foto"
+                            class="w-full text-sm text-gray-600 file:mr-3 file:py-2 file:px-4
+                                   file:rounded-lg file:border-0
+                                   file:bg-gray-100 file:text-gray-700
+                                   hover:file:bg-gray-200">
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- BUTTON -->
+            <div class="flex justify-end gap-3 pt-4 border-t">
+
+                <a href="{{ route('admin.paket_wisata.index') }}"
+                   class="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300 transition">
+                    Batal
+                </a>
+
+                <button type="submit"
+                        class="flex items-center gap-2 px-5 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 shadow transition">
+
+                    <!-- HEROICON CHECK -->
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         class="w-5 h-5"
+                         fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M5 13l4 4L19 7"/>
+                    </svg>
+
+                    Update
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
 </div>
+
 @endsection

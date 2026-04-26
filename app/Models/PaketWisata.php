@@ -9,6 +9,10 @@ use Carbon\Carbon;
 class PaketWisata extends Model
 {
     use HasFactory;
+    
+    protected $casts = [
+        'destinasi' => 'array',
+    ];
 
     protected $fillable = [
         'nama_paket',

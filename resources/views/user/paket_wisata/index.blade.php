@@ -73,7 +73,9 @@
                     <!-- Overlay saat hover -->
                     <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center text-center p-3">
                         <h3 class="text-white text-lg sm:text-xl font-bold mb-1">{{ $item->nama_paket }}</h3>
-                        <p class="text-gray-200 text-xs sm:text-sm mb-1">{{ $item->destinasi->nama }} - {{ $item->durasi_hari }} Hari</p>
+                        <p class="text-gray-200 text-xs sm:text-sm mb-1">
+                            {{ $item->destinasi->nama ?? 'Tidak ada destinasi' }} - {{ $item->durasi_hari }} Hari
+                        </p>
                         <span class="block text-sm text-gray-600">
                             Weekday: Rp {{ number_format($item->harga_weekday,0,',','.') }}
                         </span>

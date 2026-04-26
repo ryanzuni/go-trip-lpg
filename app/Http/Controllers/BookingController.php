@@ -8,6 +8,10 @@ use App\Models\Booking;
 use Carbon\Carbon;
 use App\Notifications\BookingConfirmed;
 use Illuminate\Support\Facades\Notification;
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Models\Transaksi;
+use Midtrans\Config;
+use Midtrans\Snap;
 
 class BookingController extends Controller
 {
@@ -46,57 +50,21 @@ class BookingController extends Controller
         return view('laporan.booking', compact('bookings','pakets'));
     }
 
-    // public function store(Request $request, PaketWisata $paket)
-    // {
-    //     $validated = $request->validate([
-    //         'nama' => 'required|string|max:255',
-    //         'email' => 'required|email',
-    //         'telepon' => 'required|string|max:20',
-    //         'jumlah_orang' => 'required|integer|min:1',
-    //         'tanggal_booking' => 'required|date', // <-- tambah input tanggal
-    //         'catatan' => 'nullable|string',
-    //     ]);
-
-    //     // Tentukan harga berdasarkan hari booking
-    //     $tanggal = Carbon::parse($validated['tanggal_booking']);
-    //     $dayOfWeek = $tanggal->dayOfWeek; // 0 = Minggu, 6 = Sabtu
-
-    //     if ($dayOfWeek == 0 || $dayOfWeek == 6) {
-    //         // Weekend
-    //         $harga = $paket->harga_weekend;
-    //     } else {
-    //         // Weekday
-    //         $harga = $paket->harga_weekday;
-    //     }
-
-    //     Booking::create([
-    //         'paket_id' => $paket->id,
-    //         'nama' => $validated['nama'],
-    //         'email' => $validated['email'],
-    //         'telepon' => $validated['telepon'],
-    //         'jumlah_orang' => $validated['jumlah_orang'],
-    //         'tanggal_booking' => $validated['tanggal_booking'], // simpan tanggal booking
-    //         'harga' => $harga * $validated['jumlah_orang'], // total harga
-    //         'catatan' => $validated['catatan'] ?? null,
-    //     ]);
-
-    //     return redirect()->back()->with('success', 'Pemesanan berhasil dikirim!');
-    // }
-
     public function confirmPayment($id)
     {
         $booking = Booking::findOrFail($id);
 
+        // update status booking
         $booking->update([
             'status' => 'paid'
         ]);
 
-        // ✅ BARU KIRIM EMAIL
-        Notification::route('mail', $booking->email)
-            ->notify(new BookingConfirmed($booking));
-
-        // ✅ BARU KIRIM WA
-        // wa logic di sini
+        // simpan ke transaksi
+        Transaksi::where('paket_id', $booking->paket_id)
+            ->where('nama_pelanggan', $booking->nama)
+            ->update([
+                'status' => 'lunas'
+            ]);
 
         return back()->with('success', 'Pembayaran berhasil dikonfirmasi');
     }
@@ -113,44 +81,109 @@ class BookingController extends Controller
         return view('user.booking.payment', compact('booking'));
     }
 
-    // Hitung harga berdasarkan weekday/weekend
+    public function success($id)
+    {
+        $booking = Booking::with('paketWisata.destinasi')->findOrFail($id);
+
+        return view('booking.success', compact('booking'));
+    }
+
+    public function invoice($id)
+    {
+        $booking = Booking::with('paketWisata.destinasi')->findOrFail($id);
+
+        $pdf = Pdf::loadView('booking.invoice', compact('booking'));
+
+        return $pdf->download('invoice-booking-'.$booking->id.'.pdf');
+    }
+
+    public function callback(Request $request)
+    {
+        $serverKey = config('midtrans.server_key');
+
+        // ambil data dari midtrans
+        $orderId = $request->order_id;
+        $statusCode = $request->status_code;
+        $grossAmount = $request->gross_amount;
+        $signatureKey = $request->signature_key;
+
+        // 🔐 VALIDASI SIGNATURE (WAJIB)
+        $expectedSignature = hash('sha512',
+            $orderId . $statusCode . $grossAmount . $serverKey
+        );
+
+        if ($signatureKey !== $expectedSignature) {
+            return response()->json(['message' => 'Invalid signature'], 403);
+        }
+
+        // ambil ID booking dari order_id
+        // format: BOOK-1 → ambil 1
+        $bookingId = str_replace('BOOK-', '', $orderId);
+
+        $booking = Booking::find($bookingId);
+
+        if (!$booking) {
+            return response()->json(['message' => 'Booking not found'], 404);
+        }
+
+        // HANDLE STATUS MIDTRANS
+        if ($request->transaction_status == 'settlement' || 
+            $request->transaction_status == 'capture') {
+
+            // update booking
+            $booking->update([
+                'status' => 'success'
+            ]);
+
+            // update transaksi
+            $transaksi = Transaksi::where('paket_id', $booking->paket_id)
+                ->where('nama_pelanggan', $booking->nama)
+                ->latest()
+                ->first();
+
+            if ($transaksi) {
+                $transaksi->update([
+                    'status' => 'lunas'
+                ]);
+            }
+
+        } elseif ($request->transaction_status == 'pending') {
+
+            $booking->update([
+                'status' => 'pending'
+            ]);
+
+        } elseif ($request->transaction_status == 'expire' || 
+                $request->transaction_status == 'cancel') {
+
+            $booking->update([
+                'status' => 'batal'
+            ]);
+        }
+
+        return response()->json(['message' => 'OK']);
+    }
+
     public function store(Request $request, PaketWisata $paket)
     {
-        // Validasi input user
         $validated = $request->validate([
             'nama'            => 'required|string|max:255',
             'email'           => 'required|email',
             'telepon'         => 'required|string|max:20',
             'jumlah_orang'    => 'required|integer|min:1',
             'tanggal_booking' => 'required|date',
-            'catatan'         => 'nullable|string',
         ]);
 
-        // Tentukan weekday/weekend dari tanggal booking
-        $tanggal   = Carbon::parse($validated['tanggal_booking']);
-        $dayOfWeek = $tanggal->dayOfWeek; // 0 = Minggu, 6 = Sabtu
+        $tanggal   = \Carbon\Carbon::parse($validated['tanggal_booking']);
+        $dayOfWeek = $tanggal->dayOfWeek;
 
-        // Ambil harga sesuai paket wisata
         $hargaSatuan = ($dayOfWeek == 0 || $dayOfWeek == 6)
             ? $paket->harga_weekend
             : $paket->harga_weekday;
 
-        // Hitung total
         $totalHarga = $hargaSatuan * $validated['jumlah_orang'];
 
-        // Simpan booking ke database
-        // $booking = Booking::create([
-        //     'paket_id'        => $paket->id,
-        //     'nama'            => $validated['nama'],
-        //     'email'           => $validated['email'],
-        //     'telepon'         => $validated['telepon'],
-        //     'jumlah_orang'    => $validated['jumlah_orang'],
-        //     'tanggal_booking' => $validated['tanggal_booking'],
-        //     'harga_satuan'    => $hargaSatuan,
-        //     'total_harga'     => $totalHarga,
-        //     'catatan'         => $validated['catatan'] ?? null,
-        //     'status'          => 'pending',
-        // ]);
+        // SIMPAN BOOKING
         $booking = Booking::create([
             'paket_id'        => $paket->id,
             'nama'            => $validated['nama'],
@@ -160,40 +193,41 @@ class BookingController extends Controller
             'tanggal_booking' => $validated['tanggal_booking'],
             'harga_satuan'    => $hargaSatuan,
             'total_harga'     => $totalHarga,
-            'catatan'         => $validated['catatan'] ?? null,
-            'status'          => 'pending', // ⬅️ BELUM BAYAR
+            'status'          => 'pending',
         ]);
 
-        // $booking->notify(new BookingConfirmed($booking));
+        // SIMPAN TRANSAKSI
+        Transaksi::create([
+            'nama_pelanggan'     => $booking->nama,
+            'paket_id'           => $booking->paket_id,
+            'jumlah_orang'       => $booking->jumlah_orang,
+            'tanggal_berangkat'  => $booking->tanggal_booking,
+            'total_harga'        => $booking->total_harga,
+            'status'             => 'pending',
+        ]);
 
-        // Buat link WhatsApp ke customer
-        $waNumber = preg_replace('/[^0-9]/', '', $booking->telepon); // bersihkan input, hanya angka
-        if (str_starts_with($waNumber, '0')) {
-            $waNumber = '628981798046' . substr($waNumber, 1); // ganti 0 diawal jadi 62 (kode negara Indonesia)
-        }
+        // MIDTRANS CONFIG
+        Config::$serverKey = config('midtrans.server_key');
+        Config::$isProduction = config('midtrans.is_production');
+        Config::$isSanitized = true;
+        Config::$is3ds = true;
 
-        $message = "Halo {$booking->nama}, terima kasih telah melakukan booking paket wisata di *" . config('app.name') . "*.\n\n"
-            . "📌 *Detail Booking:*\n"
-            . "- Paket: {$booking->paketWisata->nama}\n"
-            . "- Tanggal: {$booking->tanggal_booking}\n"
-            . "- Jumlah Orang: {$booking->jumlah_orang}\n"
-            . "- Total: Rp " . number_format($booking->total_harga, 0, ',', '.') . "\n\n"
-            . "Kami akan segera menghubungi Anda untuk konfirmasi lebih lanjut.\n\n"
-            . "Terima kasih 🙏";
+        // PARAM MIDTRANS
+        $params = [
+            'transaction_details' => [
+                'order_id' => 'BOOK-' . $booking->id,
+                'gross_amount' => $booking->total_harga,
+            ],
+            'customer_details' => [
+                'first_name' => $booking->nama,
+                'email' => $booking->email,
+                'phone' => $booking->telepon,
+            ],
+        ];
 
-        $waLink = "https://wa.me/{$waNumber}?text=" . urlencode($message);
+        $snapToken = Snap::getSnapToken($params);
 
-        return redirect()
-            ->route('paket.show', $paket->id) // balik ke detail paket
-            ->with('success', 'Pemesanan berhasil dikirim!')
-            ->with('booking_id', $booking->id)
-            ->with('wa_link', $waLink);
-
-        return redirect()->route('booking.payment', $booking->id);
-
-        // return redirect()->back()
-        //     ->with('success', 'Pemesanan berhasil dikirim!')
-        //     ->with('booking_id', $booking->id);
+        return view('user.booking.payment', compact('booking', 'snapToken'));
     }
 
 }

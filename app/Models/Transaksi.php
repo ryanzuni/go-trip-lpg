@@ -10,6 +10,12 @@ class Transaksi extends Model
     //
     use HasFactory;
 
+    protected $casts = [
+        'tanggal_berangkat' => 'date',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
+
     protected $fillable = [
         'nama_pelanggan',
         'email',
@@ -22,9 +28,9 @@ class Transaksi extends Model
     ];
 
     public function user()
-{
-    return $this->belongsTo(User::class);
-}
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function paketwisata()
     {
