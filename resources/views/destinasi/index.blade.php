@@ -9,23 +9,23 @@
         <h2 class="text-2xl font-bold text-gray-800">Destinasi Wisata</h2>
 
         <a href="{{ route('admin.destinasi.create') }}"
-        class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition">
+            class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition">
             + Tambah
         </a>
     </div>
 
     <!-- SUCCESS -->
     @if(session('success'))
-        <div class="bg-green-100 text-green-700 px-4 py-3 rounded-lg">
-            {{ session('success') }}
-        </div>
+    <div class="bg-green-100 text-green-700 px-4 py-3 rounded-lg">
+        {{ session('success') }}
+    </div>
     @endif
 
-    <!-- TABLE CARD -->
-    <div class="bg-white rounded-2xl shadow overflow-hidden">
+    <!-- TABLE -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
 
         <table class="w-full text-sm">
-            <thead class="bg-gray-50 text-gray-600">
+            <thead class="bg-gray-50 text-gray-500 uppercase text-xs tracking-wide">
                 <tr>
                     <th class="p-4 text-left">#</th>
                     <th class="p-4 text-left">Nama</th>
@@ -37,13 +37,14 @@
             <tbody class="divide-y">
 
                 @forelse($destinasi as $item)
-                <tr class="hover:bg-gray-50 transition">
 
-                    <td class="p-4">
+                <!-- ROW -->
+                <tr class="hover:bg-gray-50 transition">
+                    <td class="p-4 text-gray-400">
                         {{ $loop->iteration + ($destinasi->currentPage()-1) * $destinasi->perPage() }}
                     </td>
 
-                    <td class="p-4 font-medium text-gray-800">
+                    <td class="p-4 font-semibold text-gray-800">
                         {{ $item->nama }}
                     </td>
 
@@ -51,42 +52,57 @@
                         {{ $item->lokasi }}
                     </td>
 
-                    <td class="p-4 text-center space-x-2">
+                    <td class="p-4 text-center">
+                        <div class="flex justify-center gap-2">
 
-                        <!-- VIEW -->
-                        <button onclick="openModal({{ $item->id }})"
-                        class="bg-blue-100 text-blue-600 px-3 py-1 rounded-lg hover:bg-blue-200">
-                            👁
-                        </button>
-
-                        <!-- EDIT -->
-                        <a href="{{ route('admin.destinasi.edit',$item->id) }}"
-                        class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-lg hover:bg-yellow-200">
-                            ✏️
-                        </a>
-
-                        <!-- DELETE -->
-                        <form action="{{ route('admin.destinasi.destroy',$item->id) }}" method="POST" class="inline">
-                            @csrf @method('DELETE')
-                            <button onclick="return confirm('Yakin hapus?')"
-                            class="bg-red-100 text-red-600 px-3 py-1 rounded-lg hover:bg-red-200">
-                                🗑
+                            <!-- VIEW -->
+                            <button onclick="openModal({{ $item->id }})"
+                                class="p-2 rounded-lg bg-blue-100 text-blue-600 hover:bg-blue-600 hover:text-white transition">
+                                
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 
+                                        8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 
+                                        7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
                             </button>
-                        </form>
 
+                            <!-- EDIT -->
+                            <a href="{{ route('admin.destinasi.edit',$item->id) }}"
+                                class="p-2 rounded-lg bg-yellow-100 text-yellow-600 hover:bg-yellow-500 hover:text-white transition">
+                                ✏️
+                            </a>
+
+                            <!-- DELETE -->
+                            <form action="{{ route('admin.destinasi.destroy',$item->id) }}" method="POST">
+                                @csrf @method('DELETE')
+                                <button onclick="return confirm('Yakin hapus?')"
+                                    class="p-2 rounded-lg bg-red-100 text-red-600 hover:bg-red-600 hover:text-white transition">
+                                    🗑
+                                </button>
+                            </form>
+
+                        </div>
                     </td>
                 </tr>
 
-                <!-- MODAL -->
+                <!-- ✅ MODAL (WAJIB DI SINI) -->
                 <div id="modal{{ $item->id }}"
-                class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+                    class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
 
-                    <div class="bg-white rounded-2xl w-full max-w-xl shadow-xl overflow-hidden">
+                    <div class="bg-white w-full max-w-xl rounded-2xl shadow-xl overflow-hidden">
 
-                        <!-- CLOSE -->
-                        <div class="flex justify-end p-3">
+                        <!-- HEADER -->
+                        <div class="flex justify-between items-center px-6 py-4 border-b">
+                            <h3 class="text-lg font-semibold text-gray-800">
+                                Detail Destinasi
+                            </h3>
+
                             <button onclick="closeModal({{ $item->id }})"
-                            class="text-gray-400 hover:text-red-500 text-xl">
+                                class="text-gray-400 hover:text-red-500">
                                 ✕
                             </button>
                         </div>
@@ -94,15 +110,35 @@
                         <!-- IMAGE -->
                         @if($item->foto)
                         <img src="{{ asset('storage/'.$item->foto) }}"
-                        class="w-full h-64 object-cover">
+                            class="w-full h-60 object-cover">
                         @endif
 
-                        <!-- DESC -->
-                        <div class="p-5">
-                            <h3 class="font-bold text-lg mb-2">{{ $item->nama }}</h3>
-                            <p class="text-gray-600 text-sm">
-                                {{ $item->deskripsi ?? 'Tidak ada deskripsi' }}
-                            </p>
+                        <!-- CONTENT -->
+                        <div class="p-6 space-y-3">
+                            <div>
+                                <p class="text-sm text-gray-500">Nama</p>
+                                <p class="font-semibold text-gray-800">{{ $item->nama }}</p>
+                            </div>
+
+                            <div>
+                                <p class="text-sm text-gray-500">Lokasi</p>
+                                <p class="text-gray-700">{{ $item->lokasi }}</p>
+                            </div>
+
+                            <div>
+                                <p class="text-sm text-gray-500">Deskripsi</p>
+                                <p class="text-gray-600 text-sm">
+                                    {{ $item->deskripsi ?? 'Tidak ada deskripsi' }}
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- FOOTER -->
+                        <div class="px-6 py-4 border-t flex justify-end">
+                            <button onclick="closeModal({{ $item->id }})"
+                                class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg">
+                                Tutup
+                            </button>
                         </div>
 
                     </div>
@@ -131,12 +167,12 @@
 <!-- SCRIPT -->
 <script>
 function openModal(id) {
-    document.getElementById('modal'+id).classList.remove('hidden');
-    document.getElementById('modal'+id).classList.add('flex');
+    document.getElementById('modal' + id).classList.remove('hidden');
+    document.getElementById('modal' + id).classList.add('flex');
 }
 
 function closeModal(id) {
-    document.getElementById('modal'+id).classList.add('hidden');
+    document.getElementById('modal' + id).classList.add('hidden');
 }
 </script>
 

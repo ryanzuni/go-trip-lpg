@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Destinasi;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class DestinasiController extends Controller
 {
@@ -31,7 +32,14 @@ class DestinasiController extends Controller
         ]);
 
         if ($request->hasFile('foto')) {
-            $validated['foto'] = $request->file('foto')->store('destinasi', 'public');
+            $file = $request->file('foto');
+
+            $nama = Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
+            $ext = $file->getClientOriginalExtension();
+
+            $filename = time() . '_' . $nama . '.' . $ext;
+
+            $validated['foto'] = $file->storeAs('destinasi', $filename, 'public');
         }
 
         Destinasi::create($validated);
@@ -54,10 +62,20 @@ class DestinasiController extends Controller
         ]);
 
         if ($request->hasFile('foto')) {
+
+            // hapus lama
             if ($destinasi->foto) {
                 Storage::disk('public')->delete($destinasi->foto);
             }
-            $validated['foto'] = $request->file('foto')->store('destinasi', 'public');
+
+            $file = $request->file('foto');
+
+            $nama = Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
+            $ext = $file->getClientOriginalExtension();
+
+            $filename = time() . '_' . $nama . '.' . $ext;
+
+            $validated['foto'] = $file->storeAs('destinasi', $filename, 'public');
         }
 
         $destinasi->update($validated);

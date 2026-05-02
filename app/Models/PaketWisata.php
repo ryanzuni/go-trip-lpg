@@ -5,18 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Carbon\Carbon;
+use App\Models\Destinasi;
 
 class PaketWisata extends Model
 {
     use HasFactory;
-    
+
     protected $casts = [
         'destinasi' => 'array',
     ];
 
     protected $fillable = [
         'nama_paket',
-        'destinasi_id',
+        // 'destinasi_id',
         'deskripsi',
         'harga',
         'harga_weekday',
@@ -28,12 +29,17 @@ class PaketWisata extends Model
     ];
 
     // Relasi ke tabel destinasi
+    // public function destinasi()
+    // {
+    //     return $this->belongsTo(Destinasi::class, 'destinasi_id');
+    // }
+
     public function destinasi()
     {
-        return $this->belongsTo(Destinasi::class, 'destinasi_id');
+        return $this->belongsToMany(Destinasi::class, 'paket_destinasi');
     }
 
-// Relasi ke bookings (pemesanan)
+    // Relasi ke bookings (pemesanan)
     public function bookings()
     {
         return $this->hasMany(Booking::class, 'paket_id');
@@ -54,8 +60,8 @@ class PaketWisata extends Model
     {
         $day = Carbon::now()->dayOfWeek; // 0 = Minggu, 6 = Sabtu
 
-        return in_array($day, [0, 6]) 
-            ? $this->harga_weekend 
+        return in_array($day, [0, 6])
+            ? $this->harga_weekend
             : $this->harga_weekday;
     }
 }

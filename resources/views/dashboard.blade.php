@@ -113,9 +113,9 @@
                     @foreach($paketTerbaru as $p)
                     <tr class="border-b hover:bg-gray-50">
                         <td class="py-3 font-medium">{{ $p->nama_paket }}</td>
-                        <td>{{ $p->destinasi->nama ?? '-' }}</td>
-                        <td>Rp {{ number_format($p->harga,0,',','.') }}</td>
-                        <td>{{ $p->durasi }} hari</td>
+                        <td>{{ optional($p->destinasi)->nama_destinasi ?? '-' }}</td>
+                        <td>Rp {{ number_format($p->harga_weekday ?? 0,0,',','.') }}</td>
+                        <td>{{ $p->durasi_hari ?? '-' }} hari</td>
                         <td>
                             <span class="font-semibold {{ $p->status == 'tersedia' ? 'text-green-600' : 'text-yellow-600' }}">
                                 {{ ucfirst($p->status) }}
@@ -136,49 +136,50 @@
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
 
 <script>
-document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function() {
 
-    // Chart
-    const ctx = document.getElementById('bookingChart').getContext('2d');
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'],
-            datasets: [{
-                label: 'Booking',
-                data: @json($dataChart),
-                borderWidth: 1
-            }]
-        }
+        // Chart
+        const ctx = document.getElementById('bookingChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
+                datasets: [{
+                    label: 'Booking',
+                    data: @json($dataChart),
+                    borderWidth: 1
+                }]
+            }
+        });
+
+        // Calendar
+        const calendar = new FullCalendar.Calendar(document.getElementById('calendar'), {
+            initialView: 'dayGridMonth',
+            height: 350,
+            events: @json($events),
+
+            eventClick: function(info) {
+                const e = info.event;
+
+                // isi modal
+                document.getElementById('modalNama').innerText = e.title;
+                document.getElementById('modalPaket').innerText = e.extendedProps.paket;
+                document.getElementById('modalTanggal').innerText = e.extendedProps.tanggal;
+                document.getElementById('modalJumlah').innerText = e.extendedProps.jumlah;
+                document.getElementById('modalTotal').innerText = 'Rp ' + Number(e.extendedProps.total).toLocaleString('id-ID');
+                document.getElementById('modalStatus').innerText = e.extendedProps.status;
+
+                // tampilkan modal
+                document.getElementById('eventModal').classList.remove('hidden');
+                document.getElementById('eventModal').classList.add('flex');
+            }
+        });
+
+        calendar.render();
     });
 
-    // Calendar
-    const calendar = new FullCalendar.Calendar(document.getElementById('calendar'), {
-        initialView: 'dayGridMonth',
-        height: 350,
-        events: @json($events),
-
-        eventClick: function(info) {
-            const e = info.event;
-
-            // isi modal
-            document.getElementById('modalNama').innerText = e.title;
-            document.getElementById('modalPaket').innerText = e.extendedProps.paket;
-            document.getElementById('modalTanggal').innerText = e.extendedProps.tanggal;
-            document.getElementById('modalJumlah').innerText = e.extendedProps.jumlah;
-            document.getElementById('modalTotal').innerText = 'Rp ' + Number(e.extendedProps.total).toLocaleString('id-ID');
-            document.getElementById('modalStatus').innerText = e.extendedProps.status;
-
-            // tampilkan modal
-            document.getElementById('eventModal').classList.remove('hidden');
-            document.getElementById('eventModal').classList.add('flex');
-        }
-    });
-
-    calendar.render();
-});
-function closeModal() {
-    document.getElementById('eventModal').classList.add('hidden');
-}
+    function closeModal() {
+        document.getElementById('eventModal').classList.add('hidden');
+    }
 </script>
 @endsection

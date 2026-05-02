@@ -52,7 +52,7 @@ class BookingController extends Controller
 
     public function confirmPayment($id)
     {
-        $booking = Booking::findOrFail($id);
+        $booking = Booking::with('paketWisata.destinasi')->findOrFail($id);
 
         // update status booking
         $booking->update([

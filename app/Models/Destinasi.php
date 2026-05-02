@@ -21,4 +21,9 @@ class Destinasi extends Model
     protected $casts = [
         'views' => 'integer',
     ];
+
+    public function paket()
+    {
+        return $this->belongsToMany(PaketWisata::class, 'paket_destinasi');
+    }
 }

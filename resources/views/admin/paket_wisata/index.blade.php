@@ -69,7 +69,7 @@
                         </td>
 
                         <td class="px-6 py-4 text-gray-600">
-                            {{ $item->destinasi->nama ?? '-' }}
+                            {{ $item->destinasi ? $item->destinasi->pluck('nama')->join(', ') : '-' }}
                         </td>
 
                         <td class="px-6 py-4 text-gray-600">

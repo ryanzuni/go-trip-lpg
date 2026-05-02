@@ -37,22 +37,20 @@
                 <div>
                     <label class="text-sm font-medium text-gray-700">Nama Paket</label>
                     <input type="text" name="nama_paket"
-                    value="{{ old('nama_paket') }}"
-                    class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                        value="{{ old('nama_paket') }}"
+                        class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
                 </div>
 
                 <!-- Destinasi -->
                 <div>
                     <label class="text-sm font-medium text-gray-700">Destinasi</label>
-                    <select name="destinasi_id"
-                        class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-
-                        <option value="">-- Pilih Destinasi --</option>
+                    <select id="destinasi-select" name="destinasi_id[]" multiple
+                        class="w-full mt-1 px-4 py-2 border rounded-lg">
 
                         @foreach($destinasi as $d)
-                            <option value="{{ $d->id }}" {{ old('destinasi_id') == $d->id ? 'selected' : '' }}>
-                                {{ $d->nama }}
-                            </option>
+                        <option value="{{ $d->id }}">
+                            {{ $d->nama }}
+                        </option>
                         @endforeach
                     </select>
                 </div>
@@ -61,7 +59,7 @@
                 <div>
                     <label class="text-sm font-medium text-gray-700">Deskripsi</label>
                     <textarea name="deskripsi" rows="4"
-                    class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">{{ old('deskripsi') }}</textarea>
+                        class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">{{ old('deskripsi') }}</textarea>
                 </div>
 
                 <!-- Harga -->
@@ -70,15 +68,15 @@
                     <div>
                         <label class="text-sm font-medium text-gray-700">Harga Weekday</label>
                         <input type="number" name="harga_weekday"
-                        value="{{ old('harga_weekday') }}"
-                        class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                            value="{{ old('harga_weekday') }}"
+                            class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
                     </div>
 
                     <div>
                         <label class="text-sm font-medium text-gray-700">Harga Weekend</label>
                         <input type="number" name="harga_weekend"
-                        value="{{ old('harga_weekend') }}"
-                        class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                            value="{{ old('harga_weekend') }}"
+                            class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
                     </div>
 
                 </div>
@@ -87,17 +85,17 @@
                 <div>
                     <label class="text-sm font-medium text-gray-700">Durasi (Hari)</label>
                     <input type="number" name="durasi_hari"
-                    value="{{ old('durasi_hari') }}"
-                    class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                        value="{{ old('durasi_hari') }}"
+                        class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
                 </div>
 
                 <!-- Fasilitas -->
                 <div>
                     <label class="text-sm font-medium text-gray-700">Fasilitas</label>
                     <input type="text" name="fasilitas"
-                    value="{{ old('fasilitas') }}"
-                    placeholder="Hotel, Makan, Guide"
-                    class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                        value="{{ old('fasilitas') }}"
+                        placeholder="Hotel, Makan, Guide"
+                        class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
                 </div>
 
                 <!-- BUTTON -->
@@ -149,16 +147,25 @@
 
 </div>
 
-<script>
-function previewImage(event) {
-    const file = event.target.files[0];
-    const preview = document.getElementById('preview');
+<link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+    <script>
+        new TomSelect("#destinasi-select", {
+            plugins: ['remove_button'],
+            placeholder: "Pilih destinasi",
+        });
+    </script>
 
-    if (file) {
-        preview.src = URL.createObjectURL(file);
-        preview.classList.remove('hidden');
-    }
-}
-</script>
+    <script>
+        function previewImage(event) {
+            const file = event.target.files[0];
+            const preview = document.getElementById('preview');
 
-@endsection
+            if (file) {
+                preview.src = URL.createObjectURL(file);
+                preview.classList.remove('hidden');
+            }
+        }
+    </script>
+
+    @endsection

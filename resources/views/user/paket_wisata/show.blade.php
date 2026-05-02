@@ -4,193 +4,307 @@
 
 @section('content')
 
-<!-- Banner Full Width (nempel ke navbar) -->
 @section('banner')
 @if($paket->foto)
 <div class="relative w-screen h-[570px] left-1/2 -translate-x-1/2 -mt-[15px]">
-    <img src="{{ asset('storage/'.$paket->foto) }}" 
-         alt="{{ $paket->nama_paket }}" 
-         class="w-full h-full object-cover">
-    <div class="absolute inset-0 bg-black/40"></div>
+    <img src="{{ asset('storage/'.$paket->foto) }}"
+        alt="{{ $paket->nama_paket }}"
+        class="w-full h-full object-cover">
+    <div class="absolute inset-0 bg-black/50"></div>
 
-    <!-- Info di atas banner -->
+    <!-- TEXT -->
     <div class="absolute inset-0 flex flex-col items-center justify-center text-center text-white px-6">
-        <h1 class="text-4xl md:text-5xl font-extrabold drop-shadow-lg mb-3">
+        <h1 class="text-4xl md:text-5xl font-extrabold mb-3">
             {{ $paket->nama_paket }}
         </h1>
-        <p class="text-lg md:text-xl opacity-90">
-            {{ $paket->destinasi->nama ?? 'Tidak ada destinasi' }} - {{ $paket->durasi_hari }} Hari
+
+        <!-- DESTINASI -->
+        @if($paket->destinasi && $paket->destinasi->count())
+        <div class="flex flex-wrap justify-center gap-2">
+            @foreach($paket->destinasi as $d)
+            <span class="px-3 py-1 bg-white/20 backdrop-blur rounded-full text-sm">
+                {{ $d->nama }}
+            </span>
+            @endforeach
+        </div>
+        @else
+        <p class="text-sm opacity-80">Tidak ada destinasi</p>
+        @endif
+
+        <p class="mt-3 text-lg opacity-90">
+            {{ $paket->durasi_hari }} Hari
         </p>
     </div>
 
-    <!-- Harga pojok kanan atas -->
-    <span class="absolute top-4 right-4 bg-white/90 text-blue-600 text-sm md:text-base font-bold px-5 py-2 rounded-full shadow-lg">
-        Rp {{ number_format($paket->harga,0,',','.') }}
-    </span>
+    <!-- HARGA -->
+    <div class="absolute top-5 right-5 bg-white text-blue-600 px-5 py-2 rounded-full font-bold shadow-lg">
+        Weekday: Rp {{ number_format($paket->harga_weekday,0,',','.') }}
+    </div>
 </div>
 @endif
+@endsection
 
-<!-- Konten Detail -->
+<!-- CONTENT -->
 <section class="py-16 px-6 bg-white">
     <div class="max-w-6xl mx-auto">
-        
-        <!-- Info Utama -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-            <div class="flex items-center gap-4 bg-gray-50 p-6 rounded-2xl shadow-sm">
-                <i class="bi bi-geo-alt text-blue-600 text-3xl"></i>
-                <div>
-                    <p class="text-gray-500 text-sm">Lokasi</p>
-                    <p class="text-lg md:text-xl opacity-90">
-                        {{ optional($paket->destinasi)->nama ?? '-' }} - {{ $paket->durasi_hari }} Hari
-                    </p>
+
+        <!-- INFO -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+
+            <!-- DESTINASI -->
+            <div class="bg-gray-50 p-6 rounded-2xl shadow-sm">
+                <p class="text-gray-500 text-sm mb-2">Destinasi</p>
+
+                @if($paket->destinasi && $paket->destinasi->count())
+                <div class="flex flex-wrap gap-2">
+                    @foreach($paket->destinasi as $d)
+                    <span class="px-3 py-1 bg-blue-100 text-blue-700 text-sm rounded-full">
+                        {{ $d->nama }}
+                    </span>
+                    @endforeach
                 </div>
+                @else
+                <p class="text-gray-400">Tidak ada destinasi</p>
+                @endif
             </div>
-            <div class="flex items-center gap-4 bg-gray-50 p-6 rounded-2xl shadow-sm">
-                <i class="bi bi-clock text-blue-600 text-3xl"></i>
-                <div>
-                    <p class="text-gray-500 text-sm">Durasi</p>
-                    <p class="text-lg font-semibold text-gray-800">{{ $paket->durasi_hari }} Hari</p>
-                </div>
+
+            <!-- DURASI -->
+            <div class="bg-gray-50 p-6 rounded-2xl shadow-sm">
+                <p class="text-gray-500 text-sm">Durasi</p>
+                <p class="text-xl font-bold">{{ $paket->durasi_hari }} Hari</p>
             </div>
-            <div class="flex items-center gap-4 bg-gray-50 p-6 rounded-2xl shadow-sm">
-                <i class="bi bi-cash-stack text-blue-600 text-3xl"></i>
-                <div>
-                    <!-- <p class="text-lg font-bold text-blue-600">
-                        Harga Hari Ini: Rp {{ number_format($paket->harga_hari_ini, 0, ',', '.') }}
-                    </p> -->
-                    <p class="text-lg font-bold text-blue-600">
-                        Weekday: Rp {{ number_format($paket->harga_weekday, 0, ',', '.') }}
-                    </p>
-                    <p class="text-lg font-bold text-green-600">
-                        Weekend: Rp {{ number_format($paket->harga_weekend, 0, ',', '.') }}
-                    </p>
-                </div>
+
+            <!-- HARGA -->
+            <div class="bg-gray-50 p-6 rounded-2xl shadow-sm">
+                <p class="text-blue-600 font-bold">
+                    Weekday: Rp {{ number_format($paket->harga_weekday,0,',','.') }}
+                </p>
+                <p class="text-green-600 font-bold">
+                    Weekend: Rp {{ number_format($paket->harga_weekend,0,',','.') }}
+                </p>
             </div>
+
         </div>
 
-        <!-- Deskripsi -->
+        <!-- DESKRIPSI -->
         <div class="mb-12">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">Deskripsi Paket</h2>
+            <h2 class="text-2xl font-bold mb-4">Deskripsi Paket</h2>
             <p class="text-gray-700 leading-relaxed">
-                {!! nl2br(e($paket->deskripsi ?? 'Deskripsi belum tersedia untuk paket ini.')) !!}
+                {!! nl2br(e($paket->deskripsi ?? 'Deskripsi belum tersedia')) !!}
             </p>
         </div>
 
-        <!-- Itinerary -->
-        @if(!empty($paket->itinerary))
+        <!-- FASILITAS (🔥 FIX UTAMA) -->
+        @if($paket->fasilitas)
         <div class="mb-12">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6">Itinerary Perjalanan</h2>
-            <div class="space-y-6">
-                @foreach(explode("\n", $paket->itinerary) as $index => $hari)
-                    <div class="flex items-start gap-4">
-                        <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-blue-600 text-white font-bold rounded-full shadow-md">
-                            {{ $index+1 }}
-                        </div>
-                        <div class="p-4 bg-gray-50 rounded-2xl shadow-sm flex-1">
-                            <p class="text-gray-700">{{ $hari }}</p>
-                        </div>
-                    </div>
+            <h2 class="text-2xl font-bold mb-6">Fasilitas</h2>
+
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                @foreach(explode(',', $paket->fasilitas) as $f)
+                <div class="flex items-center gap-2 bg-gray-50 p-3 rounded-xl shadow-sm">
+                    <span class="text-green-500">✔</span>
+                    <span class="text-gray-700 text-sm">{{ trim($f) }}</span>
+                </div>
                 @endforeach
             </div>
         </div>
         @endif
-    </div>
 
-    <!-- Tombol Aksi + Form Booking -->
-    <!-- <div x-data="{ openForm: false }"> -->
-        <!-- Tombol -->
+        <!-- ITINERARY -->
+        @if($paket->itinerary)
+        <div class="mb-12">
+            <h2 class="text-2xl font-bold mb-6">Itinerary</h2>
+
+            <div class="space-y-4">
+                @foreach(explode("\n", $paket->itinerary) as $i => $hari)
+                <div class="flex gap-4">
+                    <div class="w-8 h-8 bg-blue-600 text-white flex items-center justify-center rounded-full">
+                        {{ $i+1 }}
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-xl flex-1">
+                        {{ $hari }}
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        </div>
+        @endif
+
+        <!-- BUTTON -->
         <div x-data="{ openModal: false }">
 
             <!-- BUTTON -->
             <button @click="openModal = true"
-                class="px-6 py-3 bg-blue-600 text-white rounded-xl">
+                class="px-6 py-3 bg-blue-600 text-white rounded-xl shadow hover:bg-blue-700 transition">
                 Pesan Sekarang
             </button>
 
             <!-- MODAL -->
             <div x-show="openModal"
                 x-transition
-                class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
 
                 <div @click.away="openModal = false"
-                    class="bg-white w-full max-w-lg p-6 rounded-2xl shadow-lg">
+                    class="bg-white w-full max-w-4xl rounded-2xl shadow-2xl overflow-hidden grid grid-cols-1 md:grid-cols-2">
 
-                    <h2 class="text-xl font-bold mb-4">Booking Paket</h2>
+                    <!-- LEFT: INFO PAKET -->
+                    <div class="bg-gradient-to-br from-blue-600 to-blue-700 text-white p-6 flex flex-col justify-between">
 
-                    <form action="{{ route('booking.store', $paket->id) }}" method="POST">
-                        @csrf
+                        <div>
+                            <h2 class="text-2xl font-bold mb-2">
+                                {{ $paket->nama_paket }}
+                            </h2>
 
-                        <input type="text" name="nama" placeholder="Nama" class="w-full mb-3 p-2 border rounded" required>
-                        <input type="email" name="email" placeholder="Email" class="w-full mb-3 p-2 border rounded" required>
-                        <input type="text" name="telepon" placeholder="Telepon" class="w-full mb-3 p-2 border rounded" required>
-                        <input type="number" name="jumlah_orang" placeholder="Jumlah Orang" class="w-full mb-3 p-2 border rounded" required>
-                        <input type="date" name="tanggal_booking" class="w-full mb-3 p-2 border rounded" required>
+                            <!-- DESTINASI -->
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                @foreach($paket->destinasi ?? [] as $d)
+                                <span class="bg-white/20 px-2 py-1 rounded-full text-xs">
+                                    {{ $d->nama }}
+                                </span>
+                                @endforeach
+                            </div>
 
-                        <div class="flex justify-end gap-2">
-                            <button type="button" @click="openModal=false"
-                                class="px-4 py-2 bg-gray-300 rounded">
-                                Batal
-                            </button>
-
-                            <button type="submit"
-                                class="px-4 py-2 bg-blue-600 text-white rounded">
-                                Booking
-                            </button>
+                            <p class="text-sm opacity-90">
+                                {{ $paket->durasi_hari }} Hari
+                            </p>
                         </div>
-                    </form>
+
+                        <!-- PRICE -->
+                        <div class="mt-6">
+                            <p class="text-sm opacity-80">Harga mulai dari</p>
+                            <p class="text-2xl font-bold">
+                                Rp {{ number_format($paket->harga_weekday,0,',','.') }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT: FORM -->
+                    <div class="p-6">
+
+                        <h2 class="text-xl font-bold mb-5">Isi Data Pemesan</h2>
+
+                        <form action="{{ route('booking.store', $paket->id) }}" method="POST" class="space-y-4">
+                            @csrf
+
+                            <input type="text" name="nama" placeholder="Nama Lengkap"
+                                class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" required>
+
+                            <input type="email" name="email" placeholder="Email"
+                                class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" required>
+
+                            <input type="text" name="telepon" placeholder="Nomor Telepon"
+                                class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" required>
+
+                            <div class="grid grid-cols-2 gap-3">
+                                <input type="number" name="jumlah_orang" placeholder="Jumlah Orang"
+                                    class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" required>
+
+                                <input type="date" name="tanggal_booking"
+                                    class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" required>
+                            </div>
+
+                            <!-- TOTAL (STATIC FEEL TRAVELOKA) -->
+                            <div class="bg-gray-50 p-4 rounded-xl mt-3">
+                                <p class="text-sm text-gray-500">Estimasi Harga</p>
+                                <p class="text-lg font-bold text-blue-600">
+                                    Rp {{ number_format($paket->harga_weekday,0,',','.') }}
+                                </p>
+                            </div>
+
+                            <!-- ACTION -->
+                            <div class="flex justify-end gap-3 pt-4">
+                                <button type="button" @click="openModal=false"
+                                    class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">
+                                    Batal
+                                </button>
+
+                                <button type="submit"
+                                    class="px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 shadow">
+                                    Booking Sekarang
+                                </button>
+                            </div>
+
+                        </form>
+
+                    </div>
 
                 </div>
             </div>
-
         </div>
 
+    </div>
+</section>
 
-        <!-- Konten Lain / Paket Lainnya -->
-        <section class="py-16 px-6 bg-gray-50">
-            <div class="max-w-6xl mx-auto">
-                <h2 class="text-2xl font-bold text-gray-800 mb-8">Paket Lainnya</h2>
+<!-- PAKET LAIN -->
+<section class="py-16 px-6 bg-gray-50">
+    <div class="max-w-6xl mx-auto">
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    @forelse($paketLain as $item)
-                        <div class="group relative overflow-hidden rounded-3xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-500">
-                            
-                            @if($item->foto)
-                            <div class="relative h-64">
-                                <img src="{{ asset('storage/'.$item->foto) }}" alt="{{ $item->nama_paket }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+        <h2 class="text-2xl font-bold mb-8">Paket Lainnya</h2>
 
-                                <!-- Overlay saat hover -->
-                                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center text-center p-4">
-                                    <h3 class="text-white text-lg font-bold mb-1">{{ $item->nama_paket }}</h3>
-                                    <p class="text-gray-200 text-sm mb-2">{{ $item->destinasi->nama }} - {{ $item->durasi_hari }} Hari</p>
-                                    <span class="block text-sm text-gray-600">
-                                        Weekday: Rp {{ number_format($item->harga_weekday,0,',','.') }}
-                                    </span>
-                                    <span class="block text-sm text-gray-600">
-                                        Weekend: Rp {{ number_format($item->harga_weekend,0,',','.') }}
-                                    </span>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
 
+            @foreach($paketLain as $item)
+            <div class="group relative bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-500">
 
-                                    <a href="{{ route('paket.show', $item->id) }}"
-                                    class="inline-block bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold px-4 py-2 rounded-xl shadow-lg hover:scale-105 hover:shadow-2xl transition-transform duration-300">
-                                    Lihat Detail
-                                    </a>
-                                </div>
+                <!-- IMAGE -->
+                <div class="relative h-56 overflow-hidden">
+                    <img src="{{ asset('storage/'.$item->foto) }}"
+                        class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
 
-                                <!-- Badge durasi -->
-                                <span class="absolute top-4 left-4 bg-black/60 text-white text-sm font-semibold px-3 py-1 rounded-full shadow-lg">
-                                    {{ $item->durasi_hari }} Hari
-                                </span>
-                            </div>
-                            @endif
-                        </div>
-                    @empty
-                        <p class="text-gray-400 text-center col-span-full">Belum ada paket lain tersedia.</p>
-                    @endforelse
+                    <!-- GRADIENT OVERLAY -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
+
+                    <!-- DURASI BADGE -->
+                    <span class="absolute top-4 left-4 bg-white/90 text-gray-800 text-xs font-semibold px-3 py-1 rounded-full shadow">
+                        {{ $item->durasi_hari }} Hari
+                    </span>
+
+                    <!-- PRICE -->
+                    <div class="absolute bottom-3 right-3 bg-white text-blue-600 text-sm font-bold px-4 py-1 rounded-full shadow">
+                        Rp {{ number_format($item->harga_weekday,0,',','.') }}
+                    </div>
                 </div>
+
+                <!-- CONTENT -->
+                <div class="p-5">
+
+                    <!-- TITLE -->
+                    <h3 class="text-lg font-bold text-gray-800 group-hover:text-blue-600 transition">
+                        {{ $item->nama_paket }}
+                    </h3>
+
+                    <!-- DESTINASI -->
+                    <div class="flex flex-wrap gap-2 mt-3">
+                        @if($item->destinasi && $item->destinasi->count())
+                        @foreach($item->destinasi->take(3) as $d)
+                        <span class="text-xs bg-blue-50 text-blue-600 px-2 py-1 rounded-full">
+                            {{ $d->nama }}
+                        </span>
+                        @endforeach
+
+                        @if($item->destinasi->count() > 3)
+                        <span class="text-xs text-gray-400">
+                            +{{ $item->destinasi->count() - 3 }} lainnya
+                        </span>
+                        @endif
+                        @else
+                        <span class="text-xs text-gray-400">Tidak ada destinasi</span>
+                        @endif
+                    </div>
+
+                    <!-- BUTTON -->
+                    <a href="{{ route('paket.show', $item->id) }}"
+                        class="block mt-5 text-center bg-gradient-to-r from-blue-600 to-blue-700 text-white py-2.5 rounded-xl font-semibold shadow-md hover:scale-[1.02] hover:shadow-xl transition">
+                        Lihat Detail
+                    </a>
+
+                </div>
+
             </div>
-        </section>
+            @endforeach
+
         </div>
     </div>
-</div>
 </section>
+
 @endsection
