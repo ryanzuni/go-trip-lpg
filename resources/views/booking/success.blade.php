@@ -19,7 +19,15 @@
         <div class="space-y-2 text-sm">
             <p><b>Nama:</b> {{ $booking->nama }}</p>
             <p><b>Paket:</b> {{ $booking->paketWisata->nama_paket }}</p>
-            <p><b>Destinasi:</b> {{ $booking->paketWisata->destinasi->nama ?? '-' }}</p>
+            <p>
+                <b>Destinasi:</b>
+
+                @if($booking->paketWisata->destinasi->count())
+                {{ $booking->paketWisata->destinasi->pluck('nama')->join(', ') }}
+                @else
+                -
+                @endif
+            </p>
             <p><b>Tanggal:</b> {{ $booking->tanggal_booking }}</p>
             <p><b>Jumlah Orang:</b> {{ $booking->jumlah_orang }}</p>
 
