@@ -8,46 +8,99 @@
     <!-- ===== HEADER ===== -->
     <div>
         <h1 class="text-2xl font-bold text-gray-800">Dashboard</h1>
-        <p class="text-gray-500">Selamat datang kembali 👋</p>
+        <p class="text-gray-500">Selamat datang kembali</p>
     </div>
 
     <!-- ===== STATS ===== -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-        <!-- Card 1 -->
-        <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-6 rounded-2xl shadow-lg">
-            <div class="flex justify-between items-center">
-                <div>
-                    <p class="text-sm opacity-80">Total Paket</p>
-                    <h2 class="text-3xl font-bold">{{ $jumlahDestinasi }}</h2>
-                </div>
-                <i class="fas fa-box text-3xl opacity-80"></i>
-            </div>
-        </div>
+    <!-- TOTAL PAKET -->
+    <div class="relative overflow-hidden bg-gradient-to-br from-blue-500 to-blue-700 text-white p-7 rounded-3xl shadow-xl">
 
-        <!-- Card 2 -->
-        <div class="bg-gradient-to-r from-emerald-400 to-emerald-600 text-white p-6 rounded-2xl shadow-lg">
-            <div class="flex justify-between items-center">
-                <div>
-                    <p class="text-sm opacity-80">Total Destinasi</p>
-                    <h2 class="text-3xl font-bold">{{ $jumlahDestinasi }}</h2>
-                </div>
-                <i class="fas fa-map-marker-alt text-3xl opacity-80"></i>
-            </div>
-        </div>
+        <div class="absolute -right-6 -top-6 w-28 h-28 bg-white/10 rounded-full"></div>
 
-        <!-- Card 3 -->
-        <div class="bg-gradient-to-r from-orange-400 to-orange-500 text-white p-6 rounded-2xl shadow-lg">
-            <div class="flex justify-between items-center">
-                <div>
-                    <p class="text-sm opacity-80">Total Booking</p>
-                    <h2 class="text-3xl font-bold">{{ $jumlahPengunjung }}</h2>
-                </div>
-                <i class="fas fa-users text-3xl opacity-80"></i>
-            </div>
-        </div>
+        <div class="relative flex justify-between items-center">
 
+            <div>
+                <p class="text-sm opacity-80 mb-2">
+                    Total Paket
+                </p>
+
+                <h2 class="text-4xl font-bold">
+                    {{ $jumlahPaket }}
+                </h2>
+
+                <p class="text-xs opacity-70 mt-2">
+                    Paket wisata tersedia
+                </p>
+            </div>
+
+            <div class="w-16 h-16 rounded-2xl bg-white/20 flex items-center justify-center backdrop-blur">
+                <i class="fas fa-suitcase text-3xl"></i>
+            </div>
+
+        </div>
     </div>
+
+
+    <!-- TOTAL DESTINASI -->
+    <div class="relative overflow-hidden bg-gradient-to-br from-emerald-400 to-emerald-600 text-white p-7 rounded-3xl shadow-xl">
+
+        <div class="absolute -right-6 -top-6 w-28 h-28 bg-white/10 rounded-full"></div>
+
+        <div class="relative flex justify-between items-center">
+
+            <div>
+                <p class="text-sm opacity-80 mb-2">
+                    Total Destinasi
+                </p>
+
+                <h2 class="text-4xl font-bold">
+                    {{ $jumlahDestinasi }}
+                </h2>
+
+                <p class="text-xs opacity-70 mt-2">
+                    Destinasi wisata aktif
+                </p>
+            </div>
+
+            <div class="w-16 h-16 rounded-2xl bg-white/20 flex items-center justify-center backdrop-blur">
+                <i class="fas fa-map-marker-alt text-3xl"></i>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- TOTAL BOOKING -->
+    <div class="relative overflow-hidden bg-gradient-to-br from-orange-400 to-orange-500 text-white p-7 rounded-3xl shadow-xl">
+
+        <div class="absolute -right-6 -top-6 w-28 h-28 bg-white/10 rounded-full"></div>
+
+        <div class="relative flex justify-between items-center">
+
+            <div>
+                <p class="text-sm opacity-80 mb-2">
+                    Total Booking
+                </p>
+
+                <h2 class="text-4xl font-bold">
+                    {{ $jumlahBooking }}
+                </h2>
+
+                <p class="text-xs opacity-70 mt-2">
+                    Booking pelanggan
+                </p>
+            </div>
+
+            <div class="w-16 h-16 rounded-2xl bg-white/20 flex items-center justify-center backdrop-blur">
+                <i class="fas fa-users text-3xl"></i>
+            </div>
+
+        </div>
+    </div>
+
+</div>
 
     <!-- ===== CHART + CALENDAR ===== -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -98,33 +151,126 @@
     <div class="bg-white rounded-2xl shadow p-6">
         <h3 class="font-semibold text-gray-700 mb-4">Paket Terbaru</h3>
 
-        <div class="overflow-x-auto">
-            <table class="w-full text-sm text-left">
-                <thead class="text-gray-500 border-b">
-                    <tr>
-                        <th class="py-3">Nama</th>
-                        <th>Destinasi</th>
-                        <th>Harga</th>
-                        <th>Durasi</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody class="text-gray-700">
-                    @foreach($paketTerbaru as $p)
-                    <tr class="border-b hover:bg-gray-50">
-                        <td class="py-3 font-medium">{{ $p->nama_paket }}</td>
-                        <td>{{ optional($p->destinasi)->nama_destinasi ?? '-' }}</td>
-                        <td>Rp {{ number_format($p->harga_weekday ?? 0,0,',','.') }}</td>
-                        <td>{{ $p->durasi_hari ?? '-' }} hari</td>
-                        <td>
-                            <span class="font-semibold {{ $p->status == 'tersedia' ? 'text-green-600' : 'text-yellow-600' }}">
-                                {{ ucfirst($p->status) }}
-                            </span>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+        <div class="bg-white rounded-3xl shadow-xl p-6 border border-gray-100">
+
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h3 class="text-xl font-bold text-gray-800">
+                        Paket Terbaru
+                    </h3>
+                    <p class="text-sm text-gray-500">
+                        Daftar paket wisata terbaru
+                    </p>
+                </div>
+
+                <div class="w-12 h-12 rounded-2xl bg-blue-100 flex items-center justify-center">
+                    <i class="fas fa-suitcase text-blue-600"></i>
+                </div>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+
+                    <thead>
+                        <tr class="border-b text-gray-500">
+                            <th class="text-left py-4">Paket</th>
+                            <th class="text-left">Destinasi</th>
+                            <th class="text-left">Harga</th>
+                            <th class="text-left">Durasi</th>
+                            <th class="text-left">Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody class="text-gray-700">
+
+                        @forelse($paketTerbaru as $p)
+                        <tr class="border-b hover:bg-gray-50 transition">
+
+                            <!-- NAMA -->
+                            <td class="py-4">
+                                <div class="flex items-center gap-3">
+
+                                    <div class="w-11 h-11 rounded-xl bg-blue-100 flex items-center justify-center">
+                                        <i class="fas fa-map text-blue-600"></i>
+                                    </div>
+
+                                    <div>
+                                        <p class="font-semibold text-gray-800">
+                                            {{ $p->nama_paket }}
+                                        </p>
+
+                                        <p class="text-xs text-gray-400">
+                                            ID #{{ $p->id }}
+                                        </p>
+                                    </div>
+
+                                </div>
+                            </td>
+
+                            <!-- DESTINASI -->
+                            <td>
+                                <div class="flex flex-wrap gap-2">
+
+                                    @forelse($p->destinasi ?? [] as $d)
+                                    <span class="px-2 py-1 bg-blue-50 text-blue-600 rounded-full text-xs">
+                                        {{ $d->nama }}
+                                    </span>
+                                    @empty
+                                    <span class="text-gray-400 text-xs">
+                                        Tidak ada destinasi
+                                    </span>
+                                    @endforelse
+
+                                </div>
+                            </td>
+
+                            <!-- HARGA -->
+                            <td>
+                                <span class="font-semibold text-emerald-600">
+                                    Rp {{ number_format($p->harga_weekday ?? 0,0,',','.') }}
+                                </span>
+                            </td>
+
+                            <!-- DURASI -->
+                            <td>
+                                <span class="px-3 py-1 bg-gray-100 rounded-full text-xs">
+                                    {{ $p->durasi_hari ?? 0 }} Hari
+                                </span>
+                            </td>
+
+                            <!-- STATUS -->
+                            <td>
+
+                                @php
+                                $status = $p->status ?? 'aktif';
+                                @endphp
+
+                                <span class="px-3 py-1 rounded-full text-xs font-semibold
+                            {{ $status == 'aktif'
+                                ? 'bg-green-100 text-green-600'
+                                : 'bg-yellow-100 text-yellow-600' }}">
+
+                                    {{ ucfirst($status) }}
+
+                                </span>
+
+                            </td>
+
+                        </tr>
+                        @empty
+
+                        <tr>
+                            <td colspan="5" class="py-10 text-center text-gray-400">
+                                Belum ada paket wisata
+                            </td>
+                        </tr>
+
+                        @endforelse
+
+                    </tbody>
+
+                </table>
+            </div>
         </div>
     </div>
 

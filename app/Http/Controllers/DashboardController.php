@@ -13,9 +13,15 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        $jumlahPaket = PaketWisata::count();
+
         $jumlahDestinasi = Destinasi::count();
+
         $jumlahPengunjung = Transaksi::sum('jumlah_orang');
-        $pendapatan = Transaksi::where('status','lunas')->sum('total_harga');
+
+        $pendapatan = Transaksi::where('status', 'lunas')
+            ->sum('total_harga');
+
         $jumlahBooking = Transaksi::count();
 
         // DATA PER BULAN (CHART)
@@ -23,24 +29,28 @@ class DashboardController extends Controller
             DB::raw('MONTH(tanggal_berangkat) as bulan'),
             DB::raw('COUNT(*) as total')
         )
-        ->groupBy('bulan')
-        ->orderBy('bulan')
-        ->pluck('total','bulan');
+            ->groupBy('bulan')
+            ->orderBy('bulan')
+            ->pluck('total', 'bulan');
 
-        // Format ke array 12 bulan
+        // FORMAT 12 BULAN
         $dataChart = [];
+
         for ($i = 1; $i <= 12; $i++) {
             $dataChart[] = $chartData[$i] ?? 0;
         }
 
+        // EVENTS CALENDAR
         $events = Transaksi::with('paketWisata')
             ->get()
             ->map(function ($t) {
+
                 return [
                     'title' => $t->nama_pelanggan,
-                    'start' => \Carbon\Carbon::parse($t->tanggal_berangkat)->format('Y-m-d'),
 
-                    // DETAIL TAMBAHAN
+                    'start' => Carbon::parse($t->tanggal_berangkat)
+                        ->format('Y-m-d'),
+
                     'extendedProps' => [
                         'paket' => $t->paketWisata->nama_paket ?? '-',
                         'jumlah' => $t->jumlah_orang,
@@ -58,13 +68,14 @@ class DashboardController extends Controller
             ->get();
 
         return view('dashboard', compact(
+            'jumlahPaket',
             'jumlahDestinasi',
             'jumlahPengunjung',
             'pendapatan',
+            'jumlahBooking',
             'dataChart',
             'paketTerbaru',
-            'events',
-            'jumlahBooking'
+            'events'
         ));
     }
 }

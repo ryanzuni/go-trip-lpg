@@ -11,9 +11,9 @@ class PaketWisata extends Model
 {
     use HasFactory;
 
-    protected $casts = [
-        'destinasi' => 'array',
-    ];
+    // protected $casts = [
+    //     'destinasi' => 'array',
+    // ];
 
     protected $fillable = [
         'nama_paket',
@@ -36,7 +36,12 @@ class PaketWisata extends Model
 
     public function destinasi()
     {
-        return $this->belongsToMany(Destinasi::class, 'paket_destinasi');
+        return $this->belongsToMany(
+            Destinasi::class,
+            'paket_destinasi',
+            'paket_wisata_id',
+            'destinasi_id'
+        );
     }
 
     // Relasi ke bookings (pemesanan)

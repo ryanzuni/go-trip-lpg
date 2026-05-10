@@ -1,6 +1,6 @@
 @extends('layouts.user-app')
 
-@section('title', 'Beranda - Pariwisata Kita')
+@section('title', 'Beranda - GoTrip Lampung')
 
 @section('content')
 
@@ -99,7 +99,7 @@
 
 <!-- Kenapa Memilih Kami -->
 <section class="py-20 bg-gradient-to-r from-blue-50 to-blue-100 mt-20">
-    <h2 class="text-3xl font-bold text-blue-700 mb-12 text-center">Kenapa Memilih Pariwisata Kita?</h2>
+    <h2 class="text-3xl font-bold text-blue-700 mb-12 text-center">Kenapa Memilih GoTrip Lampung?</h2>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-6xl mx-auto px-6">
         <div class="bg-white rounded-2xl shadow-lg p-8 text-center hover:shadow-xl transition">
             <i class="fas fa-wallet text-blue-600 text-4xl mb-4"></i>
@@ -172,7 +172,7 @@
 <section class="py-20 bg-blue-600 text-white text-center rounded-t-3xl shadow-lg mt-20">
     <h2 class="text-3xl md:text-4xl font-bold mb-4">Siap untuk Liburan?</h2>
     <p class="mb-8 text-lg opacity-90">Jelajahi destinasi terbaik di Indonesia sekarang juga.</p>
-    <a href="{{ route('gallery.index') }}" 
+    <a href="{{ route('destinasi.index') }}" 
       class="bg-white text-blue-600 font-semibold px-8 py-3 rounded-full shadow hover:bg-gray-100 transition">
         Lihat Semua Destinasi
     </a>

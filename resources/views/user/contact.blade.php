@@ -1,6 +1,6 @@
 @extends('layouts.user-app')
 
-@section('title', 'Contact Us - Pariwisata Kita')
+@section('title', 'Contact Us - GoTrip Lampung')
 
 @section('content')
 <section class="py-20 px-6 bg-white">
@@ -8,11 +8,11 @@
         <!-- Judul -->
         <div class="text-center mb-16">
             <h1 class="text-4xl md:text-5xl font-extrabold text-gray-800 mb-4">
-                Hubungi <span class="text-blue-600">Pariwisata Kita</span>
+                Hubungi <span class="text-blue-600">GoTrip Lampung</span>
             </h1>
             <p class="text-gray-600 text-lg max-w-2xl mx-auto">
                 Rencanakan perjalanan wisata Anda bersama kami, titik keberangkatan utama dari 
-                <strong>Dermaga Wisata Ketapang</strong>, Pesawaran – Lampung 🚤✨.
+                <strong>Dermaga Wisata Ketapang</strong>, Pesawaran – Lampung.
             </p>
         </div>
 
@@ -44,16 +44,15 @@
                     </div>
                 </a>
                 <!-- Email -->
-                <div class="flex items-center p-6 bg-white border rounded-2xl shadow hover:shadow-lg transition">
+                <!-- <div class="flex items-center p-6 bg-white border rounded-2xl shadow hover:shadow-lg transition">
                     <div class="w-14 h-14 flex items-center justify-center bg-yellow-100 text-yellow-600 rounded-full mr-4">
-                        <!-- Lucide mail -->
                         <i data-lucide="mail" class="w-6 h-6"></i>
                     </div>
                     <div>
                         <p class="text-sm text-gray-500">Email</p>
                         <p class="text-lg font-semibold text-gray-800">info@pariwisatakita.com</p>
                     </div>
-                </div>
+                </div> -->
             </div>
 
             <!-- Form -->

@@ -3,7 +3,7 @@
 
     <!-- Logo -->
     <a href="{{ route('home') }}" class="flex items-center group">
-      <img src="{{ asset('images/logo.jpg') }}" alt="Pariwisata Kita" 
+      <img src="{{ asset('images/logo.jpg') }}" alt="GoTrip Lampung" 
            class="w-12 h-12 object-contain transform transition duration-300 group-hover:scale-110">
     </a>
 

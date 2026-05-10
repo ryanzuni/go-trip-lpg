@@ -4,7 +4,7 @@
     <!-- Logo & About -->
     <div>
       <div class="flex items-center space-x-3 mb-4">
-        <img src="{{ asset('images/logo.jpg') }}" alt="Pariwisata Kita" class="w-12 h-12 object-contain">
+        <img src="{{ asset('images/logo.jpg') }}" alt="GoTrip Lampung" class="w-12 h-12 object-contain">
         <span class="text-2xl font-bold text-gray-800">GoTrip Lampung</span>
       </div>
       <!-- <p class="text-gray-600 text-sm leading-relaxed">

@@ -22,8 +22,18 @@ class Destinasi extends Model
         'views' => 'integer',
     ];
 
-    public function paket()
+    // public function paket()
+    // {
+    //     return $this->belongsToMany(PaketWisata::class, 'paket_destinasi');
+    // }
+
+    public function paketWisata()
     {
-        return $this->belongsToMany(PaketWisata::class, 'paket_destinasi');
+        return $this->belongsToMany(
+            PaketWisata::class,
+            'paket_destinasi',
+            'destinasi_id',
+            'paket_wisata_id'
+        );
     }
 }

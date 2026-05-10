@@ -104,7 +104,7 @@
                         <input type="checkbox" class="accent-white">
                         Ingat saya
                     </label>
-                    <a href="#" class="underline hover:text-blue-200">Lupa password?</a>
+                    <!-- <a href="#" class="underline hover:text-blue-200">Lupa password?</a> -->
                 </div>
 
                 <!-- BUTTON -->

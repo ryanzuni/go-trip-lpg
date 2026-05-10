@@ -1,12 +1,12 @@
 @extends('layouts.user-app')
 
-@section('title', $destinasi->nama . ' - Pariwisata Kita')
+@section('title', $destinasi->nama . ' - GoTrip Lampung')
 
 @section('banner')
 <div class="relative w-screen left-1/2 -translate-x-1/2 h-[510px] -mt-[15px]">
     <img src="{{ asset('storage/'.$destinasi->foto) }}"
-         alt="{{ $destinasi->nama }}"
-         class="absolute inset-0 w-full h-full object-cover brightness-90">
+        alt="{{ $destinasi->nama }}"
+        class="absolute inset-0 w-full h-full object-cover brightness-90">
     <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-blue-900/40 to-transparent"></div>
 
     <!-- Text -->
@@ -53,16 +53,16 @@
 
         <!-- Action Buttons -->
         <div class="flex flex-wrap gap-4">
-            <a href="{{ route('paket.index') }}"
-               class="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-cyan-400 text-white font-semibold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300">
+            <!-- <a href="{{ route('paket.index') }}"
+                class="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-cyan-400 text-white font-semibold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300">
                 <i class="fas fa-suitcase"></i> Lihat Paket Wisata
-            </a>
+            </a> -->
             <button onclick="shareDestination()"
-               class="inline-flex items-center gap-2 bg-gradient-to-r from-green-600 to-emerald-400 text-white font-semibold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300">
+                class="inline-flex items-center gap-2 bg-gradient-to-r from-green-600 to-emerald-400 text-white font-semibold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300">
                 <i class="fas fa-share"></i> Bagikan
             </button>
             <button onclick="addToWishlist()"
-               class="inline-flex items-center gap-2 bg-gradient-to-r from-red-600 to-pink-400 text-white font-semibold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300">
+                class="inline-flex items-center gap-2 bg-gradient-to-r from-red-600 to-pink-400 text-white font-semibold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300">
                 <i class="fas fa-heart"></i> Simpan
             </button>
         </div>
@@ -95,16 +95,30 @@
         </div>
 
         <div class="bg-gradient-to-br from-blue-600 to-cyan-400 text-white rounded-3xl p-6 text-center">
-            <h4 class="font-bold text-lg mb-2">Ingin Booking?</h4>
-            <p class="text-blue-100 text-sm mb-4">Hubungi kami untuk informasi lebih lanjut</p>
-            <a href="{{ route('home') }}#contact"
-               class="inline-block bg-white text-blue-600 font-semibold px-6 py-2 rounded-xl hover:bg-blue-50 transition">
-                <i class="fas fa-phone mr-2"></i> Hubungi Kami
+
+            <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-white/20 flex items-center justify-center backdrop-blur">
+                <i class="fas fa-suitcase text-2xl"></i>
+            </div>
+
+            <h4 class="font-bold text-2xl mb-2">
+                Jelajahi Paket Wisata
+            </h4>
+
+            <p class="text-blue-100 text-sm leading-relaxed mb-5">
+                Temukan berbagai pilihan paket wisata menarik yang mencakup destinasi ini dengan fasilitas lengkap dan harga terbaik.
+            </p>
+
+            <a href="{{ route('paket.index') }}"
+                class="inline-flex items-center gap-2 bg-white text-blue-600 font-semibold px-6 py-3 rounded-xl hover:bg-blue-50 hover:scale-105 transition duration-300 shadow-lg">
+
+                <i class="fas fa-arrow-right"></i>
+                Lihat Paket Wisata
             </a>
+
         </div>
 
         <a href="{{ route('destinasi.index') }}"
-           class="block text-center bg-gradient-to-r from-gray-600 to-gray-700 text-white py-4 rounded-xl font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300">
+            class="block text-center bg-gradient-to-r from-gray-600 to-gray-700 text-white py-4 rounded-xl font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300">
             ← Kembali ke Daftar Destinasi
         </a>
     </div>
@@ -122,30 +136,30 @@
             <a href="{{ route('destinasi.show', $item->id) }}"
                 class="group relative rounded-3xl overflow-hidden shadow-xl cursor-pointer transform transition-all duration-500 hover:scale-105 hover:shadow-2xl">
 
-                    <!-- Gambar -->
-                    <div class="relative h-64">
-                        <img src="{{ asset('storage/'.$item->foto) }}"
-                            alt="{{ $item->nama }}"
-                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 group-hover:brightness-90">
+                <!-- Gambar -->
+                <div class="relative h-64">
+                    <img src="{{ asset('storage/'.$item->foto) }}"
+                        alt="{{ $item->nama }}"
+                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 group-hover:brightness-90">
 
-                        <!-- Overlay -->
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent flex flex-col justify-end p-6 transition-all duration-500 group-hover:from-black/80 group-hover:via-black/50">
-                            <h3 class="text-lg font-bold text-white mb-1">{{ $item->nama }}</h3>
-                            <p class="text-sm text-gray-200 mb-2 flex items-center gap-1">
-                                <i class="fas fa-map-marker-alt text-red-400"></i> {{ $item->lokasi }}
-                            </p>
-                            <p class="text-yellow-300 font-semibold text-sm flex items-center gap-1">
-                                <i class="fas fa-map-marked-alt"></i>
-                                Destinasi Wisata
-                            </p>
-                        </div>
-
-                        <!-- Views Badge -->
-                        <div class="absolute top-4 right-4 bg-white/20 backdrop-blur-sm text-white px-2 py-1 rounded-full text-xs font-medium">
-                            <i class="fas fa-eye mr-1"></i> {{ $item->views ?? 0 }}
-                        </div>
+                    <!-- Overlay -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent flex flex-col justify-end p-6 transition-all duration-500 group-hover:from-black/80 group-hover:via-black/50">
+                        <h3 class="text-lg font-bold text-white mb-1">{{ $item->nama }}</h3>
+                        <p class="text-sm text-gray-200 mb-2 flex items-center gap-1">
+                            <i class="fas fa-map-marker-alt text-red-400"></i> {{ $item->lokasi }}
+                        </p>
+                        <p class="text-yellow-300 font-semibold text-sm flex items-center gap-1">
+                            <i class="fas fa-map-marked-alt"></i>
+                            Destinasi Wisata
+                        </p>
                     </div>
-                </a>
+
+                    <!-- Views Badge -->
+                    <div class="absolute top-4 right-4 bg-white/20 backdrop-blur-sm text-white px-2 py-1 rounded-full text-xs font-medium">
+                        <i class="fas fa-eye mr-1"></i> {{ $item->views ?? 0 }}
+                    </div>
+                </div>
+            </a>
             @endforeach
         </div>
     </div>
@@ -153,44 +167,51 @@
 @endif
 
 <script>
-function shareDestination() {
-    if (navigator.share) {
-        navigator.share({
-            title: '{{ $destinasi->nama }}',
-            text: 'Temukan destinasi wisata menarik: {{ $destinasi->nama }}',
-            url: window.location.href
-        });
-    } else {
-        // Fallback untuk browser yang tidak mendukung Web Share API
-        navigator.clipboard.writeText(window.location.href).then(() => {
-            alert('Link berhasil disalin ke clipboard!');
-        });
+    function shareDestination() {
+        if (navigator.share) {
+            navigator.share({
+                title: '{{ $destinasi->nama }}',
+                text: 'Temukan destinasi wisata menarik: {{ $destinasi->nama }}',
+                url: window.location.href
+            });
+        } else {
+            // Fallback untuk browser yang tidak mendukung Web Share API
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                alert('Link berhasil disalin ke clipboard!');
+            });
+        }
     }
-}
 
-function addToWishlist() {
-    // Implementasi wishlist bisa ditambahkan nanti
-    alert('Destinasi ditambahkan ke wishlist! ❤️');
-}
+    function addToWishlist() {
+        // Implementasi wishlist bisa ditambahkan nanti
+        alert('Destinasi ditambahkan ke wishlist! ❤️');
+    }
 
-// Animasi fade-in
-document.addEventListener('DOMContentLoaded', function() {
-    const elements = document.querySelectorAll('.animate-fade-in');
-    elements.forEach((el, index) => {
-        el.style.animationDelay = `${index * 0.2}s`;
+    // Animasi fade-in
+    document.addEventListener('DOMContentLoaded', function() {
+        const elements = document.querySelectorAll('.animate-fade-in');
+        elements.forEach((el, index) => {
+            el.style.animationDelay = `${index * 0.2}s`;
+        });
     });
-});
 </script>
 
 <style>
-@keyframes fade-in {
-    0% { opacity: 0; transform: translateY(20px); }
-    100% { opacity: 1; transform: translateY(0); }
-}
+    @keyframes fade-in {
+        0% {
+            opacity: 0;
+            transform: translateY(20px);
+        }
 
-.animate-fade-in {
-    animation: fade-in 0.8s ease-out forwards;
-    opacity: 0;
-}
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .animate-fade-in {
+        animation: fade-in 0.8s ease-out forwards;
+        opacity: 0;
+    }
 </style>
 @endsection
