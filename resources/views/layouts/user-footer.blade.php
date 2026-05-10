@@ -1,6 +1,6 @@
 <footer class="bg-white border-t border-gray-200 mt-10">
   <div class="container mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-4 gap-10">
-    
+
     <!-- Logo & About -->
     <div>
       <div class="flex items-center space-x-3 mb-4">
@@ -37,20 +37,28 @@
 
     <!-- Social Media -->
     <div>
-      <h3 class="text-lg font-semibold text-gray-800 mb-4">Ikuti Kami</h3>
+      <h3 class="text-lg font-semibold text-gray-800 mb-4">
+        Ikuti Kami
+      </h3>
+
       <div class="flex space-x-4">
-        <!-- <a href="#" class="w-10 h-10 flex items-center justify-center rounded-full border border-gray-300 hover:bg-blue-600 hover:text-white transition">
-          <i class="fab fa-facebook-f"></i>
-        </a> -->
-        <a href="#" class="w-10 h-10 flex items-center justify-center rounded-full border border-gray-300 hover:bg-pink-600 hover:text-white transition">
+
+        <!-- Instagram -->
+        <a href="https://www.instagram.com/gotrip.lampung?igsh=NDlhYWljcmM4ZGRz&utm_source=qr"
+          target="_blank"
+          class="w-10 h-10 flex items-center justify-center rounded-full border border-gray-300 hover:bg-pink-600 hover:text-white transition">
+
           <i class="fab fa-instagram"></i>
         </a>
-        <!-- <a href="#" class="w-10 h-10 flex items-center justify-center rounded-full border border-gray-300 hover:bg-sky-500 hover:text-white transition">
-          <i class="fab fa-twitter"></i>
+
+        <!-- TikTok -->
+        <a href="https://www.tiktok.com/@gotrip.lampung_?_r=1&_t=ZS-96EYBVb3OJ2"
+          target="_blank"
+          class="w-10 h-10 flex items-center justify-center rounded-full border border-gray-300 hover:bg-black hover:text-white transition">
+
+          <i class="fab fa-tiktok"></i>
         </a>
-        <a href="#" class="w-10 h-10 flex items-center justify-center rounded-full border border-gray-300 hover:bg-red-600 hover:text-white transition">
-          <i class="fab fa-youtube"></i>
-        </a> -->
+
       </div>
     </div>
 
