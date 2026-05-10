@@ -107,7 +107,7 @@ class BookingController extends Controller
         $grossAmount = $request->gross_amount;
         $signatureKey = $request->signature_key;
 
-        // 🔐 VALIDASI SIGNATURE (WAJIB)
+        // VALIDASI SIGNATURE (WAJIB)
         $expectedSignature = hash('sha512',
             $orderId . $statusCode . $grossAmount . $serverKey
         );
