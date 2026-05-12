@@ -37,7 +37,7 @@
                 <i class="fas fa-info-circle text-blue-600"></i> Tentang Destinasi
             </h2>
             <p class="text-gray-600 leading-relaxed text-lg">
-                {{ $destinasi->deskripsi ?? 'Belum ada deskripsi untuk destinasi ini.' }}
+                {!! nl2br(e($destinasi->deskripsi ?? 'Belum ada deskripsi untuk destinasi ini.')) !!}
             </p>
         </div>
 
