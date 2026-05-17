@@ -132,7 +132,21 @@
 
                 <label class="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-xl h-48 cursor-pointer hover:bg-gray-50 transition">
                     <span class="text-gray-400 text-sm">Klik untuk upload</span>
-                    <input type="file" name="foto" class="hidden" onchange="previewImage(event)">
+                    <input type="file"
+                        name="foto"
+                        accept="image/*"
+                        class="hidden"
+                        onchange="previewImage(event)">
+
+                    @error('foto')
+                    <p class="text-red-500 text-sm mt-2">
+                        {{ $message }}
+                    </p>
+                    @enderror
+
+                    <p class="text-sm text-gray-500 mt-2">
+                        Maksimal ukuran foto 5MB
+                    </p>
                 </label>
 
                 <!-- PREVIEW -->
@@ -149,23 +163,23 @@
 
 <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
-    <script>
-        new TomSelect("#destinasi-select", {
-            plugins: ['remove_button'],
-            placeholder: "Pilih destinasi",
-        });
-    </script>
+<script>
+    new TomSelect("#destinasi-select", {
+        plugins: ['remove_button'],
+        placeholder: "Pilih destinasi",
+    });
+</script>
 
-    <script>
-        function previewImage(event) {
-            const file = event.target.files[0];
-            const preview = document.getElementById('preview');
+<script>
+    function previewImage(event) {
+        const file = event.target.files[0];
+        const preview = document.getElementById('preview');
 
-            if (file) {
-                preview.src = URL.createObjectURL(file);
-                preview.classList.remove('hidden');
-            }
+        if (file) {
+            preview.src = URL.createObjectURL(file);
+            preview.classList.remove('hidden');
         }
-    </script>
+    }
+</script>
 
-    @endsection
+@endsection

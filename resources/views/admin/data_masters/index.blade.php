@@ -90,7 +90,7 @@
                     </td>
 
                     <td class="px-6 py-4 text-gray-600">
-                        {{ $item->paketWisata->nama ?? '-' }}
+                        {{ $item->paketWisata->nama_paket ?? '-' }}
                     </td>
 
                     <td class="px-6 py-4 text-center">
