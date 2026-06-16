@@ -12,6 +12,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Transaksi;
 use Midtrans\Config;
 use Midtrans\Snap;
+use Illuminate\Support\Facades\Auth;
 
 class BookingController extends Controller
 {
@@ -47,7 +48,7 @@ class BookingController extends Controller
         // $bookings = $query->with('paketWisata')->get();
         $pakets = PaketWisata::all();
 
-        return view('laporan.booking', compact('bookings','pakets'));
+        return view('laporan.booking', compact('bookings', 'pakets'));
     }
 
     public function confirmPayment($id)
@@ -69,16 +70,59 @@ class BookingController extends Controller
         return back()->with('success', 'Pembayaran berhasil dikonfirmasi');
     }
 
+    // public function payment($id)
+    // {
+    //     $booking = Booking::with('paketWisata')->findOrFail($id);
+
+    //     // pastikan belum dibayar
+    //     if ($booking->status !== 'pending') {
+    //         abort(403, 'Booking sudah diproses');
+    //     }
+
+    //     return view('user.booking.payment', compact('booking'));
+    // }
+
     public function payment($id)
     {
-        $booking = Booking::with('paketWisata')->findOrFail($id);
+        $booking = Booking::with('paketWisata')
+            ->findOrFail($id);
 
-        // pastikan belum dibayar
         if ($booking->status !== 'pending') {
             abort(403, 'Booking sudah diproses');
         }
 
-        return view('user.booking.payment', compact('booking'));
+        Config::$serverKey = config('midtrans.server_key');
+        Config::$isProduction = config('midtrans.is_production');
+        Config::$isSanitized = true;
+        Config::$is3ds = true;
+
+        if (!$booking->snap_token) {
+
+            $params = [
+                'transaction_details' => [
+                    'order_id' => 'BOOK-' . $booking->id,
+                    'gross_amount' => $booking->total_harga,
+                ],
+                'customer_details' => [
+                    'first_name' => $booking->nama,
+                    'email'      => $booking->email,
+                    'phone'      => $booking->telepon,
+                ],
+            ];
+
+            $snapToken = Snap::getSnapToken($params);
+
+            $booking->update([
+                'snap_token' => $snapToken
+            ]);
+
+            $booking->refresh();
+        }
+
+        return view('user.booking.payment', [
+            'booking'   => $booking,
+            'snapToken' => $booking->snap_token
+        ]);
     }
 
     public function success($id)
@@ -94,7 +138,7 @@ class BookingController extends Controller
 
         $pdf = Pdf::loadView('booking.invoice', compact('booking'));
 
-        return $pdf->download('invoice-booking-'.$booking->id.'.pdf');
+        return $pdf->download('invoice-booking-' . $booking->id . '.pdf');
     }
 
     public function callback(Request $request)
@@ -108,7 +152,8 @@ class BookingController extends Controller
         $signatureKey = $request->signature_key;
 
         // VALIDASI SIGNATURE (WAJIB)
-        $expectedSignature = hash('sha512',
+        $expectedSignature = hash(
+            'sha512',
             $orderId . $statusCode . $grossAmount . $serverKey
         );
 
@@ -127,8 +172,10 @@ class BookingController extends Controller
         }
 
         // HANDLE STATUS MIDTRANS
-        if ($request->transaction_status == 'settlement' || 
-            $request->transaction_status == 'capture') {
+        if (
+            $request->transaction_status == 'settlement' ||
+            $request->transaction_status == 'capture'
+        ) {
 
             // update booking
             $booking->update([
@@ -146,15 +193,15 @@ class BookingController extends Controller
                     'status' => 'lunas'
                 ]);
             }
-
         } elseif ($request->transaction_status == 'pending') {
 
             $booking->update([
                 'status' => 'pending'
             ]);
-
-        } elseif ($request->transaction_status == 'expire' || 
-                $request->transaction_status == 'cancel') {
+        } elseif (
+            $request->transaction_status == 'expire' ||
+            $request->transaction_status == 'cancel'
+        ) {
 
             $booking->update([
                 'status' => 'batal'
@@ -177,14 +224,66 @@ class BookingController extends Controller
         $tanggal   = \Carbon\Carbon::parse($validated['tanggal_booking']);
         $dayOfWeek = $tanggal->dayOfWeek;
 
-        $hargaSatuan = ($dayOfWeek == 0 || $dayOfWeek == 6)
-            ? $paket->harga_weekend
-            : $paket->harga_weekday;
+        // $hargaSatuan = ($dayOfWeek == 0 || $dayOfWeek == 6)
+        //     ? $paket->harga_weekend
+        //     : $paket->harga_weekday;
 
-        $totalHarga = $hargaSatuan * $validated['jumlah_orang'];
+        // $totalHarga = $hargaSatuan * $validated['jumlah_orang'];
+
+        $isWeekend =
+            $dayOfWeek == 0 ||
+            $dayOfWeek == 6;
+
+        $hargaSatuan = 0;
+        $totalHarga = 0;
+
+        if ($paket->jenis_layanan == 'private_trip') {
+
+            $privatePrice = $paket->privatePrices()
+                ->where('min_peserta', '<=', $validated['jumlah_orang'])
+                ->where('max_peserta', '>=', $validated['jumlah_orang'])
+                ->first();
+
+            if (!$privatePrice) {
+
+                return back()->withErrors([
+                    'jumlah_orang' => 'Range peserta tidak tersedia'
+                ]);
+            }
+
+            $hargaDasar = $isWeekend
+                ? $privatePrice->harga_weekend
+                : $privatePrice->harga_weekday;
+
+            if ($paket->tipe_harga == 'per_orang') {
+
+                $hargaSatuan = $hargaDasar;
+
+                $totalHarga =
+                    $hargaDasar *
+                    $validated['jumlah_orang'];
+            } else {
+
+                $hargaSatuan =
+                    $hargaDasar;
+
+                $totalHarga =
+                    $hargaDasar;
+            }
+        } else {
+
+            $hargaSatuan = $isWeekend
+                ? $paket->harga_weekend
+                : $paket->harga_weekday;
+
+            $totalHarga =
+                $hargaSatuan *
+                $validated['jumlah_orang'];
+        }
 
         // SIMPAN BOOKING
         $booking = Booking::create([
+            'user_id'         => Auth::id(),
             'paket_id'        => $paket->id,
             'nama'            => $validated['nama'],
             'email'           => $validated['email'],
@@ -207,27 +306,48 @@ class BookingController extends Controller
         ]);
 
         // MIDTRANS CONFIG
-        Config::$serverKey = config('midtrans.server_key');
-        Config::$isProduction = config('midtrans.is_production');
-        Config::$isSanitized = true;
-        Config::$is3ds = true;
+        // Config::$serverKey = config('midtrans.server_key');
+        // Config::$isProduction = config('midtrans.is_production');
+        // Config::$isSanitized = true;
+        // Config::$is3ds = true;
 
-        // PARAM MIDTRANS
-        $params = [
-            'transaction_details' => [
-                'order_id' => 'BOOK-' . $booking->id,
-                'gross_amount' => $booking->total_harga,
-            ],
-            'customer_details' => [
-                'first_name' => $booking->nama,
-                'email' => $booking->email,
-                'phone' => $booking->telepon,
-            ],
-        ];
+        // // PARAM MIDTRANS
+        // $params = [
+        //     'transaction_details' => [
+        //         'order_id' => 'BOOK-' . $booking->id,
+        //         'gross_amount' => $booking->total_harga,
+        //     ],
+        //     'customer_details' => [
+        //         'first_name' => $booking->nama,
+        //         'email' => $booking->email,
+        //         'phone' => $booking->telepon,
+        //     ],
+        // ];
 
-        $snapToken = Snap::getSnapToken($params);
+        // // $snapToken = Snap::getSnapToken($params);
 
-        return view('user.booking.payment', compact('booking', 'snapToken'));
+        // // return view('user.booking.payment', compact('booking', 'snapToken'));
+        // if (!$booking->snap_token) {
+
+        //     $params = [
+        //         'transaction_details' => [
+        //             'order_id' => 'BOOK-' . $booking->id,
+        //             'gross_amount' => $booking->total_harga,
+        //         ],
+        //         'customer_details' => [
+        //             'first_name' => $booking->nama,
+        //             'email' => $booking->email,
+        //             'phone' => $booking->telepon,
+        //         ],
+        //     ];
+
+        //     $booking->update([
+        //         'snap_token' => Snap::getSnapToken($params)
+        //     ]);
+
+        //     $booking->refresh();
+        // }
+
+        return redirect()->route('booking.payment', $booking->id);
     }
-
 }

@@ -20,6 +20,7 @@ class PaketWisata extends Model
         'nama_paket',
         // 'destinasi_id',
         'jenis_layanan',
+        'tipe_harga',
         'deskripsi',
         'harga',
         'harga_weekday',

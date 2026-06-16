@@ -81,6 +81,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/booking/{paket}', [BookingController::class, 'store'])
         ->name('booking.store');
 
+    Route::get('/booking/{id}', [BookingController::class, 'show'])
+        ->name('booking.show');
+
     Route::get('/booking/{id}/payment', [BookingController::class, 'payment'])
         ->name('booking.payment');
 

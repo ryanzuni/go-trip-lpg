@@ -41,36 +41,176 @@
                 </div>
 
                 <!-- Statistik -->
-                <div class="grid md:grid-cols-3 gap-5 mt-10">
+                <!-- Statistik -->
+                <div class="grid md:grid-cols-4 gap-5 mt-10">
 
-                    <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-2xl p-6">
-                        <h3 class="text-3xl font-bold text-blue-600">
-                            0
+                    <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-2xl p-6 shadow-lg">
+                        <h3 class="text-3xl font-bold">
+                            {{ $totalBooking }}
                         </h3>
-                        <p class="text-gray-600">
+                        <p class="mt-2 text-blue-100">
                             Total Booking
                         </p>
-                        <i class="fas fa-suitcase-rolling text-3xl mb-2"></i>
                     </div>
 
-                    <div class="bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-2xl p-6">
-                        <h3 class="text-3xl font-bold text-green-600">
-                            0
+                    <div class="bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-2xl p-6 shadow-lg">
+                        <h3 class="text-3xl font-bold">
+                            {{ $totalSuccess }}
                         </h3>
-                        <p class="text-gray-600">
+                        <p class="mt-2 text-green-100">
                             Pembayaran Lunas
                         </p>
-                        <i class="fas fa-check-circle text-3xl mb-2"></i>
                     </div>
 
-                    <div class="bg-gradient-to-r from-amber-400 to-orange-500 text-white rounded-2xl p-6">
-                        <h3 class="text-3xl font-bold text-yellow-600">
-                            0
+                    <div class="bg-gradient-to-r from-amber-400 to-orange-500 text-white rounded-2xl p-6 shadow-lg">
+                        <h3 class="text-3xl font-bold">
+                            {{ $totalPending }}
                         </h3>
-                        <p class="text-gray-600">
+                        <p class="mt-2 text-amber-100">
                             Pending
                         </p>
-                        <i class="fas fa-clock text-3xl mb-2"></i>
+                    </div>
+
+                    <div class="bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-2xl p-6 shadow-lg">
+                        <h3 class="text-2xl font-bold">
+                            Rp {{ number_format($totalSpent,0,',','.') }}
+                        </h3>
+                        <p class="mt-2 text-purple-100">
+                            Total Pengeluaran
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="mt-12">
+
+                    <h2 class="text-2xl font-bold mb-6">
+                        Riwayat Booking
+                    </h2>
+
+                    <div class="space-y-4">
+
+                        @forelse($bookings as $booking)
+
+                        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition overflow-hidden">
+
+                            <div class="p-6">
+
+                                <div class="flex flex-col md:flex-row md:justify-between md:items-start gap-4">
+
+                                    <div>
+
+                                        <h3 class="text-xl font-bold text-slate-800">
+                                            {{ $booking->paketWisata->nama_paket }}
+                                        </h3>
+
+                                        <p class="text-sm text-slate-500 mt-1">
+                                            Booking ID: BOOK-{{ $booking->id }}
+                                        </p>
+
+                                        <div class="mt-4 space-y-1 text-sm text-slate-600">
+
+                                            <p class="flex items-center gap-2">
+                                                <i class="fas fa-calendar-alt text-blue-500"></i>
+                                                {{ \Carbon\Carbon::parse($booking->tanggal_booking)->format('d M Y') }}
+                                            </p>
+
+                                            <p class="flex items-center gap-2">
+                                                <i class="fas fa-users text-green-500"></i>
+                                                {{ $booking->jumlah_orang }} Orang
+                                            </p>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="text-right">
+
+                                        <p class="text-sm text-slate-500">
+                                            Total Pembayaran
+                                        </p>
+
+                                        <p class="text-2xl font-bold text-blue-600">
+                                            Rp {{ number_format($booking->total_harga,0,',','.') }}
+                                        </p>
+
+                                        @if(in_array(strtolower($booking->status), ['success','settlement','capture','paid']))
+
+                                        <span class="mt-3 inline-flex px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-semibold">
+                                            SUCCESS
+                                        </span>
+
+                                        @elseif(strtolower($booking->status) == 'pending')
+
+                                        <span class="mt-3 inline-flex px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs font-semibold">
+                                            PENDING
+                                        </span>
+
+                                        @else
+
+                                        <span class="mt-3 inline-flex px-3 py-1 bg-red-100 text-red-700 rounded-full text-xs font-semibold">
+                                            BATAL
+                                        </span>
+
+                                        @endif
+
+                                    </div>
+
+                                </div>
+
+                                <div class="flex gap-3 mt-5">
+
+                                    <a href="{{ route('booking.show',$booking->id) }}"
+                                        class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition">
+
+                                        Detail Booking
+
+                                    </a>
+
+                                    <a href="{{ route('booking.invoice',$booking->id) }}"
+                                        class="px-4 py-2 border border-slate-300 hover:bg-slate-50 rounded-xl transition">
+
+                                        Download Invoice
+
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        @empty
+
+                        <div class="bg-white rounded-2xl p-10 text-center border border-dashed">
+
+                            <div class="text-5xl mb-3">
+                                ✈️
+                            </div>
+
+                            <h3 class="font-bold text-lg">
+                                Belum Ada Riwayat Booking
+                            </h3>
+
+                            <p class="text-gray-500 mt-2">
+                                Booking paket wisata pertama kamu sekarang.
+                            </p>
+
+                            <a href="{{ route('paket.index') }}"
+                                class="inline-flex mt-5 px-5 py-3 bg-blue-600 text-white rounded-xl">
+
+                                Lihat Paket Wisata
+
+                            </a>
+
+                        </div>
+
+                        @endforelse
+
+                    </div>
+
+                    <div class="mt-6">
+                        {{ $bookings->links() }}
                     </div>
 
                 </div>

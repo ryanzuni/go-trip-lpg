@@ -85,11 +85,20 @@
                             </p>
                             @if($item->jenis_layanan == 'private_trip')
 
+                            @if($item->tipe_harga == 'per_grup')
+
                             <span class="inline-block px-3 py-1 bg-purple-600 text-white rounded-full text-sm">
-                                Private Trip
+                                Private Trip • Per Grup
                             </span>
 
                             @else
+
+                            <span class="inline-block px-3 py-1 bg-blue-600 text-white rounded-full text-sm">
+                                Private Trip • Per Orang
+                            </span>
+
+                            @endif
+
 
                             <span class="text-green-300 font-semibold text-sm">
                                 Mulai Rp {{ number_format($item->harga_weekday,0,',','.') }}

@@ -21,11 +21,17 @@ class Booking extends Model
         'total_harga',
         'catatan',
         'status',
+        'snap_token',
     ];
 
     public function paketWisata()
     {
         return $this->belongsTo(PaketWisata::class, 'paket_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
     // public function paket()
     // {

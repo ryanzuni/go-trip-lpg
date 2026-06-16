@@ -410,6 +410,7 @@
 </section>
 <script>
 const jenisLayanan = "{{ $paket->jenis_layanan }}";
+const tipeHarga = "{{ $paket->tipe_harga }}";
 const privatePrices = @json($paket->privatePrices);
 
 const hargaWeekday = {{ $paket->harga_weekday ?? 0 }};
@@ -425,8 +426,10 @@ function hitungHarga() {
     const tanggal = tanggalInput.value;
 
     if (!jumlah || !tanggal) {
+
         estimasiHarga.innerHTML =
             'Pilih jumlah peserta & tanggal';
+
         return;
     }
 
@@ -435,6 +438,7 @@ function hitungHarga() {
 
     let harga = 0;
 
+    // PRIVATE TRIP
     if (jenisLayanan === 'private_trip') {
 
         const found = privatePrices.find(price =>
@@ -443,20 +447,41 @@ function hitungHarga() {
         );
 
         if (!found) {
+
             estimasiHarga.innerHTML =
                 '<span class="text-red-500">Range peserta tidak tersedia</span>';
+
             return;
         }
 
-        harga = isWeekend
+        const hargaDasar = isWeekend
             ? found.harga_weekend
             : found.harga_weekday;
 
-    } else {
+        // PER ORANG
+        if (tipeHarga === 'per_orang') {
 
-        harga = isWeekend
+            harga = hargaDasar * jumlah;
+
+        }
+        // PER GRUP
+        else {
+
+            harga = hargaDasar;
+
+        }
+
+    }
+
+    // OPEN TRIP
+    else {
+
+        const hargaDasar = isWeekend
             ? hargaWeekend
             : hargaWeekday;
+
+        harga = hargaDasar * jumlah;
+
     }
 
     estimasiHarga.innerHTML =

@@ -72,6 +72,26 @@
                     </select>
                 </div>
 
+                <div>
+                    <label class="text-sm font-medium text-gray-700">
+                        Tipe Harga
+                    </label>
+
+                    <select
+                        name="tipe_harga"
+                        class="w-full mt-1 px-4 py-2 border rounded-lg">
+
+                        <option value="per_orang">
+                            Per Orang
+                        </option>
+
+                        <option value="per_grup">
+                            Per Grup
+                        </option>
+
+                    </select>
+                </div>
+
                 <div id="privateTripPrice" class="hidden">
 
                     <div class="bg-blue-50 border border-blue-200 rounded-xl p-5">
