@@ -24,6 +24,16 @@
         </div>
     </div>
 
+    @if ($errors->any())
+    <div class="mb-4 p-4 bg-red-100 border border-red-300 rounded-lg">
+        <ul class="list-disc pl-5 text-red-700">
+            @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
+
     <!-- GRID -->
     <form action="{{ route('admin.paket_wisata.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
@@ -39,6 +49,114 @@
                     <input type="text" name="nama_paket"
                         value="{{ old('nama_paket') }}"
                         class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+
+                <div>
+                    <label class="text-sm font-medium text-gray-700">
+                        Jenis Layanan
+                    </label>
+
+                    <select
+                        name="jenis_layanan"
+                        id="jenis_layanan"
+                        class="w-full mt-1 px-4 py-2 border rounded-lg">
+
+                        <option value="open_trip">
+                            Open Trip
+                        </option>
+
+                        <option value="private_trip">
+                            Private Trip
+                        </option>
+
+                    </select>
+                </div>
+
+                <div id="privateTripPrice" class="hidden">
+
+                    <div class="bg-blue-50 border border-blue-200 rounded-xl p-5">
+
+                        <div class="flex items-center justify-between mb-4">
+
+                            <div>
+                                <h3 class="font-bold text-blue-700">
+                                    Harga Private Trip
+                                </h3>
+
+                                <p class="text-sm text-gray-500">
+                                    Harga berdasarkan jumlah peserta
+                                </p>
+                            </div>
+
+                            <button
+                                type="button"
+                                id="addRange"
+                                class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+
+                                + Tambah Range
+
+                            </button>
+
+                        </div>
+
+                        <div id="private-ranges" class="space-y-3">
+
+                            <div class="grid grid-cols-4 gap-3">
+
+                                <div>
+                                    <label class="text-xs text-gray-500">
+                                        Min Peserta
+                                    </label>
+
+                                    <input
+                                        type="number"
+                                        name="private[min][]"
+                                        class="w-full mt-1 px-3 py-2 border rounded-lg"
+                                        placeholder="1">
+                                </div>
+
+                                <div>
+                                    <label class="text-xs text-gray-500">
+                                        Max Peserta
+                                    </label>
+
+                                    <input
+                                        type="number"
+                                        name="private[max][]"
+                                        class="w-full mt-1 px-3 py-2 border rounded-lg"
+                                        placeholder="4">
+                                </div>
+
+                                <div>
+                                    <label class="text-xs text-gray-500">
+                                        Harga Weekday
+                                    </label>
+
+                                    <input
+                                        type="number"
+                                        name="private[weekday][]"
+                                        class="w-full mt-1 px-3 py-2 border rounded-lg"
+                                        placeholder="2700000">
+                                </div>
+
+                                <div>
+                                    <label class="text-xs text-gray-500">
+                                        Harga Weekend
+                                    </label>
+
+                                    <input
+                                        type="number"
+                                        name="private[weekend][]"
+                                        class="w-full mt-1 px-3 py-2 border rounded-lg"
+                                        placeholder="3000000">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
                 </div>
 
                 <!-- Destinasi -->
@@ -63,20 +181,35 @@
                 </div>
 
                 <!-- Harga -->
-                <div class="grid grid-cols-2 gap-4">
+                <!-- OPEN TRIP PRICE -->
+                <div id="openTripPrice">
 
-                    <div>
-                        <label class="text-sm font-medium text-gray-700">Harga Weekday</label>
-                        <input type="number" name="harga_weekday"
-                            value="{{ old('harga_weekday') }}"
-                            class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
-                    </div>
+                    <div class="grid grid-cols-2 gap-4">
 
-                    <div>
-                        <label class="text-sm font-medium text-gray-700">Harga Weekend</label>
-                        <input type="number" name="harga_weekend"
-                            value="{{ old('harga_weekend') }}"
-                            class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                        <div>
+                            <label class="text-sm font-medium text-gray-700">
+                                Harga Weekday
+                            </label>
+
+                            <input
+                                type="number"
+                                name="harga_weekday"
+                                value="{{ old('harga_weekday') }}"
+                                class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                        </div>
+
+                        <div>
+                            <label class="text-sm font-medium text-gray-700">
+                                Harga Weekend
+                            </label>
+
+                            <input
+                                type="number"
+                                name="harga_weekend"
+                                value="{{ old('harga_weekend') }}"
+                                class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                        </div>
+
                     </div>
 
                 </div>
@@ -180,6 +313,106 @@
             preview.classList.remove('hidden');
         }
     }
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        const jenis = document.getElementById('jenis_layanan');
+        const openTripPrice = document.getElementById('openTripPrice');
+        const privateTripPrice = document.getElementById('privateTripPrice');
+
+        function toggleJenis() {
+
+            if (!jenis || !openTripPrice || !privateTripPrice) {
+                return;
+            }
+
+            if (jenis.value === 'private_trip') {
+
+                openTripPrice.classList.add('hidden');
+                privateTripPrice.classList.remove('hidden');
+
+            } else {
+
+                openTripPrice.classList.remove('hidden');
+                privateTripPrice.classList.add('hidden');
+
+            }
+        }
+
+        toggleJenis();
+
+        jenis.addEventListener('change', toggleJenis);
+
+    });
+</script>
+
+<script>
+    document
+        .getElementById('addRange')
+        .addEventListener('click', function() {
+
+            const wrapper =
+                document.getElementById('private-ranges');
+
+            wrapper.insertAdjacentHTML(
+                'beforeend',
+                `
+            <div class="grid grid-cols-4 gap-3">
+
+                <div>
+                    <label class="text-xs text-gray-500">
+                        Min Peserta
+                    </label>
+
+                    <input
+                        type="number"
+                        name="private[min][]"
+                        class="w-full mt-1 px-3 py-2 border rounded-lg"
+                        placeholder="1">
+                </div>
+
+                <div>
+                    <label class="text-xs text-gray-500">
+                        Max Peserta
+                    </label>
+
+                    <input
+                        type="number"
+                        name="private[max][]"
+                        class="w-full mt-1 px-3 py-2 border rounded-lg"
+                        placeholder="4">
+                </div>
+
+                <div>
+                    <label class="text-xs text-gray-500">
+                        Harga Weekday
+                    </label>
+
+                    <input
+                        type="number"
+                        name="private[weekday][]"
+                        class="w-full mt-1 px-3 py-2 border rounded-lg"
+                        placeholder="2700000">
+                </div>
+
+                <div>
+                    <label class="text-xs text-gray-500">
+                        Harga Weekend
+                    </label>
+
+                    <input
+                        type="number"
+                        name="private[weekend][]"
+                        class="w-full mt-1 px-3 py-2 border rounded-lg"
+                        placeholder="3000000">
+                </div>
+
+            </div>
+            `
+            );
+        });
 </script>
 
 @endsection

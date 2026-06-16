@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Carbon\Carbon;
 use App\Models\Destinasi;
+use App\Models\PaketPrivatePrice;
 
 class PaketWisata extends Model
 {
@@ -18,6 +19,7 @@ class PaketWisata extends Model
     protected $fillable = [
         'nama_paket',
         // 'destinasi_id',
+        'jenis_layanan',
         'deskripsi',
         'harga',
         'harga_weekday',
@@ -54,6 +56,12 @@ class PaketWisata extends Model
     public function transaksis()
     {
         return $this->hasMany(Transaksi::class, 'paket_id');
+    }
+
+     // Relasi ke private prices
+    public function privatePrices()
+    {
+        return $this->hasMany(PaketPrivatePrice::class);
     }
 
     /**

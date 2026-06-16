@@ -12,7 +12,7 @@
         </div>
 
         <a href="{{ route('admin.paket_wisata.create') }}"
-           class="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
+            class="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
 
             <!-- HEROICON PLUS -->
             <svg xmlns="http://www.w3.org/2000/svg"
@@ -29,9 +29,9 @@
 
     <!-- ALERT -->
     @if(session('success'))
-        <div class="mb-4 px-4 py-2 bg-green-100 text-green-700 rounded-lg">
-            {{ session('success') }}
-        </div>
+    <div class="mb-4 px-4 py-2 bg-green-100 text-green-700 rounded-lg">
+        {{ session('success') }}
+    </div>
     @endif
 
     <!-- TABLE CARD -->
@@ -45,10 +45,12 @@
                     <tr>
                         <th class="px-6 py-3">#</th>
                         <th class="px-6 py-3">Nama Paket</th>
+                        <th class="px-6 py-3">Jenis</th>
                         <th class="px-6 py-3">Destinasi</th>
                         <th class="px-6 py-3">Durasi</th>
-                        <th class="px-6 py-3">Weekday</th>
-                        <th class="px-6 py-3">Weekend</th>
+                        <!-- <th class="px-6 py-3">Weekday</th>
+                        <th class="px-6 py-3">Weekend</th> -->
+                        <th class="px-6 py-3">Harga</th>
                         <th class="px-6 py-3">Foto</th>
                         <th class="px-6 py-3 text-right">Aksi</th>
                     </tr>
@@ -68,6 +70,30 @@
                             {{ $item->nama_paket }}
                         </td>
 
+                        <td class="px-6 py-4">
+
+                            @if($item->jenis_layanan == 'private_trip')
+
+                            <span class="px-3 py-1 text-xs font-semibold
+                     bg-purple-100 text-purple-700 rounded-full">
+
+                                Private Trip
+
+                            </span>
+
+                            @else
+
+                            <span class="px-3 py-1 text-xs font-semibold
+                     bg-blue-100 text-blue-700 rounded-full">
+
+                                Open Trip
+
+                            </span>
+
+                            @endif
+
+                        </td>
+
                         <td class="px-6 py-4 text-gray-600">
                             {{ $item->destinasi ? $item->destinasi->pluck('nama')->join(', ') : '-' }}
                         </td>
@@ -76,20 +102,55 @@
                             {{ $item->durasi_hari }} Hari
                         </td>
 
-                        <td class="px-6 py-4 text-gray-600">
-                            Rp {{ number_format($item->harga_weekday,0,',','.') }}
-                        </td>
+                        <td class="px-6 py-4">
 
-                        <td class="px-6 py-4 text-gray-600">
-                            Rp {{ number_format($item->harga_weekend,0,',','.') }}
+                            @if($item->jenis_layanan == 'private_trip')
+
+                            <div class="space-y-1">
+
+                                <div class="font-semibold text-purple-600">
+                                    {{ $item->privatePrices->count() }} Range Harga
+                                </div>
+
+                                <button
+                                    onclick='openPriceModal(@json($item->privatePrices))'
+                                    class="text-xs px-3 py-1 bg-purple-100 text-purple-700 rounded-lg hover:bg-purple-200">
+
+                                    Lihat Detail
+
+                                </button>
+
+                            </div>
+
+
+                            @else
+
+                            <div class="text-sm">
+                                <div>
+                                    Weekday :
+                                    <strong>
+                                        Rp {{ number_format($item->harga_weekday,0,',','.') }}
+                                    </strong>
+                                </div>
+
+                                <div>
+                                    Weekend :
+                                    <strong>
+                                        Rp {{ number_format($item->harga_weekend,0,',','.') }}
+                                    </strong>
+                                </div>
+                            </div>
+
+                            @endif
+
                         </td>
 
                         <td class="px-6 py-4">
                             @if($item->foto)
-                                <img src="{{ asset('storage/'.$item->foto) }}"
-                                     class="w-16 h-12 object-cover rounded-lg shadow">
+                            <img src="{{ asset('storage/'.$item->foto) }}"
+                                class="w-16 h-12 object-cover rounded-lg shadow">
                             @else
-                                <span class="text-gray-400 text-xs">No Image</span>
+                            <span class="text-gray-400 text-xs">No Image</span>
                             @endif
                         </td>
 
@@ -99,7 +160,7 @@
 
                                 <!-- EDIT -->
                                 <a href="{{ route('admin.paket_wisata.edit',$item->id) }}"
-                                   class="p-2 bg-yellow-100 text-yellow-600 rounded-lg hover:bg-yellow-200">
+                                    class="p-2 bg-yellow-100 text-yellow-600 rounded-lg hover:bg-yellow-200">
 
                                     <!-- HEROICON PENCIL -->
                                     <svg xmlns="http://www.w3.org/2000/svg"
@@ -113,8 +174,8 @@
 
                                 <!-- DELETE -->
                                 <form action="{{ route('admin.paket_wisata.destroy',$item->id) }}"
-                                      method="POST"
-                                      onsubmit="return confirm('Yakin hapus paket ini?')">
+                                    method="POST"
+                                    onsubmit="return confirm('Yakin hapus paket ini?')">
                                     @csrf @method('DELETE')
 
                                     <button type="submit"
@@ -155,8 +216,8 @@
                                 <p class="text-gray-500">Belum ada paket wisata</p>
 
                                 <a href="{{ route('admin.paket_wisata.create') }}"
-                                   class="text-blue-600 text-sm hover:underline">
-                                   Tambah sekarang
+                                    class="text-blue-600 text-sm hover:underline">
+                                    Tambah sekarang
                                 </a>
 
                             </div>
@@ -177,5 +238,87 @@
     </div>
 
 </div>
+
+<div id="priceModal"
+    class="fixed inset-0 bg-black/50 hidden z-50">
+
+    <div class="flex items-center justify-center min-h-screen">
+
+        <div class="bg-white w-full max-w-lg rounded-2xl p-6">
+
+            <div class="flex justify-between items-center mb-4">
+
+                <h3 class="text-lg font-bold">
+                    Detail Harga Private Trip
+                </h3>
+
+                <button onclick="closePriceModal()">
+                    ✕
+                </button>
+
+            </div>
+
+            <div id="modalContent">
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    function openPriceModal(prices) {
+        let html = '';
+
+        if (prices.length === 0) {
+
+            html = `
+            <div class="text-center text-gray-500">
+                Belum ada range harga
+            </div>
+        `;
+
+        } else {
+
+            prices.forEach(price => {
+
+                html += `
+                <div class="border rounded-lg p-4 mb-3">
+
+                    <div class="font-semibold">
+                        ${price.min_peserta} - ${price.max_peserta} Orang
+                    </div>
+
+                    <div class="text-sm text-gray-600 mt-2">
+                        Weekday :
+                        Rp ${Number(price.harga_weekday).toLocaleString('id-ID')}
+                    </div>
+
+                    <div class="text-sm text-gray-600">
+                        Weekend :
+                        Rp ${Number(price.harga_weekend).toLocaleString('id-ID')}
+                    </div>
+
+                </div>
+            `;
+            });
+        }
+
+        document.getElementById('modalContent').innerHTML = html;
+
+        document
+            .getElementById('priceModal')
+            .classList
+            .remove('hidden');
+    }
+
+    function closePriceModal() {
+        document
+            .getElementById('priceModal')
+            .classList
+            .add('hidden');
+    }
+</script>
 
 @endsection

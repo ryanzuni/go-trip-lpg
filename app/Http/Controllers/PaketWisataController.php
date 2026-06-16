@@ -21,9 +21,25 @@ class PaketWisataController extends Controller
         return view('user.paket_wisata.index', compact('paket'));
     }
 
+    // public function userShow($id)
+    // {
+    //     $paket = PaketWisata::with('destinasi')->findOrFail($id);
+
+    //     $paketLain = PaketWisata::with('destinasi')
+    //         ->where('id', '!=', $id)
+    //         ->latest()
+    //         ->take(6)
+    //         ->get();
+
+    //     return view('user.paket_wisata.show', compact('paket', 'paketLain'));
+    // }
+
     public function userShow($id)
     {
-        $paket = PaketWisata::with('destinasi')->findOrFail($id);
+        $paket = PaketWisata::with([
+            'destinasi',
+            'privatePrices'
+        ])->findOrFail($id);
 
         $paketLain = PaketWisata::with('destinasi')
             ->where('id', '!=', $id)
@@ -40,11 +56,26 @@ class PaketWisataController extends Controller
      * ================================
      */
 
+    // public function index()
+    // {
+    //     $paket = PaketWisata::with('destinasi')->latest()->paginate(10);
+
+    //     return view('admin.paket_wisata.index', compact('paket'));
+    // }
+
     public function index()
     {
-        $paket = PaketWisata::with('destinasi')->latest()->paginate(10);
+        $paket = PaketWisata::with([
+            'destinasi',
+            'privatePrices'
+        ])
+            ->latest()
+            ->paginate(10);
 
-        return view('admin.paket_wisata.index', compact('paket'));
+        return view(
+            'admin.paket_wisata.index',
+            compact('paket')
+        );
     }
 
     public function create()
@@ -62,20 +93,34 @@ class PaketWisataController extends Controller
 
     public function store(Request $request)
     {
+        // $request->validate([
+        //     'nama_paket'    => 'required|string|max:255',
+        //     'destinasi_id'  => 'required|array|min:1',
+        //     'destinasi_id.*' => 'exists:destinasis,id',
+        //     'harga_weekday' => 'required|numeric',
+        //     'harga_weekend' => 'required|numeric',
+        //     'durasi_hari'   => 'required|numeric',
+        //     'foto'          => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
+        // ], [
+        //     'foto.max'   => 'Ukuran foto maksimal 5MB',
+        //     'foto.image' => 'File harus berupa gambar',
+        // ]);
         $request->validate([
-            'nama_paket'    => 'required|string|max:255',
-            'destinasi_id'  => 'required|array|min:1',
+            'nama_paket' => 'required|string|max:255',
+            'jenis_layanan' => 'required|in:open_trip,private_trip',
+            'destinasi_id' => 'required|array|min:1',
             'destinasi_id.*' => 'exists:destinasis,id',
-            'harga_weekday' => 'required|numeric',
-            'harga_weekend' => 'required|numeric',
-            'durasi_hari'   => 'required|numeric',
-            'foto'          => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
-        ], [
-            'foto.max'   => 'Ukuran foto maksimal 5MB',
-            'foto.image' => 'File harus berupa gambar',
+            'durasi_hari' => 'required|numeric',
+            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
         ]);
 
         $data = $request->except('destinasi_id');
+
+        if ($request->jenis_layanan == 'private_trip') {
+
+            $data['harga_weekday'] = 0;
+            $data['harga_weekend'] = 0;
+        }
 
         // upload foto
         if ($request->hasFile('foto')) {
@@ -84,6 +129,31 @@ class PaketWisataController extends Controller
 
         // create paket
         $paket = PaketWisata::create($data);
+
+        if (
+            $request->jenis_layanan === 'private_trip'
+            && $request->has('private')
+        ) {
+
+            foreach ($request->private['min'] as $index => $min) {
+
+                if (
+                    empty($min)
+                    || empty($request->private['max'][$index])
+                    || empty($request->private['weekday'][$index])
+                    || empty($request->private['weekend'][$index])
+                ) {
+                    continue;
+                }
+
+                $paket->privatePrices()->create([
+                    'min_peserta' => $min,
+                    'max_peserta' => $request->private['max'][$index],
+                    'harga_weekday' => $request->private['weekday'][$index],
+                    'harga_weekend' => $request->private['weekend'][$index],
+                ]);
+            }
+        }
 
         // simpan ke pivot (MULTIPLE DESTINASI)
         $paket->destinasi()->attach($request->destinasi_id);

@@ -37,8 +37,22 @@
     </div>
 
     <!-- HARGA -->
-    <div class="absolute top-5 right-5 bg-white text-blue-600 px-5 py-2 rounded-full font-bold shadow-lg">
-        Weekday: Rp {{ number_format($paket->harga_weekday,0,',','.') }}
+    <div class="absolute top-5 right-5">
+
+        @if($paket->jenis_layanan == 'private_trip')
+
+        <div class="bg-purple-600 text-white px-5 py-2 rounded-full font-bold shadow-lg">
+            Private Trip
+        </div>
+
+        @else
+
+        <div class="bg-white text-blue-600 px-5 py-2 rounded-full font-bold shadow-lg">
+            Mulai Rp {{ number_format($paket->harga_weekday,0,',','.') }}
+        </div>
+
+        @endif
+
     </div>
 </div>
 @endif
@@ -76,12 +90,58 @@
 
             <!-- HARGA -->
             <div class="bg-gray-50 p-6 rounded-2xl shadow-sm">
+
+                @if($paket->jenis_layanan == 'private_trip')
+
+                <h4 class="font-bold text-purple-600 mb-3">
+                    Harga Private Trip
+                </h4>
+
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="border-b">
+                            <th class="text-left py-2">Peserta</th>
+                            <th class="text-left py-2">Weekday</th>
+                            <th class="text-left py-2">Weekend</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach($paket->privatePrices as $price)
+                        <tr class="border-b">
+                            <td class="py-2">
+                                {{ $price->min_peserta }}
+                                -
+                                {{ $price->max_peserta }}
+                                Orang
+                            </td>
+
+                            <td>
+                                Rp {{ number_format($price->harga_weekday,0,',','.') }}
+                            </td>
+
+                            <td>
+                                Rp {{ number_format($price->harga_weekend,0,',','.') }}
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+
+                @else
+
                 <p class="text-blue-600 font-bold">
-                    Weekday: Rp {{ number_format($paket->harga_weekday,0,',','.') }}
+                    Weekday :
+                    Rp {{ number_format($paket->harga_weekday,0,',','.') }}
                 </p>
-                <p class="text-green-600 font-bold">
-                    Weekend: Rp {{ number_format($paket->harga_weekend,0,',','.') }}
+
+                <p class="text-green-600 font-bold mt-2">
+                    Weekend :
+                    Rp {{ number_format($paket->harga_weekend,0,',','.') }}
                 </p>
+
+                @endif
+
             </div>
 
         </div>
@@ -179,12 +239,27 @@
                         </div>
 
                         <!-- PRICE -->
-                        <div class="mt-6">
-                            <p class="text-sm opacity-80">Harga mulai dari</p>
-                            <p class="text-2xl font-bold">
-                                Rp {{ number_format($paket->harga_weekday,0,',','.') }}
-                            </p>
-                        </div>
+                        @if($paket->jenis_layanan == 'private_trip')
+
+                        <p class="text-sm opacity-80">
+                            Harga berdasarkan jumlah peserta
+                        </p>
+
+                        <p class="text-xl font-bold">
+                            Private Trip
+                        </p>
+
+                        @else
+
+                        <p class="text-sm opacity-80">
+                            Harga mulai dari
+                        </p>
+
+                        <p class="text-2xl font-bold">
+                            Rp {{ number_format($paket->harga_weekday,0,',','.') }}
+                        </p>
+
+                        @endif
                     </div>
 
                     <!-- RIGHT: FORM -->
@@ -205,19 +280,37 @@
                                 class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" required>
 
                             <div class="grid grid-cols-2 gap-3">
-                                <input type="number" name="jumlah_orang" placeholder="Jumlah Orang"
-                                    class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" required>
+                                <input
+                                    id="jumlah_orang"
+                                    type="number"
+                                    name="jumlah_orang"
+                                    placeholder="Jumlah Orang"
+                                    class="w-full p-3 border rounded-lg"
+                                    required>
 
-                                <input type="date" name="tanggal_booking"
-                                    class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" required>
+                                <input
+                                    id="tanggal_booking"
+                                    type="date"
+                                    name="tanggal_booking"
+                                    class="w-full p-3 border rounded-lg"
+                                    required>
                             </div>
 
                             <!-- TOTAL (STATIC FEEL TRAVELOKA) -->
                             <div class="bg-gray-50 p-4 rounded-xl mt-3">
-                                <p class="text-sm text-gray-500">Estimasi Harga</p>
-                                <p class="text-lg font-bold text-blue-600">
-                                    Rp {{ number_format($paket->harga_weekday,0,',','.') }}
+
+                                <p class="text-sm text-gray-500">
+                                    Estimasi Harga
                                 </p>
+
+                                <p
+                                    id="estimasiHarga"
+                                    class="text-lg font-bold text-blue-600 mt-2">
+
+                                    Pilih jumlah peserta & tanggal
+
+                                </p>
+
                             </div>
 
                             <!-- ACTION -->
@@ -315,5 +408,63 @@
         </div>
     </div>
 </section>
+<script>
+const jenisLayanan = "{{ $paket->jenis_layanan }}";
+const privatePrices = @json($paket->privatePrices);
+
+const hargaWeekday = {{ $paket->harga_weekday ?? 0 }};
+const hargaWeekend = {{ $paket->harga_weekend ?? 0 }};
+
+const jumlahInput = document.getElementById('jumlah_orang');
+const tanggalInput = document.getElementById('tanggal_booking');
+const estimasiHarga = document.getElementById('estimasiHarga');
+
+function hitungHarga() {
+
+    const jumlah = parseInt(jumlahInput.value);
+    const tanggal = tanggalInput.value;
+
+    if (!jumlah || !tanggal) {
+        estimasiHarga.innerHTML =
+            'Pilih jumlah peserta & tanggal';
+        return;
+    }
+
+    const day = new Date(tanggal).getDay();
+    const isWeekend = day === 0 || day === 6;
+
+    let harga = 0;
+
+    if (jenisLayanan === 'private_trip') {
+
+        const found = privatePrices.find(price =>
+            jumlah >= price.min_peserta &&
+            jumlah <= price.max_peserta
+        );
+
+        if (!found) {
+            estimasiHarga.innerHTML =
+                '<span class="text-red-500">Range peserta tidak tersedia</span>';
+            return;
+        }
+
+        harga = isWeekend
+            ? found.harga_weekend
+            : found.harga_weekday;
+
+    } else {
+
+        harga = isWeekend
+            ? hargaWeekend
+            : hargaWeekday;
+    }
+
+    estimasiHarga.innerHTML =
+        'Rp ' + Number(harga).toLocaleString('id-ID');
+}
+
+jumlahInput.addEventListener('input', hitungHarga);
+tanggalInput.addEventListener('change', hitungHarga);
+</script>
 
 @endsection

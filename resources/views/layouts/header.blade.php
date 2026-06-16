@@ -53,7 +53,7 @@
             <div id="userDropdown"
                 class="hidden absolute right-0 mt-3 w-48 bg-white rounded-xl shadow-lg border z-50">
 
-                <a href="{{ route('profile.edit') }}"
+                <a href="{{ route('admin.profile.edit') }}">
                     class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
 
                     <!-- HEROICON USER -->

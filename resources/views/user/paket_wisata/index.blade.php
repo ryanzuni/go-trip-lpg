@@ -83,12 +83,19 @@
 
                                 - {{ $item->durasi_hari }} Hari
                             </p>
-                            <span class="block text-sm text-gray-600">
-                                Weekday: Rp {{ number_format($item->harga_weekday,0,',','.') }}
+                            @if($item->jenis_layanan == 'private_trip')
+
+                            <span class="inline-block px-3 py-1 bg-purple-600 text-white rounded-full text-sm">
+                                Private Trip
                             </span>
-                            <span class="block text-sm text-gray-600">
-                                Weekend: Rp {{ number_format($item->harga_weekend,0,',','.') }}
+
+                            @else
+
+                            <span class="text-green-300 font-semibold text-sm">
+                                Mulai Rp {{ number_format($item->harga_weekday,0,',','.') }}
                             </span>
+
+                            @endif
 
                             <span class="text-xs sm:text-sm text-gray-200 bg-black/50 px-2 py-1 rounded-full mb-2">
                                 {{ $item->bookings_count }} booking
