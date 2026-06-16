@@ -3,17 +3,17 @@
 
     <!-- Logo -->
     <a href="{{ route('home') }}" class="flex items-center group">
-      <img src="{{ asset('images/logo.jpg') }}" alt="GoTrip Lampung" 
-           class="w-12 h-12 object-contain transform transition duration-300 group-hover:scale-110">
+      <img src="{{ asset('images/logo.jpg') }}" alt="GoTrip Lampung"
+        class="w-12 h-12 object-contain transform transition duration-300 group-hover:scale-110">
     </a>
 
     <!-- Desktop Nav -->
     <nav class="hidden md:flex items-center space-x-8">
       <a href="{{ route('home') }}"
-         class="relative font-medium transition duration-300 
+        class="relative font-medium transition duration-300 
          {{ Request::routeIs('home') ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600' }}">
-         Home
-         <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-blue-600 transition-all duration-300
+        Home
+        <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-blue-600 transition-all duration-300
           {{ Request::routeIs('home') ? 'w-full' : 'group-hover:w-full' }}"></span>
       </a>
 
@@ -51,6 +51,58 @@
     </nav>
 
     <!-- Mobile Menu Button -->
+    <!-- Auth Menu -->
+    <div class="hidden md:flex items-center space-x-4">
+
+      @guest
+      <a href="{{ route('login') }}"
+        class="text-gray-700 hover:text-blue-600 font-medium">
+        Login
+      </a>
+
+      <a href="{{ route('register') }}"
+        class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+        Register
+      </a>
+      @endguest
+
+      @auth
+      <div class="relative group">
+
+        <button class="flex items-center gap-2">
+          <img
+            src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}"
+            class="w-10 h-10 rounded-full border">
+
+          <span class="font-medium text-gray-700">
+            {{ Auth::user()->name }}
+          </span>
+
+          <i class="fas fa-chevron-down text-xs"></i>
+        </button>
+
+        <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg hidden group-hover:block">
+
+          <a href="{{ route('profile') }}"
+            class="block px-4 py-2 hover:bg-gray-100">
+            Profil Saya
+          </a>
+
+          <form action="{{ route('logout') }}" method="POST">
+            @csrf
+            <button type="submit"
+              class="w-full text-left px-4 py-2 hover:bg-gray-100 text-red-600">
+              Logout
+            </button>
+          </form>
+
+        </div>
+      </div>
+      @endauth
+
+    </div>
+
+    <!-- Mobile Menu Button -->
     <button class="md:hidden text-gray-700 hover:text-blue-600 focus:outline-none" id="menu-toggle">
       <i class="fas fa-bars text-2xl"></i>
     </button>
@@ -62,15 +114,47 @@
       <a href="{{ route('home') }}" class="font-medium {{ Request::routeIs('home') ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600' }}">
         Home
       </a>
-      <a href="{{ route('gallery.index') }}" 
+      <a href="{{ route('gallery.index') }}"
         class="font-medium {{ Request::routeIs('gallery.*') ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600' }}">
         Gallery
       </a>
-      <a href="{{ route('destinasi.index') }}" 
+      <a href="{{ route('destinasi.index') }}"
         class="font-medium {{ Request::routeIs('destinasi.index') ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600' }}">
-          Destinasi
+        Destinasi
       </a>
       <a href="#contact" class="font-medium text-gray-700 hover:text-blue-600">Contact</a>
+      @guest
+      <a href="{{ route('login') }}"
+        class="font-medium text-gray-700">
+        Login
+      </a>
+
+      <a href="{{ route('register') }}"
+        class="font-medium text-gray-700">
+        Register
+      </a>
+      @endguest
+
+      @auth
+      <div class="border-t pt-3">
+        <p class="font-semibold text-blue-600">
+          {{ Auth::user()->name }}
+        </p>
+
+        <a href="{{ route('profile') }}"
+          class="block mt-2 text-gray-700">
+          Profil Saya
+        </a>
+
+        <form action="{{ route('logout') }}" method="POST" class="mt-2">
+          @csrf
+          <button type="submit"
+            class="text-red-600">
+            Logout
+          </button>
+        </form>
+      </div>
+      @endauth
       <a href="#explore" class="bg-gradient-to-r from-blue-500 to-cyan-400 text-white px-4 py-2 rounded-full shadow-md text-center">
         Explore
       </a>
@@ -93,9 +177,17 @@
 <style>
   /* Animasi slide down */
   @keyframes slideDown {
-    0% { transform: translateY(-10px); opacity: 0; }
-    100% { transform: translateY(0); opacity: 1; }
+    0% {
+      transform: translateY(-10px);
+      opacity: 0;
+    }
+
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
   }
+
   .animate-slideDown {
     animation: slideDown 0.3s ease forwards;
   }

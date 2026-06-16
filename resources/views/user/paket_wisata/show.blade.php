@@ -134,10 +134,19 @@
         <div x-data="{ openModal: false }">
 
             <!-- BUTTON -->
+            @guest
+            <a href="{{ route('login') }}"
+                class="px-6 py-3 bg-blue-600 text-white rounded-xl shadow">
+                Login / Daftar Untuk Booking
+            </a>
+            @endguest
+
+            @auth
             <button @click="openModal = true"
-                class="px-6 py-3 bg-blue-600 text-white rounded-xl shadow hover:bg-blue-700 transition">
+                class="px-6 py-3 bg-blue-600 text-white rounded-xl shadow">
                 Pesan Sekarang
             </button>
+            @endauth
 
             <!-- MODAL -->
             <div x-show="openModal"

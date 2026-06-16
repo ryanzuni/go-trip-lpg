@@ -14,8 +14,7 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MidtransCallbackController;
-
-
+use App\Http\Controllers\UserProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,15 +22,44 @@ use App\Http\Controllers\MidtransCallbackController;
 |--------------------------------------------------------------------------
 */
 
+use Illuminate\Support\Facades\Mail;
+
+// Route::get('/test-mail', function () {
+
+//     Mail::raw('Test Email GoTrip', function ($message) {
+//         $message->to('ryanzunipangestu@gmail.com')
+//             ->subject('Test SMTP');
+//     });
+
+//     return 'Email terkirim';
+// });
+
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/register', [AuthController::class, 'showRegister'])
+    ->name('register');
+Route::post('/register', [AuthController::class, 'register'])
+    ->name('register.store');
+Route::get('/verify-otp', [AuthController::class, 'showOtpForm'])
+    ->name('otp.form');
+
+Route::post('/verify-otp', [AuthController::class, 'verifyOtp'])
+    ->name('otp.verify');
 
 /*
 |--------------------------------------------------------------------------
 | USER ROUTES
 |--------------------------------------------------------------------------
 */
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [UserProfileController::class, 'index'])
+        ->name('profile');
+
+    Route::post('/profile', [UserProfileController::class, 'update'])
+        ->name('profile.update');
+});
 
 // Home
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -48,25 +76,26 @@ Route::get('/gallery', [GalleryController::class, 'userIndex'])->name('gallery.i
 Route::get('/gallery/{id}', [GalleryController::class, 'userShow'])->name('gallery.show');
 
 // Booking
-Route::post('/booking/{paket}', [BookingController::class, 'store'])
-    ->name('booking.store');
+Route::middleware('auth')->group(function () {
 
-Route::get('/booking/{id}/payment', [BookingController::class, 'payment'])
-    ->name('booking.payment');
+    Route::post('/booking/{paket}', [BookingController::class, 'store'])
+        ->name('booking.store');
 
-Route::get('/booking-success/{id}', [BookingController::class, 'success'])
-    ->name('booking.success');
+    Route::get('/booking/{id}/payment', [BookingController::class, 'payment'])
+        ->name('booking.payment');
 
-Route::get('/booking/{id}/confirm', [BookingController::class, 'confirmPayment'])
-    ->name('booking.confirm');
+    Route::get('/booking-success/{id}', [BookingController::class, 'success'])
+        ->name('booking.success');
+
+    Route::get('/booking/{id}/confirm', [BookingController::class, 'confirmPayment'])
+        ->name('booking.confirm');
+
+    Route::get('/invoice/{id}', [BookingController::class, 'invoice'])
+        ->name('booking.invoice');
+});
 
 Route::post('/midtrans/callback', [MidtransCallbackController::class, 'handle']);
-Route::post('/midtrans/callback', [MidtransController::class, 'callback']);
-
-Route::get('/invoice/{id}', [BookingController::class, 'invoice'])
-    ->name('booking.invoice');
-
-Route::post('/booking/{paket}', [BookingController::class, 'store'])->name('booking.store');
+// Route::post('/midtrans/callback', [MidtransController::class, 'callback']);
 
 // Contact
 Route::get('/contact', function () {
@@ -125,9 +154,3 @@ Route::prefix('admin')->middleware('auth')->name('admin.')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
 });
-
-Route::middleware(['auth'])->group(function () {
-    Route::get('/admin/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::post('/admin/profile', [ProfileController::class, 'update'])->name('profile.update');
-});
-

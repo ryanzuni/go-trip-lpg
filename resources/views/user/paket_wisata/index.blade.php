@@ -26,7 +26,7 @@
         <!-- Judul -->
         <div class="text-center mb-12">
             <h1 class="text-4xl md:text-5xl font-extrabold text-gray-800 mb-3 animate-fade-in">
-                Paket Wisata Premium
+                Paket Wisata
             </h1>
             <p class="text-lg text-gray-600 max-w-2xl mx-auto animate-fade-in delay-200">
                 Pilihan paket liburan terbaik untuk kamu dan keluarga. Nikmati pengalaman tak terlupakan.
