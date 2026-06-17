@@ -39,7 +39,7 @@
                 </div>
 
                 <h1 class="text-2xl font-bold">GoTrip Lampung</h1>
-                <p class="text-sm opacity-80">Admin Panel</p>
+                <!-- <p class="text-sm opacity-80">Admin Panel</p> -->
             </div>
 
             <!-- CARD -->
