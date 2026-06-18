@@ -171,9 +171,17 @@ class PaketWisataController extends Controller
 
     public function edit(PaketWisata $paket_wisatum)
     {
+        $paket_wisatum->load([
+            'destinasi',
+            'privatePrices'
+        ]);
+
         $destinasi = Destinasi::all();
 
-        return view('admin.paket_wisata.edit', compact('paket_wisatum', 'destinasi'));
+        return view(
+            'admin.paket_wisata.edit',
+            compact('paket_wisatum', 'destinasi')
+        );
     }
 
     /**

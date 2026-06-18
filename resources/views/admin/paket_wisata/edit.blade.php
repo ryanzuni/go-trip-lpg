@@ -34,6 +34,51 @@
                             required>
                     </div>
 
+                    <div>
+                        <label class="text-sm font-medium text-gray-700">
+                            Jenis Layanan
+                        </label>
+
+                        <select
+                            name="jenis_layanan"
+                            id="jenis_layanan"
+                            class="w-full mt-1 px-4 py-2 border rounded-lg">
+
+                            <option value="open_trip"
+                                {{ old('jenis_layanan',$paket_wisatum->jenis_layanan) == 'open_trip' ? 'selected' : '' }}>
+                                Open Trip
+                            </option>
+
+                            <option value="private_trip"
+                                {{ old('jenis_layanan',$paket_wisatum->jenis_layanan) == 'private_trip' ? 'selected' : '' }}>
+                                Private Trip
+                            </option>
+
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="text-sm font-medium text-gray-700">
+                            Tipe Harga
+                        </label>
+
+                        <select
+                            name="tipe_harga"
+                            class="w-full mt-1 px-4 py-2 border rounded-lg">
+
+                            <option value="per_orang"
+                                {{ old('tipe_harga',$paket_wisatum->tipe_harga) == 'per_orang' ? 'selected' : '' }}>
+                                Per Orang
+                            </option>
+
+                            <option value="per_grup"
+                                {{ old('tipe_harga',$paket_wisatum->tipe_harga) == 'per_grup' ? 'selected' : '' }}>
+                                Per Grup
+                            </option>
+
+                        </select>
+                    </div>
+
                     <!-- Destinasi -->
                     <div>
                         <label class="text-sm text-gray-600 mb-1 block">Destinasi</label>
@@ -72,23 +117,186 @@
                 <!-- RIGHT -->
                 <div class="space-y-5">
 
-                    <!-- Harga Weekday -->
-                    <div>
-                        <label class="text-sm text-gray-600 mb-1 block">Harga Weekday</label>
-                        <input type="number" name="harga_weekday"
-                            value="{{ old('harga_weekday', $paket_wisatum->harga_weekday) }}"
-                            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                            required>
+                    <!-- OPEN TRIP -->
+                    <div id="openTripPrice">
+
+                        <div class="grid grid-cols-2 gap-4">
+
+                            <div>
+                                <label class="text-sm font-medium text-gray-700">
+                                    Harga Weekday
+                                </label>
+
+                                <input
+                                    type="number"
+                                    name="harga_weekday"
+                                    value="{{ old('harga_weekday',$paket_wisatum->harga_weekday) }}"
+                                    class="w-full mt-1 px-4 py-2 border rounded-lg">
+                            </div>
+
+                            <div>
+                                <label class="text-sm font-medium text-gray-700">
+                                    Harga Weekend
+                                </label>
+
+                                <input
+                                    type="number"
+                                    name="harga_weekend"
+                                    value="{{ old('harga_weekend',$paket_wisatum->harga_weekend) }}"
+                                    class="w-full mt-1 px-4 py-2 border rounded-lg">
+                            </div>
+
+                        </div>
+
                     </div>
 
-                    <!-- Harga Weekend -->
-                    <div>
-                        <label class="text-sm text-gray-600 mb-1 block">Harga Weekend</label>
-                        <input type="number" name="harga_weekend"
-                            value="{{ old('harga_weekend', $paket_wisatum->harga_weekend) }}"
-                            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                            required>
+                    <!-- PRIVATE TRIP -->
+
+                    <div id="privateTripPrice" class="hidden">
+
+                        <div class="bg-blue-50 border border-blue-200 rounded-xl p-5">
+
+                            <div class="flex items-center justify-between mb-4">
+
+                                <div>
+                                    <h3 class="font-bold text-blue-700">
+                                        Harga Private Trip
+                                    </h3>
+
+                                    <p class="text-sm text-gray-500">
+                                        Harga berdasarkan jumlah peserta
+                                    </p>
+                                </div>
+
+                                <button
+                                    type="button"
+                                    id="addRange"
+                                    class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+
+                                    + Tambah Range
+
+                                </button>
+
+                            </div>
+
+                            <div id="private-ranges">
+
+                                @if($paket_wisatum->privatePrices->count())
+
+                                @foreach($paket_wisatum->privatePrices as $price)
+
+                                <div class="grid grid-cols-4 gap-3 mb-3">
+
+                                    <div>
+                                        <label class="text-xs text-gray-500">
+                                            Min Peserta
+                                        </label>
+
+                                        <input
+                                            type="number"
+                                            name="private[min][]"
+                                            value="{{ $price->min_peserta }}"
+                                            class="w-full mt-1 px-3 py-2 border rounded-lg">
+                                    </div>
+
+                                    <div>
+                                        <label class="text-xs text-gray-500">
+                                            Max Peserta
+                                        </label>
+
+                                        <input
+                                            type="number"
+                                            name="private[max][]"
+                                            value="{{ $price->max_peserta }}"
+                                            class="w-full mt-1 px-3 py-2 border rounded-lg">
+                                    </div>
+
+                                    <div>
+                                        <label class="text-xs text-gray-500">
+                                            Harga Weekday
+                                        </label>
+
+                                        <input
+                                            type="number"
+                                            name="private[weekday][]"
+                                            value="{{ $price->harga_weekday }}"
+                                            class="w-full mt-1 px-3 py-2 border rounded-lg">
+                                    </div>
+
+                                    <div>
+                                        <label class="text-xs text-gray-500">
+                                            Harga Weekend
+                                        </label>
+
+                                        <input
+                                            type="number"
+                                            name="private[weekend][]"
+                                            value="{{ $price->harga_weekend }}"
+                                            class="w-full mt-1 px-3 py-2 border rounded-lg">
+                                    </div>
+
+                                </div>
+
+                                @endforeach
+
+                                @else
+
+                                <div class="grid grid-cols-4 gap-3">
+
+                                    <div>
+                                        <label class="text-xs text-gray-500">
+                                            Min Peserta
+                                        </label>
+
+                                        <input
+                                            type="number"
+                                            name="private[min][]"
+                                            class="w-full mt-1 px-3 py-2 border rounded-lg">
+                                    </div>
+
+                                    <div>
+                                        <label class="text-xs text-gray-500">
+                                            Max Peserta
+                                        </label>
+
+                                        <input
+                                            type="number"
+                                            name="private[max][]"
+                                            class="w-full mt-1 px-3 py-2 border rounded-lg">
+                                    </div>
+
+                                    <div>
+                                        <label class="text-xs text-gray-500">
+                                            Harga Weekday
+                                        </label>
+
+                                        <input
+                                            type="number"
+                                            name="private[weekday][]"
+                                            class="w-full mt-1 px-3 py-2 border rounded-lg">
+                                    </div>
+
+                                    <div>
+                                        <label class="text-xs text-gray-500">
+                                            Harga Weekend
+                                        </label>
+
+                                        <input
+                                            type="number"
+                                            name="private[weekend][]"
+                                            class="w-full mt-1 px-3 py-2 border rounded-lg">
+                                    </div>
+
+                                </div>
+
+                                @endif
+
+                            </div>
+
+                        </div>
+
                     </div>
+
 
                     <!-- Durasi -->
                     <div>
