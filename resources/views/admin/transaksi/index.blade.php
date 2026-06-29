@@ -91,12 +91,12 @@
                     </td>
 
                     <!-- STATUS -->
-                    <td class="px-6 py-4 text-center">
+                    <!-- <td class="px-6 py-4 text-center">
                         @if($transaksi->status === 'success')
                             <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-600">
                                 Success
                             </span>
-                        @elseif($transaksi->status === 'pending')
+                        @elseif($transaksi->status === 'success')
                             <span class="px-2 py-1 text-xs rounded-full bg-yellow-100 text-yellow-600">
                                 Pending
                             </span>
@@ -105,6 +105,12 @@
                                 Cancel
                             </span>
                         @endif
+                    </td> -->
+
+                    <td class="px-6 py-4 text-center">
+                        <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-600">
+                            Success
+                        </span>
                     </td>
 
                     <!-- ACTION -->
